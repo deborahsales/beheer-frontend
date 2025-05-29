@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="beheer.svg" width="300" alt="Nest Logo" />
+  <img src="public/beheer.svg" width="300"/>
 </p>
 <p align="center">Plataforma de gerenciamento de equipes remotas.</p>
 
@@ -26,4 +26,3 @@ ng build
 ```
 
 O projeto será compilado e os artefatos construidos serão armazenados no diretório `dist/`
-
