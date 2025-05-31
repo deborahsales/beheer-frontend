@@ -1,0 +1,35 @@
+@media (max-width: 768px) {
+  app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    background-color: var(--white);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+
+  app-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .layout-content {
+    padding-left: 0;
+  }
+}
+
+@media (min-width: 769px) {
+  app-sidebar {
+    position: relative;
+    transform: none !important;
+    width: 250px;
+    box-shadow: none;
+  }
+
+  .layout-content {
+    padding-left: 250px;
+  }
+}

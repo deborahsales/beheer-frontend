@@ -1,0 +1,30 @@
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xxl);
+  min-height: 75vh;
+  padding: var(--space-md);
+  text-align: start;
+}
+
+div {
+  h1 {
+    font-size: var(--font-size-xxl);
+    margin-bottom: var(--space-xs);
+  }
+  h2 {
+    font-size: var(--font-size-md);
+    margin-bottom: var(--space-sm);
+  }
+}
+
+.left {
+  max-width: 300px;
+}
+
+img {
+  width: 300px;
+  max-width: 90%;
+  height: auto;
+}
