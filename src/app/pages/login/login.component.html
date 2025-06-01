@@ -1,1 +1,51 @@
-<p>login works!</p>
+<section>
+  <div class="login-wrapper">
+    <p>Login</p>
+    <mat-form-field appearance="outline">
+      <mat-label>Insira o seu e-mail</mat-label>
+      <input
+        matInput
+        placeholder="email@exemplo.com"
+        [formControl]="email"
+        (blur)="updateEmailErrorMessage()"
+        required
+      />
+      @if (email.invalid) {
+      <mat-error>{{ emailErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Insira a sua senha</mat-label>
+      <input
+        matInput
+        [type]="hide() ? 'password' : 'text'"
+        required
+        [formControl]="password"
+        (blur)="updatePasswordErrorMessage()"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="clickEvent($event)"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide()"
+      >
+        <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+      </button>
+      @if (password.invalid) {
+      <mat-error>{{ passwordErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+    <div>
+      <button
+        mat-flat-button
+        (click)="login()"
+        class="beheer-button"
+        [disabled]="email.invalid || password.invalid"
+      >
+        Login
+      </button>
+    </div>
+  </div>
+</section>

@@ -26,16 +26,19 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
+  background-color: var(--light-blue);
+  // background: var(--mat-sys-surface);
+  // color: var(--mat-sys-on-surface);
 }
 
 :root {
   /* Variáveis de cores */
-  --primary-blue: #2e3c8c;
-  --secondary-blue: #204c73;
-  --light-blue: #55b3d9;
-  --orange: #f28322;
+  --primary-blue: #1c6dc3;
+  --orange: #f67b19;
+  --brown: #4f2d18;
+  --light-yellow: #ffdc67;
+  --light-brown: #bba79d;
+  --light-blue: #ebf1ff;
   --light-gray: #f2f2f2;
   --black: #333;
   --white: #ffffff;
@@ -88,7 +91,7 @@ body {
 
 /* Estilo para links */
 a {
-  color: var(--black);
+  color: var(--brown);
   text-decoration: none;
   font-weight: var(--font-weight-medium);
   transition: color 0.3s ease;
@@ -102,8 +105,7 @@ a:hover {
   cursor: pointer;
 }
 
-/* Estilo para botões */
-button {
+.beheer-button {
   background-color: var(--orange);
   color: var(--white);
   border: none;
@@ -116,9 +118,10 @@ button {
   height: 30px;
   display: flex;
   align-items: center;
+  justify-content: center;
   margin: 0 var(--space-sm);
 }
 
-button:hover {
-  background-color: var(--light-blue);
+.beheer-button:hover {
+  background-color: var(--primary-blue);
 }

@@ -12,10 +12,11 @@ div {
   h1 {
     font-size: var(--font-size-xxl);
     margin-bottom: var(--space-xs);
+    color: var(--primary-blue);
   }
   h2 {
     font-size: var(--font-size-md);
-    margin-bottom: var(--space-sm);
+    color: var(--brown);
   }
 }
 
@@ -27,4 +28,10 @@ img {
   width: 300px;
   max-width: 90%;
   height: auto;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+  }
 }

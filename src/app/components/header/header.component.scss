@@ -6,13 +6,8 @@ header {
   .logo {
     height: 40px;
   }
+}
 
-  .custom-button {
-    border-radius: 8px;
-    height: 30px;
-  }
-
-  .hover:hover {
-    color: orange;
-  }
+mat-toolbar {
+  background-color: var(--light-blue);
 }
