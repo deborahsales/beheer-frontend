@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormControl,
@@ -10,7 +15,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
+import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { merge } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
@@ -24,6 +36,8 @@ import { AuthService } from '../../core/services/auth.service';
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
+    MatProgressSpinnerModule,
+    CommonModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './login.component.html',
@@ -32,6 +46,12 @@ import { AuthService } from '../../core/services/auth.service';
 export class LoginComponent {
   readonly email = new FormControl('', [Validators.required, Validators.email]);
   readonly password = new FormControl('', Validators.required);
+
+  private _snackBar = inject(MatSnackBar);
+
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  isLoading = signal(false);
 
   emailErrorMessage = signal('');
   passwordErrorMessage = signal('');
@@ -73,16 +93,22 @@ export class LoginComponent {
     const emailValue = this.email.value;
     const passwordValue = this.password.value;
 
+    this.isLoading.set(true);
+
     this.authService.autenticar(emailValue!, passwordValue!).subscribe({
       next: (value) => {
+        this.isLoading.set(false);
         console.log(value);
         //após autenticação, redirecionar para a tela seguinte
         //implementar de acordo com o tipo de usuário
         this.router.navigateByUrl('/');
       },
       error: (err) => {
-        //implementar mensagem de erro na tela
-        console.log(err.message);
+        this.isLoading.set(false);
+        this._snackBar.open(err.message, 'Fechar', {
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
       },
     });
   }

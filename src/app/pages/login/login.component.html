@@ -1,4 +1,9 @@
 <section>
+  @if (isLoading()) {
+  <div class="spinner-container">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+  }
   <div class="login-wrapper">
     <p>Login</p>
     <mat-form-field appearance="outline">
@@ -27,6 +32,7 @@
       <button
         mat-icon-button
         matSuffix
+        style="margin-right: 8px"
         (click)="clickEvent($event)"
         [attr.aria-label]="'Hide password'"
         [attr.aria-pressed]="hide()"

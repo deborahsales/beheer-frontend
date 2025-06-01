@@ -3,11 +3,31 @@
     <mat-toolbar>
       <img src="assets/beheer.svg" alt="Logo da aplicação" class="logo" />
       <span class="spacer"></span>
-      <a routerLink="/" routerLinkActive="active">Home</a>
-      <a routerLink="/sobre" routerLinkActive="active">Sobre</a>
-      <button routerLink="/login" routerLinkActive="active" class="beheer-button">
-        Login
+      <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button">
+        <mat-icon>menu</mat-icon>
       </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item routerLink="/" routerLinkActive="active">
+          Home
+        </button>
+        <button mat-menu-item routerLink="/sobre" routerLinkActive="active">
+          Sobre
+        </button>
+        <button mat-menu-item routerLink="/login" routerLinkActive="active">
+          Login
+        </button>
+      </mat-menu>
+      <nav>
+        <a routerLink="/" routerLinkActive="active">Home</a>
+        <a routerLink="/sobre" routerLinkActive="active">Sobre</a>
+        <button
+          routerLink="/login"
+          routerLinkActive="active"
+          class="beheer-button"
+        >
+          Login
+        </button>
+      </nav>
     </mat-toolbar>
   </app-container>
 </header>

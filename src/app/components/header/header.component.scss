@@ -6,8 +6,39 @@ header {
   .logo {
     height: 40px;
   }
+
+  nav {
+    display: flex;
+  }
 }
 
 mat-toolbar {
   background-color: var(--light-blue);
+}
+
+.menu-button {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .menu-button {
+    display: inline-flex;
+    background-color: transparent;
+    border: none;
+
+    mat-icon {
+      color: var(--primary-blue);
+    }
+
+    mat-icon:hover {
+      color: var(--orange);
+      cursor: pointer;
+    }
+  }
+
+  header {
+    nav {
+      display: none;
+    }
+  }
 }
