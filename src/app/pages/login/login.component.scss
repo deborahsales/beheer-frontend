@@ -7,7 +7,7 @@ section {
 }
 
 .login-wrapper {
-  background-color: var(--light-brown);
+  background-color: var(--white);
   width: 350px;
   height: 400px;
   display: flex;
@@ -15,6 +15,7 @@ section {
   padding: var(--space-lg);
   border-radius: 16px;
   gap: var(--space-sm);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 
   p {
     text-align: center;

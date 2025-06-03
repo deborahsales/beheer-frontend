@@ -26,6 +26,7 @@ import {
 import { Router } from '@angular/router';
 import { merge } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
+import { UserService } from '../../core/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -56,7 +57,11 @@ export class LoginComponent {
   emailErrorMessage = signal('');
   passwordErrorMessage = signal('');
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private userService: UserService
+  ) {
     merge(this.email.statusChanges, this.email.valueChanges)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.updateEmailErrorMessage());
@@ -98,10 +103,24 @@ export class LoginComponent {
     this.authService.autenticar(emailValue!, passwordValue!).subscribe({
       next: (value) => {
         this.isLoading.set(false);
-        console.log(value);
-        //após autenticação, redirecionar para a tela seguinte
-        //implementar de acordo com o tipo de usuário
-        this.router.navigateByUrl('/');
+        this.userService.retornarUser().subscribe((user) => {
+          if (user) {
+            const funcao = user.funcao;
+            console.log(funcao);
+
+            if (funcao == 'ADMINISTRADOR') {
+              this.router.navigateByUrl('/admin');
+            } else if (funcao == 'GESTOR') {
+              this.router.navigateByUrl('/gestor');
+            } else if (funcao == 'COLABORADOR') {
+              this.router.navigateByUrl('/colaborador');
+            } else if (funcao == 'RH') {
+              this.router.navigateByUrl('/rh');
+            }
+          } else {
+            console.log('Usuário não autenticado');
+          }
+        });
       },
       error: (err) => {
         this.isLoading.set(false);

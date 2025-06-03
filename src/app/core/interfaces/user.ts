@@ -1,6 +1,6 @@
-export interface User{
-    id: number
-    nome: string
-    email: string
-    tipo: string
+export interface User {
+  id: number;
+  nome: string;
+  email: string;
+  funcao: string;
 }
