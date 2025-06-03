@@ -8,9 +8,18 @@ export const colaboradorRoutes: Routes = [
     path: '',
     component: DashboardLayoutComponent,
     canActivateChild: [colaboradorGuard],
+    data: {
+      sidebarLinks: [
+        {
+          label: 'Dashboard',
+          route: '/colaborador/dashboard',
+          icon: 'dashboard',
+        },
+      ],
+    },
     children: [
-      { path: '', redirectTo: '', pathMatch: 'full' },
-      { path: '', component: ColaboradorDashboardComponent },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: ColaboradorDashboardComponent },
     ],
   },
 ];

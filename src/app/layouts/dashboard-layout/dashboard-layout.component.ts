@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -8,4 +8,16 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './dashboard-layout.component.html',
   styleUrl: './dashboard-layout.component.scss',
 })
-export class DashboardLayoutComponent {}
+export class DashboardLayoutComponent {
+  sidebarLinks = [];
+
+  constructor(private route: ActivatedRoute, private router: Router) {
+    this.route.data.subscribe((data) => {
+      this.sidebarLinks = data['sidebarLinks'] || [];
+    });
+  }
+
+  onLogout() {
+    this.router.navigate(['/']);
+  }
+}

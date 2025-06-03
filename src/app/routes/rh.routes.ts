@@ -8,9 +8,18 @@ export const rhRoutes: Routes = [
     path: '',
     component: DashboardLayoutComponent,
     canActivateChild: [rhGuard],
+    data: {
+      sidebarLinks: [
+        {
+          label: 'Dashboard',
+          route: '/rh/dashboard',
+          icon: 'dashboard',
+        },
+      ],
+    },
     children: [
-      { path: '', redirectTo: '', pathMatch: 'full' },
-      { path: '', component: RhDashboardComponent },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: RhDashboardComponent },
     ],
   },
 ];
