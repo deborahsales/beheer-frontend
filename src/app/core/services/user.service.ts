@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { User } from '../interfaces/user';
 import { TokenService } from './token.service';
 
@@ -42,5 +42,13 @@ export class UserService {
 
   estaLogado() {
     return this.tokenService.possuiToken();
+  }
+
+  retornaNome() {
+    return this.retornarUser().pipe(
+      map((user) => {
+        return user?.nome;
+      })
+    );
   }
 }

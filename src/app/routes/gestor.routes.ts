@@ -8,9 +8,18 @@ export const gestorRoutes: Routes = [
     path: '',
     component: DashboardLayoutComponent,
     canActivateChild: [gestorGuard],
+    data: {
+      sidebarLinks: [
+        {
+          label: 'Dashboard',
+          route: '/gestor/dashboard',
+          icon: 'dashboard',
+        },
+      ],
+    },
     children: [
-      { path: '', redirectTo: '', pathMatch: 'full' },
-      { path: '', component: GestorDashboardComponent },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: GestorDashboardComponent },
     ],
   },
 ];

@@ -1,5 +1,5 @@
 <div class="layout-container">
-  <app-sidebar></app-sidebar>
+  <app-sidebar [links]="sidebarLinks" (logout)="onLogout()"></app-sidebar>
   <main class="layout-content">
     <router-outlet></router-outlet>
   </main>
