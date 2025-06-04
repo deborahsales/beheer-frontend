@@ -1,16 +1,19 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
-import { BehaviorSubject, map } from 'rxjs';
-import { User } from '../interfaces/user';
+import { BehaviorSubject, map, Observable } from 'rxjs';
+import { enviroment } from '../../../enviroments/enviroment';
+import { AuthUser, User } from '../interfaces/user';
 import { TokenService } from './token.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private userSubject = new BehaviorSubject<User | null>(null);
+  private userSubject = new BehaviorSubject<AuthUser | null>(null);
+  private apiUrl = `${enviroment.apiUrl}/usuario`;
 
-  constructor(private tokenService: TokenService) {
+  constructor(private tokenService: TokenService, private http: HttpClient) {
     if (this.tokenService.possuiToken()) {
       this.decodificarJwt();
     }
@@ -18,7 +21,7 @@ export class UserService {
 
   decodificarJwt() {
     const token = this.tokenService.retornarToken();
-    const user = jwtDecode(token) as User;
+    const user = jwtDecode(token) as AuthUser;
     this.userSubject.next(user);
   }
 
@@ -50,5 +53,17 @@ export class UserService {
         return user?.nome;
       })
     );
+  }
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.apiUrl);
+  }
+
+  createUser(userData: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, userData);
+  }
+
+  deleteUser(userId: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${userId}`);
   }
 }

@@ -1,0 +1,128 @@
+.fab {
+  position: fixed;
+  bottom: var(--space-lg);
+  right: var(--space-lg);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--orange);
+  color: var(--white);
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: none;
+  transition: background-color 0.3s;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 0;
+}
+
+.fab:hover {
+  background-color: var(--primary-blue);
+}
+
+.search-bar {
+  position: relative;
+  max-width: 300px;
+  margin-bottom: var(--space-md);
+}
+
+.search-bar input {
+  width: 100%;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 8px;
+  border: none;
+  font-size: var(--font-size-sm);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar .search-icon {
+  position: absolute;
+  top: 50%;
+  right: var(--space-sm);
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: var(--font-size-md);
+  color: var(--black);
+  cursor: pointer;
+  padding: 0;
+}
+
+.search-icon .material-icons {
+  font-size: 24px;
+  color: var(--black);
+  line-height: 1;
+  display: block;
+}
+
+table {
+  width: 100%;
+}
+
+h2 {
+  margin-bottom: var(--space-sm);
+  font-size: var(--font-size-xl);
+}
+
+.table-container {
+  overflow-x: auto;
+  background-color: var(--white);
+  padding: var(--space-sm);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  color: var(--black);
+  text-align: left;
+  border-bottom: 2px solid var(--light-gray);
+}
+
+th,
+td {
+  padding: var(--space-sm);
+}
+
+section {
+  padding: var(--space-md) 0;
+  font-family: var(--font-secondary);
+}
+
+.action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-size-md);
+}
+
+.action-button .material-icons {
+  font-size: 20px;
+  color: var(--primary-blue);
+  transition: color 0.3s ease;
+}
+
+.action-button:hover .material-icons {
+  color: var(--orange);
+}
+
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 8px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}

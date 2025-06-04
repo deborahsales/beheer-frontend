@@ -6,7 +6,9 @@
 
 .layout-content {
   flex-grow: 1;
-  min-height: 100vh;
+  overflow-y: auto;
+  height: 100vh;
+  padding: 1rem;
 
   @media (max-width: 768px) {
     padding-left: 0;
