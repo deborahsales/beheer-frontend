@@ -106,7 +106,6 @@ export class LoginComponent {
         this.userService.retornarUser().subscribe((user) => {
           if (user) {
             const funcao = user.funcao;
-            console.log(funcao);
 
             if (funcao == 'ADMINISTRADOR') {
               this.router.navigateByUrl('/admin');
@@ -117,14 +116,12 @@ export class LoginComponent {
             } else if (funcao == 'RH') {
               this.router.navigateByUrl('/rh');
             }
-          } else {
-            console.log('Usuário não autenticado');
           }
         });
       },
       error: (err) => {
         this.isLoading.set(false);
-        this._snackBar.open(err.message, 'Fechar', {
+        this._snackBar.open(err.error.message, 'Fechar', {
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
         });

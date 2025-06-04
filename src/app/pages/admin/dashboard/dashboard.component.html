@@ -1,1 +1,62 @@
-<app-construction></app-construction>
+<app-container>
+  @if (isLoading()) {
+  <div class="spinner-container">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+  }
+  <section>
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Buscar usuário..."
+        [(ngModel)]="searchInput"
+      />
+      <button class="search-icon" (click)="applyFilter()" aria-label="Buscar">
+        <span class="material-icons">search</span>
+      </button>
+    </div>
+    <h2>Usuários</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th>Data de Nascimento</th>
+            <th>Admissão</th>
+            <th>Cargo</th>
+            <th>Função</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        @for (user of filteredUsers; track user.id){
+        <tbody>
+          <td>{{ user.nome }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.telefone }}</td>
+          <td>{{ user.dataNascimento | date : "dd/MM/yyyy" : "UTC" }}</td>
+          <td>{{ user.dataAdmissao | date : "dd/MM/yyyy" : "UTC" }}</td>
+          <td>{{ user.cargo }}</td>
+          <td>{{ user.funcao | capitalizeFirst }}</td>
+          @if(user.dataDesligamento){
+          <td>Inativo</td>
+          } @else {
+          <td>Ativo</td>
+          }
+          <td>
+            <button class="action-button" (click)="editUser(user.id)">
+              <span class="material-icons">edit</span>
+            </button>
+            <button class="action-button" (click)="deleteUser(user.id)">
+              <span class="material-icons">delete</span>
+            </button>
+          </td>
+        </tbody>
+        }
+      </table>
+    </div>
+    <button class="fab" (click)="createUser()">＋</button>
+  </section>
+</app-container>
