@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { ModalExclusaoComponent } from '../../components/modal-exclusao/modal-exclusao.component';
+import { ModalExclusaoComponent } from '../../shared/components/modal-exclusao/modal-exclusao.component';
 
 export interface ConfirmDialogData {
   title?: string;

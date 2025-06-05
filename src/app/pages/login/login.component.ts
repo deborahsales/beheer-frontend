@@ -14,10 +14,10 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { merge } from 'rxjs';
-import { ProgressSpinnerComponent } from '../../components/progress-spinner/progress-spinner.component';
 import { AuthService } from '../../core/services/auth.service';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { UserService } from '../../core/services/user.service';
+import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
 
 @Component({
   selector: 'app-login',

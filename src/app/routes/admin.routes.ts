@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { adminGuard } from '../core/guards/admin.guard';
 import { DashboardLayoutComponent } from '../layouts/dashboard-layout/dashboard-layout.component';
 import { AdminDashboardComponent } from '../pages/admin/dashboard/dashboard.component';
+import { NovoUsuarioComponent } from '../pages/admin/novo-usuario/novo-usuario.component';
 import { GerenciaAvisosComponent } from '../pages/gerencia-avisos/gerencia-avisos.component';
 
 export const adminRoutes: Routes = [
@@ -19,6 +20,7 @@ export const adminRoutes: Routes = [
       { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
       { path: 'usuarios', component: AdminDashboardComponent },
       { path: 'avisos', component: GerenciaAvisosComponent },
+      { path: 'novo-usuario', component: NovoUsuarioComponent },
     ],
   },
 ];

@@ -2,12 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ContainerComponent } from '../../../components/container/container.component';
+import { Router } from '@angular/router';
 import { User } from '../../../core/interfaces/user';
-import { CapitalizeFirstPipe } from '../../../core/pipes/capitalize-first.pipe';
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 import { SnackbarService } from '../../../core/services/snackbar.service';
 import { UserService } from '../../../core/services/user.service';
+import { ContainerComponent } from '../../../shared/components/container/container.component';
+import { CapitalizeFirstPipe } from '../../../shared/pipes/capitalize-first.pipe';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -30,7 +31,8 @@ export class AdminDashboardComponent {
   constructor(
     private userService: UserService,
     private confirmDialog: ConfirmDialogService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -47,7 +49,9 @@ export class AdminDashboardComponent {
     );
   }
 
-  createUser() {}
+  createUser() {
+    this.router.navigate(['/admin/novo-usuario']);
+  }
 
   editUser(userId: string) {}
 
