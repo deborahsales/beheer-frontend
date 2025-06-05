@@ -1,17 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
 import { ContainerComponent } from '../../../components/container/container.component';
-import { ModalExclusaoComponent } from '../../../components/modal-exclusao/modal-exclusao.component';
 import { User } from '../../../core/interfaces/user';
 import { CapitalizeFirstPipe } from '../../../core/pipes/capitalize-first.pipe';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
+import { SnackbarService } from '../../../core/services/snackbar.service';
 import { UserService } from '../../../core/services/user.service';
 
 @Component({
@@ -22,7 +17,6 @@ import { UserService } from '../../../core/services/user.service';
     CapitalizeFirstPipe,
     ContainerComponent,
     MatProgressSpinnerModule,
-    ModalExclusaoComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -31,14 +25,13 @@ export class AdminDashboardComponent {
   users: User[] = [];
   filteredUsers: User[] = [];
   searchInput = '';
-
-  private _snackBar = inject(MatSnackBar);
-
-  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
   isLoading = signal(false);
 
-  constructor(private userService: UserService, private dialog: MatDialog) {}
+  constructor(
+    private userService: UserService,
+    private confirmDialog: ConfirmDialogService,
+    private snackbarService: SnackbarService
+  ) {}
 
   ngOnInit() {
     this.userService.getUsers().subscribe((data) => {
@@ -62,38 +55,36 @@ export class AdminDashboardComponent {
     const user = this.users.find((u) => u.id === userId);
     if (!user) return;
 
-    const dialogRef = this.dialog.open(ModalExclusaoComponent, {
-      data: { nome: user.nome },
-    });
+    this.confirmDialog
+      .confirm({
+        title: 'Excluir usuário',
+        message: `Tem certeza que deseja excluir o usuário ${user.nome}?`,
+        confirmText: 'Excluir',
+        cancelText: 'Cancelar',
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.executeDelete(userId);
+        }
+      });
+  }
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.isLoading.set(true);
+  private executeDelete(userId: string): void {
+    this.isLoading.set(true);
 
-        this.userService.deleteUser(userId).subscribe({
-          next: () => {
-            this.users = this.users.filter((u) => u.id !== userId);
-            this.applyFilter();
-            this.isLoading.set(false);
-            this._snackBar.open('Usuário deletado com sucesso', 'Fechar', {
-              horizontalPosition: this.horizontalPosition,
-              verticalPosition: this.verticalPosition,
-            });
-          },
-          error: (err) => {
-            this.isLoading.set(false);
-            console.error(err);
-            this._snackBar.open(
-              err.error.message || 'Erro ao deletar usuário',
-              'Fechar',
-              {
-                horizontalPosition: this.horizontalPosition,
-                verticalPosition: this.verticalPosition,
-              }
-            );
-          },
-        });
-      }
+    this.userService.deleteUser(userId).subscribe({
+      next: () => {
+        this.users = this.users.filter((u) => u.id !== userId);
+        this.applyFilter();
+        this.snackbarService.show('Usuário deletado com sucesso');
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        this.snackbarService.show(
+          err.error?.message || 'Erro ao deletar usuário'
+        );
+        this.isLoading.set(false);
+      },
     });
   }
 }
