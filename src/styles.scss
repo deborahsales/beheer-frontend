@@ -125,3 +125,13 @@ a:hover {
 .beheer-button:hover {
   background-color: var(--primary-blue);
 }
+
+.beheer-button:disabled,
+.beheer-button[disabled] {
+  background-color: var(--disabled-color);
+  color: #666;
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.6;
+  box-shadow: none;
+}

@@ -1,0 +1,167 @@
+<app-container>
+  <mat-card>
+    <form [formGroup]="userForm">
+      <mat-card-header>
+        <mat-card-title>{{ titulo }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="grid-container">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nome</mat-label>
+            <input matInput placeholder="Nome" formControlName="nome" />
+            @if (userForm.get('nome')?.errors) {
+            <mat-error>Nome é obrigatório</mat-error>
+            }
+          </mat-form-field>
+          <div class="grid-item">
+            <mat-form-field appearance="outline">
+              <mat-label>CPF</mat-label>
+              <input
+                matInput
+                placeholder="Digite seu CPF"
+                formControlName="cpf"
+              />
+              @if (userForm.get('cpf')?.errors) {
+              <mat-error>CPF é obrigatório</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>E-mail</mat-label>
+              <input
+                matInput
+                type="email"
+                placeholder="Digite seu e-mail"
+                formControlName="email"
+              />
+              @if (userForm.get('email')?.errors) {
+              <mat-error>E-mail é obrigatório</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="grid-item">
+            <mat-form-field appearance="outline">
+              <mat-label>Data de Nascimento</mat-label>
+              <input
+                input
+                matInput
+                [matDatepicker]="picker"
+                formControlName="dataNascimento"
+              />
+
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              @if (userForm.get('dataNascimento')?.errors) {
+              <mat-error>Data de nascimento é obrigatória</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Senha</mat-label>
+              <input
+                matInput
+                formControlName="senha"
+                [type]="hide() ? 'password' : 'text'"
+              />
+              <button
+                mat-icon-button
+                matSuffix
+                (click)="clickEvent($event)"
+                [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide()"
+              >
+                <mat-icon>{{
+                  hide() ? "visibility_off" : "visibility"
+                }}</mat-icon>
+              </button>
+              @if (userForm.get('senha')?.errors) {
+              <mat-error>Senha é obrigatória</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="grid-item">
+            <mat-form-field appearance="outline">
+              <mat-label>Telefone</mat-label>
+              <input
+                matInput
+                placeholder="+XX XXXX-XXXX"
+                formControlName="telefone"
+              />
+              @if (userForm.get('telefone')?.errors) {
+              <mat-error>Telefone é obrigatório</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Cargo</mat-label>
+              <input matInput placeholder="Cargo" formControlName="cargo" />
+              @if (userForm.get('cargo')?.errors) {
+              <mat-error>Cargo é obrigatório</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="grid-item">
+            <mat-form-field appearance="outline">
+              <mat-label>Função</mat-label>
+              <mat-select formControlName="funcao">
+                <mat-option>--</mat-option>
+                @for (funcao of Funcoes; track funcao) {
+                <mat-option [value]="funcao.value">{{
+                  funcao.viewValue
+                }}</mat-option>
+                }
+              </mat-select>
+              @if (userForm.get('funcao')?.errors) {
+              <mat-error>Função é obrigatória</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Data de Admissão</mat-label>
+              <input
+                input
+                matInput
+                [matDatepicker]="picker2"
+                formControlName="dataAdmissao"
+              />
+
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker2"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+              @if (userForm.get('dataAdmissao')?.errors) {
+              <mat-error>Data de admissão é obrigatória</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="grid-item">
+            <mat-form-field appearance="outline">
+              <mat-label>Data de Desligamento</mat-label>
+              <input
+                input
+                matInput
+                [matDatepicker]="picker3"
+                formControlName="dataDesligamento"
+              />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker3"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker3></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions class="card-footer">
+        <button
+          class="beheer-button"
+          (click)="onClick()"
+          [disabled]="userForm.invalid"
+        >
+          {{ textoBotao }}
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</app-container>

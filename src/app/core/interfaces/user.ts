@@ -5,11 +5,12 @@ export interface AuthUser {
   funcao: string;
 }
 
-export interface User{
-  id: string;
+export interface User {
+  id?: string;
   cpf: string;
   nome: string;
   email: string;
+  senha?: string;
   telefone: string;
   dataNascimento: string;
   dataAdmissao: string;

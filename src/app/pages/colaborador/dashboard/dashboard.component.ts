@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ConstructionComponent } from '../../../components/construction/construction.component';
+import { ConstructionComponent } from '../../../shared/components/construction/construction.component';
 
 @Component({
   selector: 'app-colaborador-dashboard',

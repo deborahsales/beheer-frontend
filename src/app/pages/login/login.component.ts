@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormControl,
@@ -17,16 +12,12 @@ import { MatInputModule } from '@angular/material/input';
 
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { merge } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
+import { SnackbarService } from '../../core/services/snackbar.service';
 import { UserService } from '../../core/services/user.service';
+import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
 
 @Component({
   selector: 'app-login',
@@ -37,8 +28,8 @@ import { UserService } from '../../core/services/user.service';
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule,
     CommonModule,
+    ProgressSpinnerComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './login.component.html',
@@ -48,10 +39,6 @@ export class LoginComponent {
   readonly email = new FormControl('', [Validators.required, Validators.email]);
   readonly password = new FormControl('', Validators.required);
 
-  private _snackBar = inject(MatSnackBar);
-
-  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
   isLoading = signal(false);
 
   emailErrorMessage = signal('');
@@ -60,7 +47,8 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private snackbarService: SnackbarService
   ) {
     merge(this.email.statusChanges, this.email.valueChanges)
       .pipe(takeUntilDestroyed())
@@ -121,10 +109,7 @@ export class LoginComponent {
       },
       error: (err) => {
         this.isLoading.set(false);
-        this._snackBar.open(err.error.message, 'Fechar', {
-          horizontalPosition: this.horizontalPosition,
-          verticalPosition: this.verticalPosition,
-        });
+        this.snackbarService.show(err.error.message);
       },
     });
   }
