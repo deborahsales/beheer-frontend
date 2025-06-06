@@ -2,7 +2,9 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
+  Output,
   signal,
 } from '@angular/core';
 import {
@@ -19,6 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { User } from '../../../core/interfaces/user';
+import { FormsService } from '../../../core/services/forms.service';
 import { ContainerComponent } from '../container/container.component';
 
 interface Funcao {
@@ -46,9 +49,12 @@ interface Funcao {
 })
 export class UserFormComponent {
   userForm!: FormGroup;
-  isDisabled: boolean = true;
+  titulo: string = 'Cadastrar usuário';
+  textoBotao: string = 'Cadastrar';
 
-  @Input() user?: User;
+  @Input() isEditing: boolean = false;
+  @Input() usuario!: User;
+  @Output() acaoClique = new EventEmitter<void>();
 
   hide = signal(true);
   clickEvent(event: MouseEvent) {
@@ -57,13 +63,16 @@ export class UserFormComponent {
   }
 
   Funcoes: Funcao[] = [
-    { value: 'admin-0', viewValue: 'ADMINISTRADOR' },
-    { value: 'gestor-1', viewValue: 'GESTOR' },
-    { value: 'colaborador-2', viewValue: 'COLABORADOR' },
-    { value: 'rh-3', viewValue: 'RH' },
+    { value: 'ADMINISTRADOR', viewValue: 'Administrador' },
+    { value: 'GESTOR', viewValue: 'Gestor' },
+    { value: 'COLABORADOR', viewValue: 'Colaborador' },
+    { value: 'RH', viewValue: 'RH' },
   ];
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private formsService: FormsService
+  ) {}
 
   ngOnInit() {
     this.userForm = this.formBuilder.group({
@@ -78,7 +87,38 @@ export class UserFormComponent {
       dataAdmissao: [null, Validators.required],
       dataDesligamento: [{ value: null, disabled: true }],
     });
+
+    if (this.isEditing) {
+      this.carregarFormulario();
+      this.titulo = 'Editar usuário';
+      this.textoBotao = 'Editar';
+      this.userForm.get('dataDesligamento')?.enable();
+
+      Object.keys(this.userForm.controls).forEach((field) => {
+        const control = this.userForm.get(field);
+        control?.clearValidators();
+        control?.updateValueAndValidity();
+      });
+    }
+
+    this.formsService.setCadastro(this.userForm);
   }
 
-  onClick() {}
+  onClick() {
+    this.acaoClique.emit();
+  }
+
+  carregarFormulario() {
+    this.userForm?.patchValue({
+      nome: this.usuario.nome,
+      cpf: this.usuario.cpf,
+      email: this.usuario.email,
+      dataNascimento: this.usuario.dataNascimento,
+      telefone: this.usuario.telefone,
+      cargo: this.usuario.cargo,
+      funcao: this.usuario.funcao,
+      dataAdmissao: this.usuario.dataAdmissao,
+      dataDesligamento: this.usuario.dataDesligamento,
+    });
+  }
 }

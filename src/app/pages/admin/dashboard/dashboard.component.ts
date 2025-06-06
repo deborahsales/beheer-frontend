@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { User } from '../../../core/interfaces/user';
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 import { SnackbarService } from '../../../core/services/snackbar.service';
 import { UserService } from '../../../core/services/user.service';
 import { ContainerComponent } from '../../../shared/components/container/container.component';
+import { ProgressSpinnerComponent } from '../../../shared/components/progress-spinner/progress-spinner.component';
 import { CapitalizeFirstPipe } from '../../../shared/pipes/capitalize-first.pipe';
 
 @Component({
@@ -17,7 +17,7 @@ import { CapitalizeFirstPipe } from '../../../shared/pipes/capitalize-first.pipe
     FormsModule,
     CapitalizeFirstPipe,
     ContainerComponent,
-    MatProgressSpinnerModule,
+    ProgressSpinnerComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -53,7 +53,9 @@ export class AdminDashboardComponent {
     this.router.navigate(['/admin/novo-usuario']);
   }
 
-  editUser(userId: string) {}
+  editUser(userId: string) {
+    this.router.navigate(['/admin/usuarios', userId, 'editar']);
+  }
 
   deleteUser(userId: string) {
     const user = this.users.find((u) => u.id === userId);

@@ -59,8 +59,16 @@ export class UserService {
     return this.http.get<User[]>(this.apiUrl);
   }
 
+  getUserById(userId: string): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/${userId}`);
+  }
+
   createUser(userData: any): Observable<any> {
     return this.http.post<any>(this.apiUrl, userData);
+  }
+
+  updateUser(userId: string, userData: any): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/${userId}`, userData);
   }
 
   deleteUser(userId: string): Observable<any> {

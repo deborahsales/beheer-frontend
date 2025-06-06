@@ -1,0 +1,5 @@
+@if (isLoading()) {
+<app-progress-spinner></app-progress-spinner>
+} @if (usuario){
+<app-user-form [isEditing]="isEditing" [usuario]="usuario" (acaoClique)="editar()"></app-user-form>
+}

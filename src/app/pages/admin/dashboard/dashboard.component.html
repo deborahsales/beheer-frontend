@@ -1,8 +1,6 @@
 <app-container>
   @if (isLoading()) {
-  <div class="spinner-container">
-    <mat-spinner diameter="40"></mat-spinner>
-  </div>
+    <app-progress-spinner></app-progress-spinner>
   }
   <section>
     <div class="search-bar">
@@ -46,10 +44,10 @@
           <td>Ativo</td>
           }
           <td>
-            <button class="action-button" (click)="editUser(user.id)">
+            <button class="action-button" (click)="editUser(user.id!)">
               <span class="material-icons">edit</span>
             </button>
-            <button class="action-button" (click)="deleteUser(user.id)">
+            <button class="action-button" (click)="deleteUser(user.id!)">
               <span class="material-icons">delete</span>
             </button>
           </td>

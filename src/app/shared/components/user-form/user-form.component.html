@@ -2,9 +2,7 @@
   <mat-card>
     <form [formGroup]="userForm">
       <mat-card-header>
-        <mat-card-title>{{
-          user ? "Editar usuário" : "Novo usuário"
-        }}</mat-card-title>
+        <mat-card-title>{{ titulo }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="grid-container">
@@ -27,6 +25,21 @@
               <mat-error>CPF é obrigatório</mat-error>
               }
             </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>E-mail</mat-label>
+              <input
+                matInput
+                type="email"
+                placeholder="Digite seu e-mail"
+                formControlName="email"
+              />
+              @if (userForm.get('email')?.errors) {
+              <mat-error>E-mail é obrigatório</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="grid-item">
             <mat-form-field appearance="outline">
               <mat-label>Data de Nascimento</mat-label>
               <input
@@ -43,20 +56,6 @@
               <mat-datepicker #picker></mat-datepicker>
               @if (userForm.get('dataNascimento')?.errors) {
               <mat-error>Data de nascimento é obrigatória</mat-error>
-              }
-            </mat-form-field>
-          </div>
-          <div class="grid-item">
-            <mat-form-field appearance="outline">
-              <mat-label>E-mail</mat-label>
-              <input
-                matInput
-                type="email"
-                placeholder="Digite seu e-mail"
-                formControlName="email"
-              />
-              @if (userForm.get('email')?.errors) {
-              <mat-error>E-mail é obrigatório</mat-error>
               }
             </mat-form-field>
             <mat-form-field appearance="outline">
@@ -87,7 +86,6 @@
               <mat-label>Telefone</mat-label>
               <input
                 matInput
-                type="number"
                 placeholder="+XX XXXX-XXXX"
                 formControlName="telefone"
               />
@@ -109,7 +107,9 @@
               <mat-select formControlName="funcao">
                 <mat-option>--</mat-option>
                 @for (funcao of Funcoes; track funcao) {
-                <mat-option [value]="funcao">{{ funcao.viewValue }}</mat-option>
+                <mat-option [value]="funcao.value">{{
+                  funcao.viewValue
+                }}</mat-option>
                 }
               </mat-select>
               @if (userForm.get('funcao')?.errors) {
@@ -159,7 +159,7 @@
           (click)="onClick()"
           [disabled]="userForm.invalid"
         >
-          {{ user ? "Salvar" : "Cadastrar" }}
+          {{ textoBotao }}
         </button>
       </mat-card-actions>
     </form>
