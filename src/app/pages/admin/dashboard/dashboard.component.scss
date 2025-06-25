@@ -6,66 +6,6 @@
     margin-bottom: var(--space-sm);
     font-size: var(--font-size-xl);
   }
-
-  &__fab {
-    position: fixed;
-    bottom: var(--space-lg);
-    right: var(--space-lg);
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background-color: var(--orange);
-    color: var(--white);
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border: none;
-    transition: background-color 0.3s;
-    cursor: pointer;
-    overflow: hidden;
-    padding: 0;
-
-    &:hover {
-      background-color: var(--primary-blue);
-    }
-  }
-}
-
-.search-bar {
-  position: relative;
-  max-width: 300px;
-  margin-bottom: var(--space-md);
-
-  input {
-    width: 100%;
-    padding: var(--space-sm) var(--space-lg);
-    border-radius: 8px;
-    border: none;
-    font-size: var(--font-size-sm);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-
-  &__icon {
-    position: absolute;
-    top: 50%;
-    right: var(--space-sm);
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    font-size: var(--font-size-md);
-    color: var(--black);
-    cursor: pointer;
-    padding: 0;
-
-    .material-icons {
-      font-size: 24px;
-      color: var(--black);
-      line-height: 1;
-      display: block;
-    }
-  }
 }
 
 .table-container {

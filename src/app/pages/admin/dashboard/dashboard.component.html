@@ -3,20 +3,11 @@
   <app-progress-spinner></app-progress-spinner>
   }
   <section class="user-container">
-    <div class="search-bar">
-      <input
-        type="text"
-        placeholder="Buscar usuário..."
-        [(ngModel)]="searchInput"
-      />
-      <button
-        class="search-bar__icon"
-        (click)="applyFilter()"
-        aria-label="Buscar"
-      >
-        <span class="material-icons">search</span>
-      </button>
-    </div>
+    <app-search-bar
+      [(value)]="searchInput"
+      [placeholder]="'Buscar usuário...'"
+      (search)="applyFilter()"
+    ></app-search-bar>
     <h1 class="user-container__title">Usuários</h1>
     <div class="table-container">
       <table>
@@ -59,6 +50,6 @@
         }
       </table>
     </div>
-    <button class="user-container__fab" (click)="createUser()">＋</button>
+    <app-fab-button (click)="createUser()"></app-fab-button>
   </section>
 </app-container>
