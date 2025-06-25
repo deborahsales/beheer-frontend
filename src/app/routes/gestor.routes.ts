@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { gestorGuard } from '../core/guards/gestor.guard';
 import { DashboardLayoutComponent } from '../layouts/dashboard-layout/dashboard-layout.component';
 import { GestorDashboardComponent } from '../pages/gestor/dashboard/dashboard.component';
+import { GruposComponent } from '../pages/gestor/grupos/grupos.component';
 
 export const gestorRoutes: Routes = [
   {
@@ -15,11 +16,17 @@ export const gestorRoutes: Routes = [
           route: '/gestor/dashboard',
           icon: 'dashboard',
         },
+        {
+          label: 'Grupos',
+          route: '/gestor/grupos',
+          icon: 'groups',
+        },
       ],
     },
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: GestorDashboardComponent },
+      { path: 'grupos', component: GruposComponent },
     ],
   },
 ];

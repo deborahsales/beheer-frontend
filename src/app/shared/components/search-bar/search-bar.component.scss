@@ -2,6 +2,7 @@
   position: relative;
   max-width: 300px;
   margin-bottom: var(--space-md);
+  height: 30px;
 
   input {
     width: 100%;
@@ -14,7 +15,7 @@
 
   &__icon {
     position: absolute;
-    top: 50%;
+    top: 90%;
     right: var(--space-sm);
     transform: translateY(-50%);
     background: transparent;

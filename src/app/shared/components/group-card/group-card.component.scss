@@ -1,0 +1,37 @@
+.group-card {
+  background-color: var(--white);
+  border-radius: 10px;
+  padding: var(--space-sm);
+  box-shadow: 0 2px 5px #0000001a;
+  width: 240px;
+  height: 160px;
+  transition: transform 0.3s;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+
+  &__title {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+  }
+
+  &__members {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-regular);
+    padding: var(--space-xs) 0 var(--space-sm) 0;
+  }
+
+  &__description {
+    max-height: calc(1.4em * 3);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    border-top: 1px solid var(--black);
+    padding: var(--space-xs) 0;
+  }
+}

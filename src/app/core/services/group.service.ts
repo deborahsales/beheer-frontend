@@ -1,0 +1,18 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { enviroment } from '../../../enviroments/enviroment';
+import { Group } from '../interfaces/group';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GroupService {
+  private apiUrl = `${enviroment.apiUrl}/grupo`;
+
+  constructor(private http: HttpClient) {}
+
+  getGroups(): Observable<Group[]> {
+    return this.http.get<Group[]>(this.apiUrl);
+  }
+}

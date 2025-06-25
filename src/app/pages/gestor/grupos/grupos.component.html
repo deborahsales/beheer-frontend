@@ -1,0 +1,22 @@
+<app-container>
+  <section class="groups-page">
+    <div class="groups-page__header">
+      <h1 class="groups-page__title">Grupos</h1>
+      <span class="groups-page__spacer"></span>
+      <app-search-bar
+        [(value)]="searchInput"
+        [placeholder]="'Buscar usuário...'"
+        (search)="applyFilter()"
+      ></app-search-bar>
+      <button class="beheer-button groups-page__button">Novo Grupo</button>
+    </div>
+    <div class="groups-page__wrapper">
+      @for (group of filteredGroups; track group.id){
+      <app-group-card
+        [grupo]="group"
+        (cardClick)="openGroup($event)"
+      ></app-group-card>
+      }
+    </div>
+  </section>
+</app-container>
