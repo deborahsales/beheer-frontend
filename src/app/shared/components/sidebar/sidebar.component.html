@@ -7,11 +7,11 @@
   (click)="toggleSidebar()"
 ></div>
 <aside class="sidebar" [ngClass]="{ open: isSidebarOpen }">
-  <div class="logo">
+  <div class="sidebar__logo">
     <img src="assets/beheer.svg" alt="Logo" />
   </div>
 
-  <nav class="nav">
+  <nav class="sidebar__nav">
     <a
       *ngFor="let link of links"
       [routerLink]="link.route"
@@ -23,12 +23,10 @@
   </nav>
 
   <div class="user-section">
-    <div class="user-info">
-      <div class="user-name">{{ userName }}</div>
-      <button (click)="onLogout()">
-        <span class="material-icons">logout</span>
-        Sair
-      </button>
-    </div>
+    <div class="user-section__name">{{ userName }}</div>
+    <button class="user-section__button" (click)="onLogout()">
+      <span class="material-icons">logout</span>
+      Sair
+    </button>
   </div>
 </aside>

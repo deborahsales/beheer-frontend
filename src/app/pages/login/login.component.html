@@ -1,9 +1,9 @@
-<section>
+<section class="login">
   @if (isLoading()) {
     <app-progress-spinner></app-progress-spinner>
   }
-  <div class="login-wrapper">
-    <p>Login</p>
+  <div class="login__wrapper">
+    <h1 class="login__title">Login</h1>
     <mat-form-field appearance="outline">
       <mat-label>Insira o seu e-mail</mat-label>
       <input
@@ -41,11 +41,11 @@
       <mat-error>{{ passwordErrorMessage() }}</mat-error>
       }
     </mat-form-field>
-    <div>
+    <div class="login__actions">
       <button
         mat-flat-button
         (click)="login()"
-        class="beheer-button"
+        class="beheer-button login__button"
         [disabled]="email.invalid || password.invalid"
       >
         Login
