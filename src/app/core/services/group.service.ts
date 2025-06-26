@@ -16,6 +16,18 @@ export class GroupService {
     return this.http.get<Group[]>(this.apiUrl);
   }
 
+  getGroupById(groupId: string): Observable<Group> {
+    return this.http.get<Group>(`${this.apiUrl}/${groupId}`);
+  }
+
+  createGroup(groupData: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, groupData);
+  }
+
+  updateGroup(groupId: string, GroupData: any): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/${groupId}`, GroupData);
+  }
+
   deleteGroup(groupId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${groupId}`);
   }

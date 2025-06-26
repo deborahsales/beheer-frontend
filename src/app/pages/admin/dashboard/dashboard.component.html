@@ -7,8 +7,10 @@
       [title]="'Usuários'"
       [buttonName]="'Novo Usuário'"
       [inputPlaceholder]="'Buscar usuários...'"
+      [canCreate]="canCreate"
       [(searchInput)]="searchInput"
       (filter)="applyFilter()"
+      (buttonClick)="createUser()"
     ></app-features-header>
     <div class="table-container">
       <table>

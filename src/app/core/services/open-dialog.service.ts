@@ -1,3 +1,4 @@
+import { ComponentType } from '@angular/cdk/overlay';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
@@ -13,7 +14,7 @@ export interface ConfirmDialogData {
 @Injectable({
   providedIn: 'root',
 })
-export class ConfirmDialogService {
+export class OpenDialogService {
   constructor(private dialog: MatDialog) {}
 
   confirm(data: ConfirmDialogData): Observable<boolean> {
@@ -22,5 +23,16 @@ export class ConfirmDialogService {
     });
 
     return dialogRef.afterClosed();
+  }
+
+  open<T, D = any, R = unknown>(
+    component: ComponentType<T>,
+    data?: D
+  ): Observable<R> {
+    const dialogRef = this.dialog.open(component, {
+      data,
+    });
+
+    return dialogRef.afterClosed() as Observable<R>;
   }
 }

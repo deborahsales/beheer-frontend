@@ -1,0 +1,17 @@
+<app-container>
+  @if (isLoading()) {
+  <app-progress-spinner></app-progress-spinner>
+  }
+  <section class="tasks-page">
+    <app-features-header
+      [title]="'Demandas'"
+      [buttonName]="'Nova demanda'"
+      [inputPlaceholder]="'Buscar demanda...'"
+      [canCreate]="canCreate"
+      [(searchInput)]="searchInput"
+      (filter)="applyFilter()"
+      (buttonClick)="createTask()"
+    ></app-features-header>
+    <div class="tasks-page__content"></div>
+  </section>
+</app-container>

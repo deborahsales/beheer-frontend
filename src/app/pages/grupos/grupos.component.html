@@ -1,11 +1,16 @@
 <app-container>
+  @if (isLoading()) {
+  <app-progress-spinner></app-progress-spinner>
+  }
   <section class="groups-page">
     <app-features-header
       [title]="'Grupos'"
-      [buttonName]="'Novo Grupo'"
+      [buttonName]="'Novo grupo'"
       [inputPlaceholder]="'Buscar grupo...'"
+      [canCreate]="canCreate"
       [(searchInput)]="searchInput"
       (filter)="applyFilter()"
+      (buttonClick)="createGroup()"
     ></app-features-header>
     <div class="groups-page__wrapper">
       @for (group of filteredGroups; track group.id){

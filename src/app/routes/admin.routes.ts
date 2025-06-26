@@ -4,7 +4,7 @@ import { DashboardLayoutComponent } from '../layouts/dashboard-layout/dashboard-
 import { AdminDashboardComponent } from '../pages/admin/dashboard/dashboard.component';
 import { EditarUsuarioComponent } from '../pages/admin/editar-usuario/editar-usuario.component';
 import { NovoUsuarioComponent } from '../pages/admin/novo-usuario/novo-usuario.component';
-import { GerenciaAvisosComponent } from '../pages/gerencia-avisos/gerencia-avisos.component';
+import { AvisosComponent } from '../pages/avisos/avisos.component';
 
 export const adminRoutes: Routes = [
   {
@@ -20,7 +20,7 @@ export const adminRoutes: Routes = [
     children: [
       { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
       { path: 'usuarios', component: AdminDashboardComponent },
-      { path: 'avisos', component: GerenciaAvisosComponent },
+      { path: 'avisos', component: AvisosComponent },
       { path: 'novo-usuario', component: NovoUsuarioComponent },
       { path: 'usuarios/:id/editar', component: EditarUsuarioComponent },
     ],

@@ -1,0 +1,17 @@
+<app-container>
+  @if (isLoading()) {
+  <app-progress-spinner></app-progress-spinner>
+  }
+  <section class="timeline-page">
+    <app-features-header
+      [title]="'Cronogramas'"
+      [buttonName]="'Novo cronograma'"
+      [inputPlaceholder]="'Buscar cronograma...'"
+      [canCreate]="canCreate"
+      [(searchInput)]="searchInput"
+      (filter)="applyFilter()"
+      (buttonClick)="createTimeline()"
+    ></app-features-header>
+    <div class="timeline-page__content"></div>
+  </section>
+</app-container>

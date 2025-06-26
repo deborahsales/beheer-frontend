@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GerenciaAvisosComponent } from './gerencia-avisos.component';
+import { GroupFormComponent } from './group-form.component';
 
-describe('GerenciaAvisosComponent', () => {
-  let component: GerenciaAvisosComponent;
-  let fixture: ComponentFixture<GerenciaAvisosComponent>;
+describe('GroupFormComponent', () => {
+  let component: GroupFormComponent;
+  let fixture: ComponentFixture<GroupFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GerenciaAvisosComponent]
+      imports: [GroupFormComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GerenciaAvisosComponent);
+    fixture = TestBed.createComponent(GroupFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

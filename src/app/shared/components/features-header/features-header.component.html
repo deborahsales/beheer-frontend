@@ -7,5 +7,9 @@
     (valueChange)="onSearchInputChange($event)"
     (search)="applyFilter()"
   ></app-search-bar>
-  <button class="beheer-button feature-header__button">{{ buttonName }}</button>
+  @if (canCreate){
+  <button (click)="onClick()" class="beheer-button feature-header__button">
+    {{ buttonName }}
+  </button>
+  }
 </div>
