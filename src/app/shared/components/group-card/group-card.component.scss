@@ -12,6 +12,11 @@
     transform: scale(1.1);
   }
 
+  &__header {
+    display: flex;
+    gap: var(--space-sm);
+  }
+
   &__title {
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-medium);
@@ -21,6 +26,10 @@
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-regular);
     padding: var(--space-xs) 0 var(--space-sm) 0;
+  }
+
+  &__spacer {
+    flex: 1 1 auto;
   }
 
   &__description {
@@ -33,5 +42,22 @@
 
     border-top: 1px solid var(--black);
     padding: var(--space-xs) 0;
+  }
+
+  &__action-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: var(--font-size-md);
+
+    .material-icons {
+      font-size: 20px;
+      color: var(--error-color);
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: var(--primary-blue);
+      }
+    }
   }
 }

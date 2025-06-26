@@ -44,4 +44,41 @@ export class GruposComponent {
   openGroup(id: number) {
     console.log(`Grupo ${id} clicado`);
   }
+
+  deleteGroup(groupId: number) {
+    const group = this.groups.find((u) => u.id === groupId);
+    if (!group) return;
+
+    this.confirmDialog
+      .confirm({
+        title: 'Excluir grupo',
+        message: `Tem certeza que deseja excluir o grupo ${group.nome}?`,
+        confirmText: 'Excluir',
+        cancelText: 'Cancelar',
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.executeDelete(groupId);
+        }
+      });
+  }
+
+  private executeDelete(groupId: number): void {
+    this.isLoading.set(true);
+
+    this.groupService.deleteGroup(groupId).subscribe({
+      next: () => {
+        this.groups = this.groups.filter((u) => u.id !== groupId);
+        this.applyFilter();
+        this.snackbarService.show('Grupo deletado com sucesso');
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        this.snackbarService.show(
+          err.error?.message || 'Erro ao deletar grupo'
+        );
+        this.isLoading.set(false);
+      },
+    });
+  }
 }

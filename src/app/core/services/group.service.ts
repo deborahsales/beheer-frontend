@@ -15,4 +15,8 @@ export class GroupService {
   getGroups(): Observable<Group[]> {
     return this.http.get<Group[]>(this.apiUrl);
   }
+
+  deleteGroup(groupId: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${groupId}`);
+  }
 }

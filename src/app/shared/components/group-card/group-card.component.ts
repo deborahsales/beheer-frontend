@@ -8,16 +8,21 @@ import { Group } from '../../../core/interfaces/group';
   styleUrl: './group-card.component.scss',
 })
 export class GroupCardComponent {
-  @Input() grupo!: Group;
+  @Input() group!: Group;
   @Output() cardClick = new EventEmitter<number>();
+  @Output() groupDelete = new EventEmitter<number>();
 
   onClick() {
-    this.cardClick.emit(this.grupo.id);
+    this.cardClick.emit(this.group.id);
+  }
+
+  onDelete() {
+    this.groupDelete.emit(this.group.id);
   }
 
   getTotalMembros(): string {
     const total: number =
-      this.grupo.gestores.length + this.grupo.usuarios.length;
+      this.group.gestores.length + this.group.usuarios.length;
     return `${total} ${total === 1 ? 'membro' : 'membros'}`;
   }
 }

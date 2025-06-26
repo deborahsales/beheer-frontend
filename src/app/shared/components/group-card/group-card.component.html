@@ -1,7 +1,15 @@
 <div class="group-card" (click)="onClick()">
-  <p class="group-card__title">{{ grupo.nome }}</p>
-  <p class="group-card__members">
-    {{ getTotalMembros() }}
-  </p>
-  <p class="group-card__description">{{ grupo.descricao }}</p>
+  <div class="group-card__header">
+    <div class="group-card__data">
+      <p class="group-card__title">{{ group.nome }}</p>
+      <p class="group-card__members">
+        {{ getTotalMembros() }}
+      </p>
+    </div>
+    <span class="group-card__spacer"></span>
+    <button class="group-card__action-button" (click)="onDelete()">
+      <span class="material-icons">delete</span>
+    </button>
+  </div>
+  <p class="group-card__description">{{ group.descricao }}</p>
 </div>

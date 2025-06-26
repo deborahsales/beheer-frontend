@@ -13,8 +13,9 @@
     <div class="groups-page__wrapper">
       @for (group of filteredGroups; track group.id){
       <app-group-card
-        [grupo]="group"
+        [group]="group"
         (cardClick)="openGroup($event)"
+        (groupDelete)="deleteGroup($event)"
       ></app-group-card>
       }
     </div>
