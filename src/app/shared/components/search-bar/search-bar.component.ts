@@ -15,9 +15,6 @@ export class SearchBarComponent {
   onInputChange(newValue: string) {
     this.value = newValue;
     this.valueChange.emit(this.value);
-  }
-
-  onSearch() {
     this.search.emit();
   }
 }

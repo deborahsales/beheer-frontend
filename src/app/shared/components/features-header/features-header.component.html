@@ -1,0 +1,11 @@
+<div class="feature-header">
+  <h1 class="feature-header__title">{{ title }}</h1>
+  <span class="feature-header__spacer"></span>
+  <app-search-bar
+    [value]="searchInput"
+    [placeholder]="inputPlaceholder"
+    (valueChange)="onSearchInputChange($event)"
+    (search)="applyFilter()"
+  ></app-search-bar>
+  <button class="beheer-button feature-header__button">{{ buttonName }}</button>
+</div>

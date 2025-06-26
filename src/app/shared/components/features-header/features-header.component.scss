@@ -1,0 +1,14 @@
+.feature-header {
+  display: flex;
+  align-items: center;
+  margin: var(--space-md) 0;
+
+  &__spacer {
+    flex: 1 1 auto;
+  }
+
+  &__button {
+    height: 40px;
+    font-size: var(--font-size-md);
+  }
+}

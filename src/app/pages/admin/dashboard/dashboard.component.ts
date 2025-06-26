@@ -7,10 +7,9 @@ import { ConfirmDialogService } from '../../../core/services/confirm-dialog.serv
 import { SnackbarService } from '../../../core/services/snackbar.service';
 import { UserService } from '../../../core/services/user.service';
 import { ContainerComponent } from '../../../shared/components/container/container.component';
+import { FeaturesHeaderComponent } from '../../../shared/components/features-header/features-header.component';
 import { ProgressSpinnerComponent } from '../../../shared/components/progress-spinner/progress-spinner.component';
-import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar.component';
 import { CapitalizeFirstPipe } from '../../../shared/pipes/capitalize-first.pipe';
-import { FabButtonComponent } from '../../../shared/components/fab-button/fab-button.component';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -20,8 +19,7 @@ import { FabButtonComponent } from '../../../shared/components/fab-button/fab-bu
     CapitalizeFirstPipe,
     ContainerComponent,
     ProgressSpinnerComponent,
-    SearchBarComponent,
-    FabButtonComponent
+    FeaturesHeaderComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',

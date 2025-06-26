@@ -5,12 +5,12 @@ import { ConfirmDialogService } from '../../../core/services/confirm-dialog.serv
 import { GroupService } from '../../../core/services/group.service';
 import { SnackbarService } from '../../../core/services/snackbar.service';
 import { ContainerComponent } from '../../../shared/components/container/container.component';
+import { FeaturesHeaderComponent } from '../../../shared/components/features-header/features-header.component';
 import { GroupCardComponent } from '../../../shared/components/group-card/group-card.component';
-import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar.component';
 
 @Component({
   selector: 'app-grupos',
-  imports: [GroupCardComponent, SearchBarComponent, ContainerComponent],
+  imports: [GroupCardComponent, ContainerComponent, FeaturesHeaderComponent],
   templateUrl: './grupos.component.html',
   styleUrl: './grupos.component.scss',
 })

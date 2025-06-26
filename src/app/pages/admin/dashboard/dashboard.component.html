@@ -3,12 +3,13 @@
   <app-progress-spinner></app-progress-spinner>
   }
   <section class="user-container">
-    <app-search-bar
-      [(value)]="searchInput"
-      [placeholder]="'Buscar usuário...'"
-      (search)="applyFilter()"
-    ></app-search-bar>
-    <h1 class="user-container__title">Usuários</h1>
+    <app-features-header
+      [title]="'Usuários'"
+      [buttonName]="'Novo Usuário'"
+      [inputPlaceholder]="'Buscar usuários...'"
+      [(searchInput)]="searchInput"
+      (filter)="applyFilter()"
+    ></app-features-header>
     <div class="table-container">
       <table>
         <thead>
@@ -50,6 +51,5 @@
         }
       </table>
     </div>
-    <app-fab-button (click)="createUser()"></app-fab-button>
   </section>
 </app-container>
