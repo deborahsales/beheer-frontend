@@ -26,6 +26,11 @@
     padding-bottom: var(--space-sm);
   }
 
+  &__message {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-light);
+  }
+
   &__wrapper {
     display: flex;
     flex-wrap: wrap;

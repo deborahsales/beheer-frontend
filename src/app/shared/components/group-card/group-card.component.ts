@@ -16,7 +16,8 @@ export class GroupCardComponent {
     this.cardClick.emit(this.group.id);
   }
 
-  onDelete() {
+  onDelete(event: MouseEvent) {
+    event.stopPropagation();
     this.groupDelete.emit(this.group.id);
   }
 

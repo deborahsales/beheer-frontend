@@ -19,7 +19,9 @@
       </div>
       <h2 class="group-page__subtitle">Membros</h2>
       <div class="group-page__wrapper">
-        @for (user of group.usuarios; track user.usuarioId) {
+        @if(group.usuarios.length === 0){
+        <p class="group-page__message">Nenhum membro...</p>
+        } @for (user of group.usuarios; track user.usuarioId) {
         <div class="group-page__member">
           <span class="group-page__avatar">{{
             user.usuario.nome | initials
