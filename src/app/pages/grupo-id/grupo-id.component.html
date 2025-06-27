@@ -3,21 +3,68 @@
     <div class="group-page__container">
       @if (isLoading()) {
       <app-progress-spinner></app-progress-spinner>
-      } @else{
-      <h1 class="group-page__title">{{ group.nome }}</h1>
-      <p class="group-page__description">{{ group.descricao }}</p>
-      <h2 class="group-page__subtitle">Gestores</h2>
+      } @else{ @if(isEditing()){
+      <form [formGroup]="form" class="group-page__form" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput formControlName="nome" />
+          <mat-error *ngIf="form.get('nome')?.hasError('required')">
+            Nome é obrigatório
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição</mat-label>
+          <textarea matInput formControlName="descricao"></textarea>
+          <mat-error *ngIf="form.get('descricao')?.hasError('required')">
+            Descrição é obrigatória
+          </mat-error>
+        </mat-form-field>
+      </form>
+      <div class="group-page__form-actions">
+        <button mat-button (click)="onCancel()">Cancelar</button>
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="form.invalid"
+          (click)="onSubmit()"
+        >
+          Salvar
+        </button>
+      </div>
+      } @else {
+      <div class="group-page__edit">
+        <div class="group-page__actions">
+          <h1 class="group-page__title">{{ group.nome }}</h1>
+          <button class="action-button" (click)="edit()">
+            <span class="material-icons">edit</span>
+          </button>
+        </div>
+        <p class="group-page__description">{{ group.descricao }}</p>
+      </div>
+      }
+      <div class="group-page__actions">
+        <h2 class="group-page__subtitle">Gestores</h2>
+        <button class="action-button" (click)="addManagers()">
+          <span class="material-icons">group_add</span>
+        </button>
+      </div>
       <div class="group-page__wrapper">
         @for (user of group.gestores; track user.usuarioId) {
         <div class="group-page__member" (click)="openMember(user.usuarioId)">
           <span class="group-page__avatar">{{
             user.usuario.nome | initials
           }}</span>
-          <p>{{ user.usuario.nome }}</p>
+          <p class="group-page__member__name">{{ user.usuario.nome }}</p>
         </div>
         }
       </div>
-      <h2 class="group-page__subtitle">Membros</h2>
+
+      <div class="group-page__actions">
+        <h2 class="group-page__subtitle">Membros</h2>
+        <button class="action-button" (click)="addMembers()">
+          <span class="material-icons">group_add</span>
+        </button>
+      </div>
       <div class="group-page__wrapper">
         @if(group.usuarios.length === 0){
         <p class="group-page__message">Nenhum membro...</p>
@@ -26,7 +73,7 @@
           <span class="group-page__avatar">{{
             user.usuario.nome | initials
           }}</span>
-          <p>{{ user.usuario.nome }}</p>
+          <p class="group-page__member__name">{{ user.usuario.nome }}</p>
         </div>
         }
       </div>

@@ -9,8 +9,23 @@
     padding: var(--space-lg);
     height: 86vh;
     width: 100%;
-    border-radius: var(--space-sm);
+    border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      border-radius: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+    }
   }
 
   &__subtitle {
@@ -24,6 +39,26 @@
     font-size: var(--font-size-md);
     border-bottom: 1px solid var(--black);
     padding-bottom: var(--space-sm);
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: stretch;
+    padding: var(--space-xs);
+    gap: var(--space-md);
+  }
+
+  &__form-actions {
+    border-bottom: 1px solid var(--black);
+    padding-bottom: var(--space-sm);
+  }
+
+  &__actions {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
   }
 
   &__message {
@@ -47,6 +82,13 @@
     transition: transform 0.3s;
     box-shadow: 0 2px 5px #0000001a;
 
+    &__name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 160px;
+    }
+
     &:hover {
       cursor: pointer;
       transform: scale(1.05);
@@ -66,5 +108,30 @@
     border: none;
     overflow: hidden;
     padding: 0;
+  }
+}
+
+.action-button {
+  background: var(--light-gray);
+  padding: var(--space-xs);
+  border-radius: 50%;
+  border: none;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s;
+  box-shadow: 0 2px 5px #0000001a;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+
+  .material-icons {
+    font-size: 16px;
+    color: var(--primary-blue);
+    transition: color 0.3s ease;
   }
 }

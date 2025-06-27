@@ -24,7 +24,7 @@ export class GroupService {
     return this.http.post<any>(this.apiUrl, groupData);
   }
 
-  updateGroup(groupId: string, GroupData: any): Observable<any> {
+  updateGroup(groupId: number, GroupData: any): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/${groupId}`, GroupData);
   }
 
