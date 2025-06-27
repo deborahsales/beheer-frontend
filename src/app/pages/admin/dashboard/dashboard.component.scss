@@ -1,9 +1,59 @@
+.user-container {
+  margin-top: var(--space-xxl);
+}
+
 .table-container {
   overflow-x: auto;
   background-color: var(--white);
   padding: var(--space-sm);
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  &__name {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__overflow-text {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__overflow-email {
+    max-width: 200px;
+  }
+
+  &__avatar {
+    background-color: var(--primary-blue);
+    padding: var(--space-xs);
+    border-radius: 50%;
+    color: var(--white);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  &__status {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border-radius: 16px;
+    padding: var(--space-xxs) var(--space-sm);
+
+    &--inactive {
+      background-color: var(--orange);
+    }
+  }
 
   &::-webkit-scrollbar {
     width: 8px;
@@ -37,10 +87,9 @@ table {
 }
 
 .action-button {
-  background: none;
+  background: transparent;
   border: none;
   cursor: pointer;
-  font-size: var(--font-size-md);
 
   .material-icons {
     font-size: 20px;
@@ -48,7 +97,15 @@ table {
     transition: color 0.3s ease;
 
     &:hover {
-      color: var(--orange);
+      color: var(--light-brown);
     }
   }
+
+  &--delete .material-icons {
+    color: var(--orange);
+  }
+}
+
+.text-center {
+  text-align: center;
 }

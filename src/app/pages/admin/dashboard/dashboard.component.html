@@ -18,34 +18,49 @@
           <tr>
             <th>Nome</th>
             <th>E-mail</th>
-            <th>Telefone</th>
-            <th>Data de Nascimento</th>
-            <th>Admissão</th>
+            <th class="text-center">Admissão</th>
             <th>Cargo</th>
             <th>Função</th>
-            <th>Status</th>
-            <th>Ações</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Ações</th>
           </tr>
         </thead>
         @for (user of filteredUsers; track user.id){
         <tbody>
-          <td>{{ user.nome }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.telefone }}</td>
-          <td>{{ user.dataNascimento | date : "dd/MM/yyyy" : "UTC" }}</td>
-          <td>{{ user.dataAdmissao | date : "dd/MM/yyyy" : "UTC" }}</td>
-          <td>{{ user.cargo }}</td>
-          <td>{{ user.funcao | capitalizeFirst }}</td>
-          @if(user.dataDesligamento){
-          <td>Inativo</td>
-          } @else {
-          <td>Ativo</td>
-          }
-          <td>
+          <td class="table-container__name">
+            <span class="table-container__avatar">{{
+              user.nome | initials
+            }}</span
+            ><span class="table-container__overflow-text">{{ user.nome }}</span>
+          </td>
+          <td
+            class="table-container__overflow-text table-container__overflow-email"
+          >
+            {{ user.email }}
+          </td>
+          <td class="text-center">
+            {{ user.dataAdmissao | date : "dd/MM/yyyy" : "UTC" }}
+          </td>
+          <td class="table-container__overflow-text">{{ user.cargo }}</td>
+          <td class="table-container__overflow-text">
+            {{ user.funcao | capitalizeFirst }}
+          </td>
+          <td class="text-center">
+            <span
+              class="table-container__status"
+              [class.table-container__status--inactive]="user.dataDesligamento"
+            >
+              {{ user.dataDesligamento ? "Inativo" : "Ativo" }}
+            </span>
+          </td>
+          <td class="text-center">
             <button class="action-button" (click)="editUser(user.id!)">
               <span class="material-icons">edit</span>
             </button>
-            <button class="action-button" (click)="deleteUser(user.id!)">
+            <button
+              class="action-button action-button--delete"
+              (click)="deleteUser(user.id!)"
+            >
               <span class="material-icons">delete</span>
             </button>
           </td>

@@ -5,6 +5,7 @@ import { AvisosComponent } from '../pages/avisos/avisos.component';
 import { DemandasComponent } from '../pages/demandas/demandas.component';
 import { CronogramasComponent } from '../pages/gestor/cronogramas/cronogramas.component';
 import { GestorDashboardComponent } from '../pages/gestor/dashboard/dashboard.component';
+import { GrupoIdComponent } from '../pages/grupo-id/grupo-id.component';
 import { GruposComponent } from '../pages/grupos/grupos.component';
 
 export const gestorRoutes: Routes = [
@@ -45,6 +46,7 @@ export const gestorRoutes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: GestorDashboardComponent },
       { path: 'grupos', component: GruposComponent },
+      { path: 'grupo/:id', component: GrupoIdComponent },
       { path: 'demandas', component: DemandasComponent },
       { path: 'avisos', component: AvisosComponent },
       { path: 'cronogramas', component: CronogramasComponent },

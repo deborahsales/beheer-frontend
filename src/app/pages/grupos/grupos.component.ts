@@ -36,9 +36,12 @@ export class GruposComponent {
   ) {}
 
   ngOnInit() {
+    this.isLoading = signal(true);
+
     this.groupService.getGroups().subscribe((data) => {
       this.groups = data;
       this.filteredGroups = [...this.groups];
+      this.isLoading = signal(false);
     });
   }
 
@@ -50,7 +53,7 @@ export class GruposComponent {
   }
 
   openGroup(id: number) {
-    console.log(`Grupo ${id} clicado`);
+    this.router.navigate(['/gestor/grupo', id]);
   }
 
   createGroup() {

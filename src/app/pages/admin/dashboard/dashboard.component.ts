@@ -3,13 +3,14 @@ import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from '../../../core/interfaces/user';
+import { OpenDialogService } from '../../../core/services/open-dialog.service';
 import { SnackbarService } from '../../../core/services/snackbar.service';
 import { UserService } from '../../../core/services/user.service';
 import { ContainerComponent } from '../../../shared/components/container/container.component';
 import { FeaturesHeaderComponent } from '../../../shared/components/features-header/features-header.component';
 import { ProgressSpinnerComponent } from '../../../shared/components/progress-spinner/progress-spinner.component';
 import { CapitalizeFirstPipe } from '../../../shared/pipes/capitalize-first.pipe';
-import { OpenDialogService } from '../../../core/services/open-dialog.service';
+import { InitialsPipe } from '../../../shared/pipes/initials.pipe';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -17,6 +18,7 @@ import { OpenDialogService } from '../../../core/services/open-dialog.service';
     CommonModule,
     FormsModule,
     CapitalizeFirstPipe,
+    InitialsPipe,
     ContainerComponent,
     ProgressSpinnerComponent,
     FeaturesHeaderComponent,
@@ -39,9 +41,12 @@ export class AdminDashboardComponent {
   ) {}
 
   ngOnInit() {
+    this.isLoading = signal(true);
+
     this.userService.getUsers().subscribe((data) => {
       this.users = data;
       this.filteredUsers = [...this.users];
+      this.isLoading = signal(false);
     });
   }
 

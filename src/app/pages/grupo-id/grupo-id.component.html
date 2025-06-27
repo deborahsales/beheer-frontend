@@ -1,0 +1,35 @@
+<app-container>
+  <section class="group-page">
+    <div class="group-page__container">
+      @if (isLoading()) {
+      <app-progress-spinner></app-progress-spinner>
+      } @else{
+      <h1 class="group-page__title">{{ group.nome }}</h1>
+      <p class="group-page__description">{{ group.descricao }}</p>
+      <h2 class="group-page__subtitle">Gestores</h2>
+      <div class="group-page__wrapper">
+        @for (user of group.gestores; track user.usuarioId) {
+        <div class="group-page__member" (click)="openMember(user.usuarioId)">
+          <span class="group-page__avatar">{{
+            user.usuario.nome | initials
+          }}</span>
+          <p>{{ user.usuario.nome }}</p>
+        </div>
+        }
+      </div>
+      <h2 class="group-page__subtitle">Membros</h2>
+      <div class="group-page__wrapper">
+        @for (user of group.usuarios; track user.usuarioId) {
+        <div class="group-page__member">
+          <span class="group-page__avatar">{{
+            user.usuario.nome | initials
+          }}</span>
+          <p>{{ user.usuario.nome }}</p>
+        </div>
+        }
+      </div>
+      <h2 class="group-page__subtitle">Demandas</h2>
+      }
+    </div>
+  </section>
+</app-container>
