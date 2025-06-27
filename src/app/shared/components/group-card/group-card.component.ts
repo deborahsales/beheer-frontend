@@ -9,6 +9,7 @@ import { Group } from '../../../core/interfaces/group';
 })
 export class GroupCardComponent {
   @Input() group!: Group;
+  @Input() canDelete: boolean = false;
   @Output() cardClick = new EventEmitter<number>();
   @Output() groupDelete = new EventEmitter<number>();
 

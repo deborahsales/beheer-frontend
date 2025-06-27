@@ -55,6 +55,14 @@ export class UserService {
     );
   }
 
+  getRole() {
+    return this.retornarUser().pipe(
+      map((user) => {
+        return user?.funcao;
+      })
+    );
+  }
+
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl);
   }

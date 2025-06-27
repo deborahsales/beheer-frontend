@@ -11,6 +11,11 @@
     border: none;
     font-size: var(--font-size-sm);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 1px 5px var(--primary-blue);
+    }
   }
 
   &__icon {

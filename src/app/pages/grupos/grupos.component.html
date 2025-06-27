@@ -7,7 +7,7 @@
       [title]="'Grupos'"
       [buttonName]="'Novo grupo'"
       [inputPlaceholder]="'Buscar grupo...'"
-      [canCreate]="canCreate"
+      [canCreate]="canManage"
       [(searchInput)]="searchInput"
       (filter)="applyFilter()"
       (buttonClick)="createGroup()"
@@ -16,6 +16,7 @@
       @for (group of filteredGroups; track group.id){
       <app-group-card
         [group]="group"
+        [canDelete]="canManage"
         (cardClick)="openGroup($event)"
         (groupDelete)="deleteGroup($event)"
       ></app-group-card>

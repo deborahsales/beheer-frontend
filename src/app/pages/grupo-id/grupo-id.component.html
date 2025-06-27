@@ -35,18 +35,22 @@
       <div class="group-page__edit">
         <div class="group-page__actions">
           <h1 class="group-page__title">{{ group.nome }}</h1>
+          @if(canManage){
           <button class="action-button" (click)="edit()">
             <span class="material-icons">edit</span>
           </button>
+          }
         </div>
         <p class="group-page__description">{{ group.descricao }}</p>
       </div>
       }
       <div class="group-page__actions">
         <h2 class="group-page__subtitle">Gestores</h2>
+        @if(canManage){
         <button class="action-button" (click)="addManagers()">
           <span class="material-icons">group_add</span>
         </button>
+        }
       </div>
       <div class="group-page__wrapper">
         @for (user of group.gestores; track user.usuarioId) {
@@ -61,9 +65,11 @@
 
       <div class="group-page__actions">
         <h2 class="group-page__subtitle">Membros</h2>
+        @if(canManage){
         <button class="action-button" (click)="addMembers()">
           <span class="material-icons">group_add</span>
         </button>
+        }
       </div>
       <div class="group-page__wrapper">
         @if(group.usuarios.length === 0){

@@ -4,6 +4,7 @@ import { Group } from '../../core/interfaces/group';
 import { GroupService } from '../../core/services/group.service';
 import { OpenDialogService } from '../../core/services/open-dialog.service';
 import { SnackbarService } from '../../core/services/snackbar.service';
+import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { FeaturesHeaderComponent } from '../../shared/components/features-header/features-header.component';
 import { GroupCardComponent } from '../../shared/components/group-card/group-card.component';
@@ -26,17 +27,29 @@ export class GruposComponent {
   filteredGroups: Group[] = [];
   searchInput: string = '';
   isLoading = signal(false);
-  canCreate: boolean = true;
+  canManage: boolean = false;
+  role: string = 'colaborador';
 
   constructor(
     private groupService: GroupService,
     private openDialog: OpenDialogService,
     private snackbarService: SnackbarService,
+    private userService: UserService,
     private router: Router
   ) {}
 
   ngOnInit() {
     this.isLoading = signal(true);
+
+    this.userService.getRole().subscribe((role) => {
+      if (role) {
+        this.role = role.toLowerCase();
+      }
+    });
+
+    if (this.role === 'gestor') {
+      this.canManage = true;
+    }
 
     this.groupService.getGroups().subscribe((data) => {
       this.groups = data;
@@ -53,7 +66,7 @@ export class GruposComponent {
   }
 
   openGroup(id: number) {
-    this.router.navigate(['/gestor/grupo', id]);
+    this.router.navigate([`/${this.role}/grupo`, id]);
   }
 
   createGroup() {

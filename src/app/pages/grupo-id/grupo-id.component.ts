@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import {
   FormBuilder,
@@ -12,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Group } from '../../core/interfaces/group';
 import { GroupService } from '../../core/services/group.service';
 import { SnackbarService } from '../../core/services/snackbar.service';
+import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
 import { InitialsPipe } from '../../shared/pipes/initials.pipe';
@@ -26,6 +28,7 @@ import { InitialsPipe } from '../../shared/pipes/initials.pipe';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    CommonModule,
   ],
   templateUrl: './grupo-id.component.html',
   styleUrl: './grupo-id.component.scss',
@@ -36,13 +39,16 @@ export class GrupoIdComponent {
   isEditing = signal(false);
   group!: Group;
   form: FormGroup;
+  canManage: boolean = false;
+  role: string = 'colaborador';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private groupService: GroupService,
     private formBuilder: FormBuilder,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private userService: UserService
   ) {
     this.form = this.formBuilder.group({
       nome: ['', Validators.required],
@@ -52,6 +58,17 @@ export class GrupoIdComponent {
 
   ngOnInit(): void {
     this.isLoading = signal(true);
+
+    this.userService.getRole().subscribe((role) => {
+      if (role) {
+        this.role = role.toLowerCase();
+      }
+    });
+
+    if (this.role === 'gestor') {
+      this.canManage = true;
+    }
+
     this.groupId = this.route.snapshot.paramMap.get('id')!;
 
     if (this.groupId) {
