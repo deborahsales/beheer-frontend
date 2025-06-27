@@ -32,7 +32,7 @@ export class AuthService {
       .pipe(
         tap((response) => {
           const authToken = response.body?.access_token || '';
-          this.userService.salvarToken(authToken);
+          this.userService.storeToken(authToken);
         })
       );
   }

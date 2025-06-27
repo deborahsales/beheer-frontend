@@ -16,6 +16,7 @@ import { SnackbarService } from '../../core/services/snackbar.service';
 import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
+import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
 import { InitialsPipe } from '../../shared/pipes/initials.pipe';
 
 @Component({
@@ -29,6 +30,7 @@ import { InitialsPipe } from '../../shared/pipes/initials.pipe';
     MatInputModule,
     MatButtonModule,
     CommonModule,
+    UserAvatarComponent,
   ],
   templateUrl: './grupo-id.component.html',
   styleUrl: './grupo-id.component.scss',

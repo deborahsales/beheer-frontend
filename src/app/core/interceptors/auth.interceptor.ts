@@ -4,8 +4,8 @@ import { TokenService } from '../services/token.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenService = inject(TokenService);
-  if (tokenService.possuiToken()) {
-    const token = tokenService.retornarToken();
+  if (tokenService.hasToken()) {
+    const token = tokenService.getToken();
 
     req = req.clone({
       setHeaders: {

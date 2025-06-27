@@ -55,9 +55,7 @@
       <div class="group-page__wrapper">
         @for (user of group.gestores; track user.usuarioId) {
         <div class="group-page__member" (click)="openMember(user.usuarioId)">
-          <span class="group-page__avatar">{{
-            user.usuario.nome | initials
-          }}</span>
+          <app-user-avatar [name]="user.usuario.nome"></app-user-avatar>
           <p class="group-page__member__name">{{ user.usuario.nome }}</p>
         </div>
         }
@@ -76,9 +74,7 @@
         <p class="group-page__message">Nenhum membro...</p>
         } @for (user of group.usuarios; track user.usuarioId) {
         <div class="group-page__member">
-          <span class="group-page__avatar">{{
-            user.usuario.nome | initials
-          }}</span>
+          <app-user-avatar [name]="user.usuario.nome"></app-user-avatar>
           <p class="group-page__member__name">{{ user.usuario.nome }}</p>
         </div>
         }

@@ -91,7 +91,7 @@ export class LoginComponent {
     this.authService.autenticar(emailValue!, passwordValue!).subscribe({
       next: (value) => {
         this.isLoading.set(false);
-        this.userService.retornarUser().subscribe((user) => {
+        this.userService.getAuthUser().subscribe((user) => {
           if (user) {
             const funcao = user.funcao;
 

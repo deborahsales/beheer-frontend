@@ -1,0 +1,14 @@
+.avatar {
+  background-color: var(--primary-blue);
+  padding: var(--space-xs);
+  border-radius: 50%;
+  color: var(--white);
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  overflow: hidden;
+  padding: 0;
+}

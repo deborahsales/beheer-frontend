@@ -9,6 +9,7 @@ import { UserService } from '../../../core/services/user.service';
 import { ContainerComponent } from '../../../shared/components/container/container.component';
 import { FeaturesHeaderComponent } from '../../../shared/components/features-header/features-header.component';
 import { ProgressSpinnerComponent } from '../../../shared/components/progress-spinner/progress-spinner.component';
+import { UserAvatarComponent } from '../../../shared/components/user-avatar/user-avatar.component';
 import { CapitalizeFirstPipe } from '../../../shared/pipes/capitalize-first.pipe';
 import { InitialsPipe } from '../../../shared/pipes/initials.pipe';
 
@@ -22,6 +23,7 @@ import { InitialsPipe } from '../../../shared/pipes/initials.pipe';
     ContainerComponent,
     ProgressSpinnerComponent,
     FeaturesHeaderComponent,
+    UserAvatarComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',

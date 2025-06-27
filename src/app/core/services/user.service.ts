@@ -14,41 +14,41 @@ export class UserService {
   private apiUrl = `${enviroment.apiUrl}/usuario`;
 
   constructor(private tokenService: TokenService, private http: HttpClient) {
-    if (this.tokenService.possuiToken()) {
-      this.decodificarJwt();
+    if (this.tokenService.hasToken()) {
+      this.decodeJwt();
     }
   }
 
-  decodificarJwt() {
-    const token = this.tokenService.retornarToken();
+  decodeJwt() {
+    const token = this.tokenService.getToken();
     const user = jwtDecode(token) as AuthUser;
     this.userSubject.next(user);
   }
 
-  retornarUser() {
+  getAuthUser() {
     return this.userSubject.asObservable();
   }
 
-  retornarToken() {
-    return this.tokenService.retornarToken();
+  getToken() {
+    return this.tokenService.getToken();
   }
 
-  salvarToken(token: string) {
-    this.tokenService.salvarToken(token);
-    this.decodificarJwt();
+  storeToken(token: string) {
+    this.tokenService.storeToken(token);
+    this.decodeJwt();
   }
 
   logout() {
-    this.tokenService.excluirToken();
+    this.tokenService.removeToken();
     this.userSubject.next(null);
   }
 
-  estaLogado() {
-    return this.tokenService.possuiToken();
+  isAuthenticated() {
+    return this.tokenService.hasToken();
   }
 
   retornaNome() {
-    return this.retornarUser().pipe(
+    return this.getAuthUser().pipe(
       map((user) => {
         return user?.nome;
       })
@@ -56,7 +56,7 @@ export class UserService {
   }
 
   getRole() {
-    return this.retornarUser().pipe(
+    return this.getAuthUser().pipe(
       map((user) => {
         return user?.funcao;
       })

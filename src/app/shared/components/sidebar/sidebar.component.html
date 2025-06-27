@@ -23,7 +23,11 @@
   </nav>
 
   <div class="user-section">
-    <div class="user-section__name">{{ userName }}</div>
+    <div class="user-section__details">
+      <app-user-avatar [name]="userName"></app-user-avatar>
+      <div class="user-section__name">{{ userName }}</div>
+    </div>
+    <div class="user-section__name">{{ userEmail }}</div>
     <button class="user-section__button" (click)="onLogout()">
       <span class="material-icons">logout</span>
       Sair

@@ -28,9 +28,7 @@
         @for (user of filteredUsers; track user.id){
         <tbody>
           <td class="table-container__name">
-            <span class="table-container__avatar">{{
-              user.nome | initials
-            }}</span
+            <app-user-avatar [name]="user.nome"></app-user-avatar>
             ><span class="table-container__overflow-text">{{ user.nome }}</span>
           </td>
           <td

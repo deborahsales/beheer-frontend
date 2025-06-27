@@ -68,9 +68,15 @@
     margin-top: auto;
     font-size: var(--font-size-sm);
     border-top: 1px solid var(--light-gray);
+    gap: var(--space-xs);
+
+    &__details {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
 
     &__name {
-      margin-bottom: var(--space-xs);
       font-weight: var(--font-weight-medium);
     }
 
