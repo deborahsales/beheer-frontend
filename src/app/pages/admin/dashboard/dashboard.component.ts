@@ -11,7 +11,6 @@ import { FeaturesHeaderComponent } from '../../../shared/components/features-hea
 import { ProgressSpinnerComponent } from '../../../shared/components/progress-spinner/progress-spinner.component';
 import { UserAvatarComponent } from '../../../shared/components/user-avatar/user-avatar.component';
 import { CapitalizeFirstPipe } from '../../../shared/pipes/capitalize-first.pipe';
-import { InitialsPipe } from '../../../shared/pipes/initials.pipe';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -19,7 +18,6 @@ import { InitialsPipe } from '../../../shared/pipes/initials.pipe';
     CommonModule,
     FormsModule,
     CapitalizeFirstPipe,
-    InitialsPipe,
     ContainerComponent,
     ProgressSpinnerComponent,
     FeaturesHeaderComponent,

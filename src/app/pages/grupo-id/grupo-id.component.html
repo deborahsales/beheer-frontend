@@ -47,7 +47,7 @@
       <div class="group-page__actions">
         <h2 class="group-page__subtitle">Gestores</h2>
         @if(canManage){
-        <button class="action-button" (click)="addManagers()">
+        <button class="action-button" (click)="addMembers(group.id, 'GESTOR')">
           <span class="material-icons">group_add</span>
         </button>
         }
@@ -64,7 +64,10 @@
       <div class="group-page__actions">
         <h2 class="group-page__subtitle">Membros</h2>
         @if(canManage){
-        <button class="action-button" (click)="addMembers()">
+        <button
+          class="action-button"
+          (click)="addMembers(group.id, 'COLABORADOR')"
+        >
           <span class="material-icons">group_add</span>
         </button>
         }

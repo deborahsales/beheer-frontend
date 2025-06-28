@@ -67,6 +67,14 @@ export class UserService {
     return this.http.get<User[]>(this.apiUrl);
   }
 
+  getColaboradores(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/colaboradores`);
+  }
+
+  getGestores(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/gestores`);
+  }
+
   getUserById(userId: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${userId}`);
   }
