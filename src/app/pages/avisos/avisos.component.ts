@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { FeaturesHeaderComponent } from '../../shared/components/features-header/features-header.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
@@ -16,7 +17,24 @@ import { ProgressSpinnerComponent } from '../../shared/components/progress-spinn
 export class AvisosComponent {
   isLoading = signal(false);
   searchInput: string = '';
-  canCreate: boolean = true;
+  canManage: boolean = false;
+  role: string = 'colaborador';
+
+  constructor(private userService: UserService) {}
+
+  ngOnInit() {
+    this.isLoading = signal(true);
+
+    this.userService.getRole().subscribe((role) => {
+      if (role) {
+        this.role = role.toLowerCase();
+      }
+    });
+
+    if (this.role === 'gestor') {
+      this.canManage = true;
+    }
+  }
 
   applyFilter() {}
   createNotification() {}
