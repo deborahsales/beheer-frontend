@@ -5,6 +5,7 @@ export interface Notification {
   dateTimestamp: string;
   gestorRhUsuarioId: number;
   avisoUsuario: AvisoUsuario[];
+  gestor: Gestor;
 }
 
 interface AvisoUsuario {
@@ -12,4 +13,13 @@ interface AvisoUsuario {
   dataLeitura: string;
   usuarioId: number;
   avisoId: number;
+}
+
+interface Gestor {
+  id: number;
+  nome: string;
+}
+
+export interface NotificationWithSender extends Notification {
+  remetenteNome: string;
 }

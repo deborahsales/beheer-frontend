@@ -24,8 +24,18 @@ export class NotificationService {
     return this.http.post<any>(this.apiUrl, notificationData);
   }
 
-  updateNotification(notificationId: number, NotificationData: any): Observable<any> {
-    return this.http.patch<any>(`${this.apiUrl}/${notificationId}`, NotificationData);
+  updateNotification(
+    notificationId: number,
+    NotificationData: any
+  ): Observable<any> {
+    return this.http.patch<any>(
+      `${this.apiUrl}/${notificationId}`,
+      NotificationData
+    );
+  }
+
+  readNotification(notificationId: number): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/lido/${notificationId}`, '');
   }
 
   deleteNotification(notificationId: number): Observable<any> {

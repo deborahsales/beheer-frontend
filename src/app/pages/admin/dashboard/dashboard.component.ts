@@ -61,11 +61,11 @@ export class AdminDashboardComponent {
     this.router.navigate(['/admin/novo-usuario']);
   }
 
-  editUser(userId: string) {
+  editUser(userId: number) {
     this.router.navigate(['/admin/usuarios', userId, 'editar']);
   }
 
-  deleteUser(userId: string) {
+  deleteUser(userId: number) {
     const user = this.users.find((u) => u.id === userId);
     if (!user) return;
 
@@ -83,7 +83,7 @@ export class AdminDashboardComponent {
       });
   }
 
-  private executeDelete(userId: string): void {
+  private executeDelete(userId: number): void {
     this.isLoading.set(true);
 
     this.userService.deleteUser(userId).subscribe({

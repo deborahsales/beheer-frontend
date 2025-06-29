@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { gestorGuard } from '../core/guards/gestor.guard';
 import { DashboardLayoutComponent } from '../layouts/dashboard-layout/dashboard-layout.component';
+import { AvisoIdComponent } from '../pages/aviso-id/aviso-id.component';
 import { AvisosComponent } from '../pages/avisos/avisos.component';
 import { DemandasComponent } from '../pages/demandas/demandas.component';
 import { CronogramasComponent } from '../pages/gestor/cronogramas/cronogramas.component';
@@ -49,6 +50,7 @@ export const gestorRoutes: Routes = [
       { path: 'grupo/:id', component: GrupoIdComponent },
       { path: 'demandas', component: DemandasComponent },
       { path: 'avisos', component: AvisosComponent },
+      { path: 'aviso/:id', component: AvisoIdComponent },
       { path: 'cronogramas', component: CronogramasComponent },
     ],
   },

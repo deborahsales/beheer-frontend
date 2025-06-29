@@ -75,7 +75,7 @@ export class UserService {
     return this.http.get<User[]>(`${this.apiUrl}/gestores`);
   }
 
-  getUserById(userId: string): Observable<User> {
+  getUserById(userId: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${userId}`);
   }
 
@@ -83,11 +83,11 @@ export class UserService {
     return this.http.post<any>(this.apiUrl, userData);
   }
 
-  updateUser(userId: string, userData: any): Observable<any> {
+  updateUser(userId: number, userData: any): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/${userId}`, userData);
   }
 
-  deleteUser(userId: string): Observable<any> {
+  deleteUser(userId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${userId}`);
   }
 }

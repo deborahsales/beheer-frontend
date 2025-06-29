@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { colaboradorGuard } from '../core/guards/colaborador.guard';
 import { DashboardLayoutComponent } from '../layouts/dashboard-layout/dashboard-layout.component';
+import { AvisoIdComponent } from '../pages/aviso-id/aviso-id.component';
 import { AvisosComponent } from '../pages/avisos/avisos.component';
 import { ColaboradorDashboardComponent } from '../pages/colaborador/dashboard/dashboard.component';
 import { DemandasComponent } from '../pages/demandas/demandas.component';
@@ -43,6 +44,7 @@ export const colaboradorRoutes: Routes = [
       { path: 'grupo/:id', component: GrupoIdComponent },
       { path: 'demandas', component: DemandasComponent },
       { path: 'avisos', component: AvisosComponent },
+      { path: 'aviso/:id', component: AvisoIdComponent },
     ],
   },
 ];

@@ -17,7 +17,7 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'admin',
+    path: 'administrador',
     children: adminRoutes,
   },
   {

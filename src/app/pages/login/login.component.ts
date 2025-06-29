@@ -96,7 +96,7 @@ export class LoginComponent {
             const funcao = user.funcao;
 
             if (funcao == 'ADMINISTRADOR') {
-              this.router.navigateByUrl('/admin');
+              this.router.navigateByUrl('/administrador');
             } else if (funcao == 'GESTOR') {
               this.router.navigateByUrl('/gestor');
             } else if (funcao == 'COLABORADOR') {

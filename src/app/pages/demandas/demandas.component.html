@@ -12,6 +12,77 @@
       (filter)="applyFilter()"
       (buttonClick)="createTask()"
     ></app-features-header>
-    <div class="tasks-page__content"></div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Titulo</th>
+            <th class="text-center">Prazo</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Prioridade</th>
+            <th class="text-center">Criação</th>
+            @if (canManage){
+            <th class="text-center">Ações</th>
+            }
+          </tr>
+        </thead>
+        @for (task of filteredTasks; track task.id){
+        <tbody>
+          <td class="table-container__overflow-text">
+            {{ task.titulo }}
+          </td>
+          <td class="text-center">
+            {{ task.prazo | date : "dd/MM/yyyy" : "UTC" }}
+          </td>
+          <td class="text-center">
+            <span
+              class="table-container__status"
+              [class.table-container__status--atrasada]="isAtrasada(task.prazo)"
+              [class.table-container__status--iniciada]="
+                task.status === 'INICIADA'
+              "
+              [class.table-container__status--finalizada]="
+                task.status === 'FINALIZADA'
+              "
+              >{{
+                !isAtrasada(task.prazo)
+                  ? (task.status | capitalizeFirst)
+                  : "Atrasada"
+              }}</span
+            >
+          </td>
+          <td class="text-center">
+            <span
+              class="table-container__prioridade"
+              [class.table-container__prioridade--media]="
+                task.prioridade === 'MEDIA'
+              "
+              [class.table-container__prioridade--alta]="
+                task.prioridade === 'ALTA'
+              "
+              >{{
+                task.prioridade === "MEDIA"
+                  ? "Média"
+                  : (task.prioridade | capitalizeFirst)
+              }}</span
+            >
+          </td>
+          <td class="text-center">
+            {{ task.dateTimestamp | date : "dd/MM/yyyy" : "UTC" }}
+          </td>
+          @if (canManage){
+          <td class="text-center">
+            <button
+              class="action-button action-button--delete"
+              (click)="deleteTask(task.id!)"
+            >
+              <span class="material-icons">delete</span>
+            </button>
+          </td>
+          }
+        </tbody>
+        }
+      </table>
+    </div>
   </section>
 </app-container>
