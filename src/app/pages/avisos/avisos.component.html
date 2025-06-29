@@ -1,0 +1,68 @@
+<app-container>
+  @if (isLoading()) {
+  <app-progress-spinner></app-progress-spinner>
+  }
+  <section class="notifications-page">
+    <app-features-header
+      [title]="'Avisos'"
+      [buttonName]="'Novo aviso'"
+      [inputPlaceholder]="'Buscar aviso...'"
+      [canCreate]="canManage"
+      [(searchInput)]="searchInput"
+      (filter)="applyFilter()"
+      (buttonClick)="createNotification()"
+    ></app-features-header>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Assunto</th>
+            <th>Conteudo</th>
+            <th class="text-center">Data</th>
+            <th>Remetente</th>
+            <th class="text-center">Ações</th>
+          </tr>
+        </thead>
+        @for (notification of filteredNotifications; track notification.id){
+        <tbody
+          class="table-container__line"
+          (click)="openNotification(notification.id)"
+        >
+          <td class="table-container__overflow-text">
+            {{ notification.assunto }}
+          </td>
+          <td class="table-container__overflow-text">
+            {{ notification.conteudo }}
+          </td>
+          <td class="text-center">
+            {{ notification.dateTimestamp | date : "dd/MM/yyyy" : "UTC" }}
+          </td>
+          <td>{{ notification.gestor.nome }}</td>
+          <td class="text-center">
+            @if (canManage && this.userId === notification.gestorRhUsuarioId){
+            <button
+              class="action-button action-button--delete"
+              (click)="
+                deleteNotification(notification.id!); $event.stopPropagation()
+              "
+            >
+              <span class="material-icons">delete</span>
+            </button>
+            } @else {
+            <button
+              class="action-button action-button"
+              (click)="
+                readNotification(notification.id!); $event.stopPropagation()
+              "
+            >
+              <span class="material-icons">check</span>
+            </button>
+
+            }
+          </td>
+        </tbody>
+        }
+      </table>
+    </div>
+  </section>
+</app-container>

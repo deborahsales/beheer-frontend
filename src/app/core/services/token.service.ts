@@ -6,19 +6,19 @@ const KEY = 'token';
   providedIn: 'root',
 })
 export class TokenService {
-  salvarToken(token: string) {
+  storeToken(token: string) {
     return localStorage.setItem(KEY, token);
   }
 
-  excluirToken() {
+  removeToken() {
     localStorage.removeItem(KEY);
   }
 
-  retornarToken() {
+  getToken() {
     return localStorage.getItem(KEY) ?? '';
   }
 
-  possuiToken() {
-    return !!this.retornarToken();
+  hasToken() {
+    return !!this.getToken();
   }
 }

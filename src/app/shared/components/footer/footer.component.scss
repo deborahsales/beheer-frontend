@@ -3,22 +3,19 @@ footer {
   text-align: center;
   justify-content: center;
   align-items: center;
-}
 
-.footer__legal a {
-  text-decoration: none;
-  font-size: 12px;
-  margin: 0 10px;
-}
+  &__legal p {
+    font-size: var(--font-size-sm);
+  }
 
-.footer__legal a:hover {
-  color: var(--orange);
-  cursor: pointer;
-}
+  &__legal a {
+    text-decoration: none;
+    font-size: var(--font-size-xs);
+    margin: 0 var(--space-xs);
+  }
 
-/* Responsividade para dispositivos móveis */
-@media (max-width: 768px) {
-  .footer__legal a {
-    font-size: 12px;
+  &__legal a:hover {
+    color: var(--orange);
+    cursor: pointer;
   }
 }

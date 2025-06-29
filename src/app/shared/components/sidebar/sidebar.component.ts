@@ -2,7 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { map } from 'rxjs';
 import { UserService } from '../../../core/services/user.service';
+import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 
 export interface SidebarLink {
   label: string;
@@ -12,7 +14,7 @@ export interface SidebarLink {
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule, RouterModule, MatIconModule],
+  imports: [CommonModule, RouterModule, MatIconModule, UserAvatarComponent],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })
@@ -27,13 +29,22 @@ export class SidebarComponent {
   @Input() links: SidebarLink[] = [];
   @Output() logout = new EventEmitter<void>();
   userName: string = 'Usuário';
+  userEmail: string = '';
 
   ngOnInit() {
-    this.userService.retornaNome().subscribe((nome) => {
-      if (nome) {
-        this.userName = nome;
-      }
-    });
+    this.userService
+      .getAuthUser()
+      .pipe(
+        map((user) => {
+          return user;
+        })
+      )
+      .subscribe((user) => {
+        if (user) {
+          this.userName = user.nome;
+          this.userEmail = user.email;
+        }
+      });
   }
 
   onLogout() {

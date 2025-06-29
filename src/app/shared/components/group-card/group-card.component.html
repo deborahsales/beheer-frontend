@@ -1,0 +1,17 @@
+<div class="group-card" (click)="onClick()">
+  <div class="group-card__header">
+    <div class="group-card__data">
+      <p class="group-card__title">{{ group.nome }}</p>
+      <p class="group-card__members">
+        {{ getTotalMembros() }}
+      </p>
+    </div>
+    <span class="group-card__spacer"></span>
+    @if(canDelete){
+    <button class="group-card__action-button" (click)="onDelete($event)">
+      <span class="material-icons">delete</span>
+    </button>
+    }
+  </div>
+  <p class="group-card__description">{{ group.descricao }}</p>
+</div>

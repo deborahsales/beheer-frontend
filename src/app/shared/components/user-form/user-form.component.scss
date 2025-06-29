@@ -1,60 +1,48 @@
-app-container {
-  mat-card {
-    background-color: var(--white);
-    margin: var(--space-md) 0;
-  }
+mat-card {
+  background-color: var(--white);
+  margin: var(--space-md) 0;
+}
 
-  .grid-container {
+mat-card-title {
+  text-align: center;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-md);
+  margin-top: var(--space-xs);
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-md);
+
+  .user-form__button {
+    height: 40px;
+    width: 90px;
+    font-size: var(--font-size-sm);
+  }
+}
+
+.user-form {
+  &__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 16px;
-    .full-width {
-      grid-column: 1 / span 2;
-    }
+    gap: 16px;
 
-    .grid-item {
-      display: flex;
-      flex-direction: column;
-      grid-gap: 8px;
-      .radio-group {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 16px;
-      }
-    }
-  }
-
-  mat-card-title {
-    text-align: center;
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-medium);
-    margin-bottom: var(--space-md);
-    margin-top: var(--space-xs);
-  }
-
-  mat-card-actions {
-    display: flex;
-    justify-content: center;
-    margin-bottom: var(--space-md);
-
-    .beheer-button {
-      height: 40px;
-      width: 90px;
-      font-size: var(--font-size-sm);
-    }
-  }
-
-  .acessoPerfil {
-    display: flex;
-    justify-content: space-between;
-    margin: 40px 16px 24px 0;
-  }
-
-  @media (max-width: 860px) {
-    .grid-container {
+    @media (max-width: 860px) {
       grid-template-columns: 1fr;
+    }
+  }
 
-      .full-width {
+  &__grid-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &--full-span {
+      grid-column: 1 / span 2;
+
+      @media (max-width: 860px) {
         grid-column: 1;
       }
     }

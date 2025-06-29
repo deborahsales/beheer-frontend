@@ -1,0 +1,39 @@
+.search-bar {
+  position: relative;
+  max-width: 300px;
+  margin-bottom: var(--space-md);
+  height: 30px;
+
+  input {
+    width: 100%;
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: 8px;
+    border: none;
+    font-size: var(--font-size-sm);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 1px 5px var(--primary-blue);
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    top: 90%;
+    right: var(--space-sm);
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    font-size: var(--font-size-md);
+    color: var(--black);
+    padding: 0;
+
+    .material-icons {
+      font-size: 24px;
+      color: var(--black);
+      line-height: 1;
+      display: block;
+    }
+  }
+}

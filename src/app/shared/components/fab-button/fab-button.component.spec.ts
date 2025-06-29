@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GerenciaAvisosComponent } from './gerencia-avisos.component';
+import { FabButtonComponent } from './fab-button.component';
 
-describe('GerenciaAvisosComponent', () => {
-  let component: GerenciaAvisosComponent;
-  let fixture: ComponentFixture<GerenciaAvisosComponent>;
+describe('FabButtonComponent', () => {
+  let component: FabButtonComponent;
+  let fixture: ComponentFixture<FabButtonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GerenciaAvisosComponent]
+      imports: [FabButtonComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GerenciaAvisosComponent);
+    fixture = TestBed.createComponent(FabButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

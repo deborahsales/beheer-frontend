@@ -3,11 +3,13 @@ import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from '../../../core/interfaces/user';
-import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
+import { OpenDialogService } from '../../../core/services/open-dialog.service';
 import { SnackbarService } from '../../../core/services/snackbar.service';
 import { UserService } from '../../../core/services/user.service';
 import { ContainerComponent } from '../../../shared/components/container/container.component';
+import { FeaturesHeaderComponent } from '../../../shared/components/features-header/features-header.component';
 import { ProgressSpinnerComponent } from '../../../shared/components/progress-spinner/progress-spinner.component';
+import { UserAvatarComponent } from '../../../shared/components/user-avatar/user-avatar.component';
 import { CapitalizeFirstPipe } from '../../../shared/pipes/capitalize-first.pipe';
 
 @Component({
@@ -18,6 +20,8 @@ import { CapitalizeFirstPipe } from '../../../shared/pipes/capitalize-first.pipe
     CapitalizeFirstPipe,
     ContainerComponent,
     ProgressSpinnerComponent,
+    FeaturesHeaderComponent,
+    UserAvatarComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -27,18 +31,22 @@ export class AdminDashboardComponent {
   filteredUsers: User[] = [];
   searchInput = '';
   isLoading = signal(false);
+  canCreate: boolean = true;
 
   constructor(
     private userService: UserService,
-    private confirmDialog: ConfirmDialogService,
+    private openDialog: OpenDialogService,
     private snackbarService: SnackbarService,
     private router: Router
   ) {}
 
   ngOnInit() {
+    this.isLoading = signal(true);
+
     this.userService.getUsers().subscribe((data) => {
       this.users = data;
       this.filteredUsers = [...this.users];
+      this.isLoading = signal(false);
     });
   }
 
@@ -53,15 +61,15 @@ export class AdminDashboardComponent {
     this.router.navigate(['/admin/novo-usuario']);
   }
 
-  editUser(userId: string) {
+  editUser(userId: number) {
     this.router.navigate(['/admin/usuarios', userId, 'editar']);
   }
 
-  deleteUser(userId: string) {
+  deleteUser(userId: number) {
     const user = this.users.find((u) => u.id === userId);
     if (!user) return;
 
-    this.confirmDialog
+    this.openDialog
       .confirm({
         title: 'Excluir usuário',
         message: `Tem certeza que deseja excluir o usuário ${user.nome}?`,
@@ -75,7 +83,7 @@ export class AdminDashboardComponent {
       });
   }
 
-  private executeDelete(userId: string): void {
+  private executeDelete(userId: number): void {
     this.isLoading.set(true);
 
     this.userService.deleteUser(userId).subscribe({

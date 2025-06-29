@@ -1,0 +1,52 @@
+<div class="user-selector">
+  @if(isLoading()){
+  <app-progress-spinner></app-progress-spinner>
+  } @else {
+  <p class="user-selector__title">Atualizar usuários</p>
+  <div class="user-selector__search">
+    <app-search-bar
+      [(value)]="searchInput"
+      [placeholder]="'Buscar usuários...'"
+      (search)="applyFilter()"
+    ></app-search-bar>
+  </div>
+  @if (filteredUsers.length > 0){
+  <label class="user-selector__item select-all">
+    <input
+      type="checkbox"
+      [checked]="allVisibleSelected()"
+      (change)="onSelectAllVisible($event)"
+    />
+    <span class="user-selector__selection-text"
+      >Selecionar todos os visíveis</span
+    >
+  </label>
+  }
+
+  <ul>
+    @for (user of filteredUsers; track user.id){
+    <li>
+      <label class="user-selector__item">
+        <input
+          type="checkbox"
+          [value]="user.id"
+          (change)="onSelect(user.id, $event)"
+          [checked]="selected.includes(user.id)"
+        />
+        <app-user-avatar [name]="user.nome"></app-user-avatar>
+        <span class="user-selector__info">{{ user.nome }}</span>
+      </label>
+    </li>
+    }
+  </ul>
+  <div class="user-selector__actions">
+    <button
+      class="confirmar"
+      (click)="confirmar()"
+      class="beheer-button user-selector__button"
+    >
+      Confirmar
+    </button>
+  </div>
+  }
+</div>

@@ -1,0 +1,19 @@
+<app-container>
+  <section class="notification-page">
+    <div class="notification-page__container">
+      @if (isLoading()) {
+      <app-progress-spinner></app-progress-spinner>
+      } @else {
+      <h1 class="notification-page__title">{{ notification.assunto }}</h1>
+      <div class="notification-page__details">
+        <p>{{ notification.dateTimestamp | date : "dd/MM/yyyy" : "UTC" }}</p>
+        <p>—</p>
+        <p>{{ notification.gestor.nome }}</p>
+      </div>
+      <p class="notification-page__description">
+        {{ notification.conteudo }}
+      </p>
+      }
+    </div>
+  </section>
+</app-container>

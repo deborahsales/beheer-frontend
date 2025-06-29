@@ -1,12 +1,12 @@
 export interface AuthUser {
-  id: string;
+  sub: number;
   nome: string;
   email: string;
   funcao: string;
 }
 
 export interface User {
-  id?: string;
+  id?: number;
   cpf: string;
   nome: string;
   email: string;

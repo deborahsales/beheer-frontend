@@ -1,0 +1,10 @@
+.groups-page {
+  margin-top: var(--space-xxl);
+
+  &__wrapper {
+    margin: var(--space-xl) 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+}

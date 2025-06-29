@@ -1,9 +1,13 @@
-<header>
+<header class="header">
   <app-container>
     <mat-toolbar>
-      <img src="assets/beheer.svg" alt="Logo da aplicação" class="logo" />
-      <span class="spacer"></span>
-      <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button">
+      <img
+        src="assets/beheer.svg"
+        alt="Logo da aplicação"
+        class="header__logo"
+      />
+      <span class="header__spacer"></span>
+      <button mat-icon-button [matMenuTriggerFor]="menu" class="header__menu-button">
         <mat-icon>menu</mat-icon>
       </button>
       <mat-menu #menu="matMenu">

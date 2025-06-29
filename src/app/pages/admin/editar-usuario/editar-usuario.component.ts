@@ -16,7 +16,7 @@ import { UserFormComponent } from '../../../shared/components/user-form/user-for
 export class EditarUsuarioComponent {
   isEditing = true;
   isLoading = signal(true);
-  userId!: string;
+  userId!: number;
   usuario!: User;
 
   constructor(
@@ -28,7 +28,7 @@ export class EditarUsuarioComponent {
   ) {}
 
   ngOnInit(): void {
-    this.userId = this.route.snapshot.paramMap.get('id')!;
+    this.userId = Number(this.route.snapshot.paramMap.get('id')!);
 
     if (this.userId) {
       this.userService.getUserById(this.userId).subscribe({
