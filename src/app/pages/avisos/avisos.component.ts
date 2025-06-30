@@ -48,7 +48,6 @@ export class AvisosComponent {
       .pipe(
         map((user) => {
           this.userId = user?.sub || 0;
-          console.log(user);
           this.role = user?.funcao.toLowerCase() || '';
         })
       )
@@ -74,8 +73,17 @@ export class AvisosComponent {
     );
   }
 
-  openNotification(id: number) {
-    this.router.navigate([`/${this.role}/aviso`, id]);
+  openNotification(notificationId: number) {
+    this.notificationService.readNotification(notificationId).subscribe({
+      next: () => {
+        this.router.navigate([`/${this.role}/aviso`, notificationId]);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        this.snackbarService.show(err.error?.message || 'Erro ao abrir aviso');
+        this.isLoading.set(false);
+      },
+    });
   }
 
   createNotification() {}
@@ -83,17 +91,8 @@ export class AvisosComponent {
   readNotification(notificationId: number): void {
     this.isLoading.set(true);
 
-    const notification = this.notifications.find(
-      (notification) => notification.id === notificationId
-    );
-    if (!notification) return;
-
-    this.notificationService.deleteNotification(notificationId).subscribe({
+    this.notificationService.readNotification(notificationId).subscribe({
       next: () => {
-        this.notifications = this.notifications.filter(
-          (notification) => notification.id !== notificationId
-        );
-        this.applyFilter();
         this.snackbarService.show('Aviso marcado como lido');
         this.isLoading.set(false);
       },

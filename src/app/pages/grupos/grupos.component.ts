@@ -76,7 +76,6 @@ export class GruposComponent {
       )
       .subscribe((result) => {
         if (result) {
-          console.log('Form recebido:', result.nome, result.descricao);
           this.executeCreate(result);
         }
       });
