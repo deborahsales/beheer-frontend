@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Inject, Output, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { User } from '../../../core/interfaces/user';
 import { GroupService } from '../../../core/services/group.service';
@@ -10,7 +11,12 @@ import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 
 @Component({
   selector: 'app-user-selection',
-  imports: [UserAvatarComponent, SearchBarComponent, ProgressSpinnerComponent],
+  imports: [
+    UserAvatarComponent,
+    SearchBarComponent,
+    ProgressSpinnerComponent,
+    MatButtonModule,
+  ],
   templateUrl: './user-selection.component.html',
   styleUrl: './user-selection.component.scss',
 })
@@ -20,31 +26,47 @@ export class UserSelectionComponent {
   filteredUsers: any[] = [];
   searchInput = '';
   isLoading = signal(false);
+  userId!: number;
 
   selected: number[] = [];
   funcao: string = '';
   @Output() selectionChange = new EventEmitter<number[]>();
   @Output() closed = new EventEmitter<void>();
+  @Output() save = new EventEmitter<number[]>();
+  @Output() step = new EventEmitter<void>();
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private data: { groupId: number; funcao: string },
+    @Inject(MAT_DIALOG_DATA)
+    private data: { groupId: number; funcao: string } | null = null,
     private dialogRef: MatDialogRef<UserSelectionComponent>,
     private userService: UserService,
     private groupService: GroupService,
     private snackbarService: SnackbarService
   ) {
-    this.groupId = data.groupId;
-    this.funcao = data.funcao;
+    if (data) {
+      this.groupId = data.groupId;
+      this.funcao = data.funcao;
+    }
   }
 
   ngOnInit() {
-    if (this.funcao === 'GESTOR') {
-      this.loadGrupoGestores();
-      this.loadAllGestores();
-    } else if (this.funcao === 'COLABORADOR') {
-      this.loadGrupoColaboradores();
-      this.loadAllColaboradores();
-    }
+    this.isLoading = signal(true);
+
+    this.userService.getAuthUser().subscribe((user) => {
+      this.userId = user?.sub || 0;
+
+      if (this.groupId) {
+        if (this.funcao === 'GESTOR') {
+          this.loadGrupoGestores();
+          this.loadAllGestores();
+        } else if (this.funcao === 'COLABORADOR') {
+          this.loadGrupoColaboradores();
+          this.loadAllColaboradores();
+        }
+      } else {
+        this.loadAllUsers();
+      }
+    });
   }
 
   loadGrupoColaboradores() {
@@ -90,6 +112,15 @@ export class UserSelectionComponent {
     this.isLoading = signal(true);
     this.userService.getGestores().subscribe((res) => {
       this.users = res;
+      this.applyFilter();
+      this.isLoading = signal(false);
+    });
+  }
+
+  loadAllUsers() {
+    this.isLoading = signal(true);
+    this.userService.getUsers().subscribe((res) => {
+      this.users = res.filter((user) => user.id !== this.userId);
       this.applyFilter();
       this.isLoading = signal(false);
     });
@@ -146,6 +177,14 @@ export class UserSelectionComponent {
       );
     }
     this.selectionChange.emit(this.selected);
+  }
+
+  onSave() {
+    this.save.emit(this.selected);
+  }
+
+  previousStep() {
+    this.step.emit();
   }
 
   confirmar() {
