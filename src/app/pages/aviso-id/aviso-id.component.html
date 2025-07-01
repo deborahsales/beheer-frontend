@@ -5,11 +5,56 @@
       <app-progress-spinner></app-progress-spinner>
       } @else {
       <h1 class="notification-page__title">{{ notification.assunto }}</h1>
-      <div class="notification-page__details">
-        <p>{{ notification.dateTimestamp | date : "dd/MM/yyyy" : "UTC" }}</p>
-        <p>—</p>
-        <p>{{ notification.gestor.nome }}</p>
+      <p class="notification-page__details">
+        Data: {{ notification.dateTimestamp | date : "dd/MM/yyyy" : "UTC" }}
+      </p>
+      <p class="notification-page__details">
+        De: {{ notification.gestor.nome }}
+      </p>
+      @if(userId === notification.gestorRhUsuarioId &&
+      notification.avisoUsuario.length > 0){
+
+      <div class="notification-page__users">
+        <p class="notification-page__details">Para:</p>
+
+        @if(notification.avisoUsuario.length < 4) { @for (avisoUsuario of
+        notification.avisoUsuario; track avisoUsuario.usuarioId){
+        <p class="notification-page__details">
+          {{ avisoUsuario.usuario.nome }} <{{ avisoUsuario.usuario.email }}>,
+        </p>
+        } } @else{
+
+        <mat-expansion-panel
+          (opened)="panelOpenState.set(true)"
+          (closed)="panelOpenState.set(false)"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              @for (avisoUsuario of notification.avisoUsuario.slice(0, 3); track
+              avisoUsuario.usuarioId; let last = $last ){
+              <p class="notification-page__details">
+                {{ avisoUsuario.usuario.nome }} &lt;{{
+                  avisoUsuario.usuario.email
+                }}&gt;{{ !last ? "," : "..." }}
+              </p>
+              }
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="notification-page__emails">
+            @for (avisoUsuario of notification.avisoUsuario.slice(3); track
+            avisoUsuario.usuarioId; let last = $last){
+            <p class="notification-page__details">
+              {{ avisoUsuario.usuario.nome }} &lt;{{
+                avisoUsuario.usuario.email
+              }}&gt;{{ !last ? "," : "." }}
+            </p>
+            }
+          </div>
+        </mat-expansion-panel>
+        }
       </div>
+
+      }
       <p class="notification-page__description">
         {{ notification.conteudo }}
       </p>

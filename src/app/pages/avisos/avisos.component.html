@@ -30,7 +30,9 @@
             notification.avisoUsuario[0]?.status === 'LIDO' &&
             this.userId !== notification.gestorRhUsuarioId
           "
-          (click)="openNotification(notification.id, notification.gestorRhUsuarioId)"
+          (click)="
+            openNotification(notification.id, notification.gestorRhUsuarioId)
+          "
         >
           <td
             class="table-container__text table-container__overflow-text"
