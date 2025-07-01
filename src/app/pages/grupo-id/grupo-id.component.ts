@@ -12,12 +12,16 @@ import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Group } from '../../core/interfaces/group';
+import { Task } from '../../core/interfaces/task';
 import { GroupService } from '../../core/services/group.service';
 import { OpenDialogService } from '../../core/services/open-dialog.service';
 import { SnackbarService } from '../../core/services/snackbar.service';
+import { TaskService } from '../../core/services/task.service';
 import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
+import { SearchBarComponent } from '../../shared/components/search-bar/search-bar.component';
+import { TasksTableComponent } from '../../shared/components/tasks-table/tasks-table.component';
 import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
 import { UserSelectionComponent } from '../../shared/components/user-selection/user-selection.component';
 
@@ -32,6 +36,8 @@ import { UserSelectionComponent } from '../../shared/components/user-selection/u
     MatButtonModule,
     CommonModule,
     UserAvatarComponent,
+    TasksTableComponent,
+    SearchBarComponent,
   ],
   templateUrl: './grupo-id.component.html',
   styleUrl: './grupo-id.component.scss',
@@ -45,14 +51,19 @@ export class GrupoIdComponent {
   canManage: boolean = false;
   role: string = 'colaborador';
 
+  tasks: Task[] = [];
+  filteredTasks: Task[] = [];
+  searchInput: string = '';
+
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private groupService: GroupService,
     private formBuilder: FormBuilder,
     private snackbarService: SnackbarService,
     private userService: UserService,
-    private openDialog: OpenDialogService
+    private openDialog: OpenDialogService,
+    private taskService: TaskService,
+    private router: Router
   ) {
     this.form = this.formBuilder.group({
       nome: ['', Validators.required],
@@ -100,9 +111,26 @@ export class GrupoIdComponent {
         },
       });
     }
+
+    this.taskService.getTasksByGroup(this.groupId).subscribe((data) => {
+      this.tasks = data;
+      this.filteredTasks = [...this.tasks];
+      this.isLoading = signal(false);
+    });
   }
 
-  openMember(userId: number) {}
+  applyFilter() {
+    const term = this.searchInput.toLowerCase();
+    this.filteredTasks = this.tasks.filter(
+      (task) =>
+        task.titulo.toLowerCase().includes(term) ||
+        task.descricao.toLowerCase().includes(term)
+    );
+  }
+
+  openMember(userId: number) {
+    this.router.navigate([`/${this.role}/usuario`, userId]);
+  }
 
   addMembers(groupId: number, funcao: string) {
     const dialogRef = this.openDialog.open(UserSelectionComponent, {
@@ -181,5 +209,5 @@ export class GrupoIdComponent {
 
   onCancel() {
     this.isEditing = signal(false);
-  }  
+  }
 }

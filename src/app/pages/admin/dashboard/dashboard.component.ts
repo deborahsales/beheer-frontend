@@ -43,7 +43,7 @@ export class AdminDashboardComponent {
   ngOnInit() {
     this.isLoading = signal(true);
 
-    this.userService.getUsersRh().subscribe((data) => {
+    this.userService.getUsersAdmin().subscribe((data) => {
       this.users = data;
       this.filteredUsers = [...this.users];
       this.isLoading = signal(false);
@@ -58,11 +58,15 @@ export class AdminDashboardComponent {
   }
 
   createUser() {
-    this.router.navigate(['/admin/novo-usuario']);
+    this.router.navigate(['/administrador/novo-usuario']);
   }
 
   editUser(userId: number) {
-    this.router.navigate(['/admin/usuarios', userId, 'editar']);
+    this.router.navigate(['/administrador/usuarios', userId, 'editar']);
+  }
+
+  openUser(userId: number) {
+    this.router.navigate([`/administrador/usuario`, userId]);
   }
 
   deleteUser(userId: number) {
