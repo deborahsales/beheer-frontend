@@ -181,5 +181,5 @@ export class GrupoIdComponent {
 
   onCancel() {
     this.isEditing = signal(false);
-  }
+  }  
 }

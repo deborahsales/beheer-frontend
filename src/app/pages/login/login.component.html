@@ -1,6 +1,6 @@
 <section class="login">
   @if (isLoading()) {
-    <app-progress-spinner></app-progress-spinner>
+  <app-progress-spinner></app-progress-spinner>
   }
   <div class="login__wrapper">
     <h1 class="login__title">Login</h1>
@@ -43,7 +43,6 @@
     </mat-form-field>
     <div class="login__actions">
       <button
-        mat-flat-button
         (click)="login()"
         class="beheer-button login__button"
         [disabled]="email.invalid || password.invalid"

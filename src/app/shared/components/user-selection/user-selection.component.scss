@@ -1,15 +1,20 @@
 :host {
   display: block;
-  padding: var(--space-xl);
+  padding: var(--space-md);
   background-color: var(--light-gray);
   width: 500px;
-  margin: auto;
-  border-radius: 12px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+  overflow: auto;
 }
 
 .user-selector {
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  max-height: 73vh;
+
+  &__wrapper {
+    overflow-y: auto;
+    max-height: 60vh;
+  }
 
   &__title {
     font-size: var(--font-size-lg);
@@ -25,7 +30,7 @@
   }
 
   &__search {
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--space-md);
   }
 
   &__selection-text {
@@ -52,7 +57,7 @@
   &__actions {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: end;
     margin-top: var(--space-md);
   }
 

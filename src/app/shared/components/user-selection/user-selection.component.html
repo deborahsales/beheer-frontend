@@ -2,7 +2,7 @@
   @if(isLoading()){
   <app-progress-spinner></app-progress-spinner>
   } @else {
-  <p class="user-selector__title">Atualizar usuários</p>
+  <p class="user-selector__title">Selecionar usuários</p>
   <div class="user-selector__search">
     <app-search-bar
       [(value)]="searchInput"
@@ -22,31 +22,33 @@
     >
   </label>
   }
-
-  <ul>
-    @for (user of filteredUsers; track user.id){
-    <li>
-      <label class="user-selector__item">
-        <input
-          type="checkbox"
-          [value]="user.id"
-          (change)="onSelect(user.id, $event)"
-          [checked]="selected.includes(user.id)"
-        />
-        <app-user-avatar [name]="user.nome"></app-user-avatar>
-        <span class="user-selector__info">{{ user.nome }}</span>
-      </label>
-    </li>
-    }
-  </ul>
+  <div class="user-selector__wrapper">
+    <ul>
+      @for (user of filteredUsers; track user.id){
+      <li>
+        <label class="user-selector__item">
+          <input
+            type="checkbox"
+            [value]="user.id"
+            (change)="onSelect(user.id, $event)"
+            [checked]="selected.includes(user.id)"
+          />
+          <app-user-avatar [name]="user.nome"></app-user-avatar>
+          <span class="user-selector__info">{{ user.nome }}</span>
+        </label>
+      </li>
+      }
+    </ul>
+  </div>
   <div class="user-selector__actions">
-    <button
-      class="confirmar"
-      (click)="confirmar()"
-      class="beheer-button user-selector__button"
-    >
+    @if(groupId){
+    <button (click)="confirmar()" class="beheer-button user-selector__button">
       Confirmar
     </button>
+    } @else{
+    <button mat-button (click)="previousStep()">Voltar</button>
+    <button mat-flat-button color="primary" (click)="onSave()">Criar</button>
+    }
   </div>
   }
 </div>

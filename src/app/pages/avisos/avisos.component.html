@@ -26,19 +26,55 @@
         @for (notification of filteredNotifications; track notification.id){
         <tbody
           class="table-container__line"
-          (click)="openNotification(notification.id)"
+          [class.table-container__line--read]="
+            notification.avisoUsuario[0]?.status === 'LIDO' &&
+            this.userId !== notification.gestorRhUsuarioId
+          "
+          (click)="openNotification(notification.id, notification.gestorRhUsuarioId)"
         >
-          <td class="table-container__overflow-text">
+          <td
+            class="table-container__text table-container__overflow-text"
+            [class.table-container__text--read]="
+              notification.avisoUsuario[0]?.status === 'LIDO' &&
+              this.userId !== notification.gestorRhUsuarioId
+            "
+          >
             {{ notification.assunto }}
           </td>
-          <td class="table-container__overflow-text">
+          <td
+            class="table-container__text table-container__overflow-text"
+            [class.table-container__text--read]="
+              notification.avisoUsuario[0]?.status === 'LIDO' &&
+              this.userId !== notification.gestorRhUsuarioId
+            "
+          >
             {{ notification.conteudo }}
           </td>
-          <td class="text-center">
+          <td
+            class="table-container__text text-center"
+            [class.table-container__text--read]="
+              notification.avisoUsuario[0]?.status === 'LIDO' &&
+              this.userId !== notification.gestorRhUsuarioId
+            "
+          >
             {{ notification.dateTimestamp | date : "dd/MM/yyyy" : "UTC" }}
           </td>
-          <td>{{ notification.gestor.nome }}</td>
-          <td class="text-center">
+          <td
+            class="table-container__text text-center"
+            [class.table-container__text--read]="
+              notification.avisoUsuario[0]?.status === 'LIDO' &&
+              this.userId !== notification.gestorRhUsuarioId
+            "
+          >
+            {{ notification.gestor.nome }}
+          </td>
+          <td
+            class="table-container__text text-center"
+            [class.table-container__text--read]="
+              notification.avisoUsuario[0]?.status === 'LIDO' &&
+              this.userId !== notification.gestorRhUsuarioId
+            "
+          >
             @if (canManage && this.userId === notification.gestorRhUsuarioId){
             <button
               class="action-button action-button--delete"
