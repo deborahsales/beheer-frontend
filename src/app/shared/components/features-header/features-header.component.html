@@ -1,15 +1,25 @@
 <div class="feature-header">
-  <h1 class="feature-header__title">{{ title }}</h1>
-  <span class="feature-header__spacer"></span>
+  <div class="feature-header__web">
+    <h1 class="feature-header__title">{{ title }}</h1>
+    <span class="feature-header__spacer"></span>
+    <app-search-bar
+      [value]="searchInput"
+      [placeholder]="inputPlaceholder"
+      (valueChange)="onSearchInputChange($event)"
+      (search)="applyFilter()"
+      class="feature-header__search"
+    ></app-search-bar>
+    @if (canCreate){
+    <button (click)="onClick()" class="beheer-button feature-header__button">
+      {{ buttonName }}
+    </button>
+    }
+  </div>
   <app-search-bar
     [value]="searchInput"
     [placeholder]="inputPlaceholder"
     (valueChange)="onSearchInputChange($event)"
     (search)="applyFilter()"
+    class="feature-header__mobile"
   ></app-search-bar>
-  @if (canCreate){
-  <button (click)="onClick()" class="beheer-button feature-header__button">
-    {{ buttonName }}
-  </button>
-  }
 </div>

@@ -28,14 +28,16 @@
     }
   }
 
-  &__title {
-    margin: var(--space-xs) 0;
+  &__details {
+    padding: var(--space-xs) 0;
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
   }
 
-  &__details {
+  &__users {
     display: flex;
-    align-items: center;
-    gap: var(--space-sm);
+    align-items: start;
+    gap: var(--space-xs);
   }
 
   &__description {
@@ -46,4 +48,14 @@
     border-top: 1px solid var(--black);
     padding-top: var(--space-sm);
   }
+
+  &__emails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+}
+
+mat-expansion-panel {
+  background-color: var(--light-gray);
 }

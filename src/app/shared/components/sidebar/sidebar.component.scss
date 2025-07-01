@@ -16,6 +16,10 @@
   transform: translateX(-100%);
   z-index: 1000;
 
+  @supports (height: 100dvh) {
+    height: 100dvh;
+  }
+
   &.open {
     transform: translateX(0);
   }
@@ -110,10 +114,13 @@
   display: none;
 
   @media (max-width: 768px) {
-    display: inline-flex;
+    position: absolute;
+    z-index: 1000;
     background-color: transparent;
     border: none;
-    margin: var(--space-xs);
+    top: var(--space-sm);
+    left: var(--space-md);
+    display: block;
 
     mat-icon {
       color: var(--primary-blue);

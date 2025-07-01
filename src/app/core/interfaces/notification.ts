@@ -13,6 +13,10 @@ interface AvisoUsuario {
   dataLeitura: string;
   usuarioId: number;
   avisoId: number;
+  usuario: {
+    nome: string;
+    email: string;
+  };
 }
 
 interface Gestor {

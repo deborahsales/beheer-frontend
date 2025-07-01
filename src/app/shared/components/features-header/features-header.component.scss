@@ -1,6 +1,4 @@
 .feature-header {
-  display: flex;
-  align-items: center;
   margin: var(--space-xl) 0;
 
   &__spacer {
@@ -10,5 +8,24 @@
   &__button {
     height: 40px;
     font-size: var(--font-size-md);
+  }
+
+  &__search {
+    @media (max-width: 860px) {
+      display: none;
+    }
+  }
+
+  &__web {
+    display: flex;
+    align-items: center;
+  }
+
+  &__mobile {
+    display: none;
+    margin-top: var(--space-md);
+    @media (max-width: 860px) {
+      display: block;
+    }
   }
 }

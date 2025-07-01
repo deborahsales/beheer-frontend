@@ -1,4 +1,6 @@
 .header {
+  margin: var(--space-sm) 0;
+
   mat-toolbar {
     background-color: var(--light-blue);
   }
@@ -15,9 +17,13 @@
     display: none;
 
     @media (max-width: 768px) {
-      display: inline-flex;
+      position: absolute;
+      z-index: 1000;
       background-color: transparent;
       border: none;
+      top: var(--space-lg);
+      right: var(--space-lg);
+      display: block;
 
       mat-icon {
         color: var(--primary-blue);
