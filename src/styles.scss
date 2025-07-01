@@ -5,6 +5,7 @@
 @use "./styles/variables-spacing";
 @use "./styles/reset";
 @use "./styles/buttons";
+@use "./styles/tables";
 
 html {
   @include mat.theme(

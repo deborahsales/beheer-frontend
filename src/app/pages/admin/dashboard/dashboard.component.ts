@@ -43,7 +43,7 @@ export class AdminDashboardComponent {
   ngOnInit() {
     this.isLoading = signal(true);
 
-    this.userService.getUsersRh().subscribe((data) => {
+    this.userService.getUsersAdmin().subscribe((data) => {
       this.users = data;
       this.filteredUsers = [...this.users];
       this.isLoading = signal(false);

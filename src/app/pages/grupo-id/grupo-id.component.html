@@ -83,6 +83,23 @@
         }
       </div>
       <h2 class="group-page__subtitle">Demandas</h2>
+      <div class="group-page__tasks">
+        <app-search-bar
+          [(value)]="searchInput"
+          [placeholder]="'Buscar demanda...'"
+          (search)="applyFilter()"
+        ></app-search-bar>
+        @if(filteredTasks.length > 0){
+        <app-tasks-table
+          [canManage]="canManage"
+          [role]="role"
+          [filteredTasks]="filteredTasks"
+          (applyFilter)="applyFilter()"
+        ></app-tasks-table>
+        } @else {
+        <p class="group-page__message">Nenhuma demanda encontrada...</p>
+        }
+      </div>
       }
     </div>
   </section>

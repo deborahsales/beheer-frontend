@@ -9,6 +9,7 @@ import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { FeaturesHeaderComponent } from '../../shared/components/features-header/features-header.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
+import { TasksTableComponent } from '../../shared/components/tasks-table/tasks-table.component';
 import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
 
 @Component({
@@ -20,6 +21,7 @@ import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
     DatePipe,
     CapitalizeFirstPipe,
     CommonModule,
+    TasksTableComponent,
   ],
   templateUrl: './demandas.component.html',
   styleUrl: './demandas.component.scss',
@@ -77,6 +79,10 @@ export class DemandasComponent {
 
   createTask() {}
 
+  openTask(id: number) {
+    this.router.navigate([`/${this.role}/demanda`, id]);
+  }
+
   deleteTask(taskId: number) {
     const task = this.tasks.find((task) => task.id === taskId);
     if (!task) return;
@@ -114,9 +120,11 @@ export class DemandasComponent {
     });
   }
 
-  isAtrasada(prazo: string): boolean {
+  isAtrasada(prazo: string, status: string): boolean {
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
-    return new Date(prazo).getTime() < hoje.getTime();
+    return (
+      new Date(prazo).getTime() < hoje.getTime() && status !== 'FINALIZADA'
+    );
   }
 }

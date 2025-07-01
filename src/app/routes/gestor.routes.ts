@@ -8,6 +8,7 @@ import { CronogramasComponent } from '../pages/gestor/cronogramas/cronogramas.co
 import { GestorDashboardComponent } from '../pages/gestor/dashboard/dashboard.component';
 import { GrupoIdComponent } from '../pages/grupo-id/grupo-id.component';
 import { GruposComponent } from '../pages/grupos/grupos.component';
+import { DemandaIdComponent } from '../pages/demanda-id/demanda-id.component';
 
 export const gestorRoutes: Routes = [
   {
@@ -49,6 +50,7 @@ export const gestorRoutes: Routes = [
       { path: 'grupos', component: GruposComponent },
       { path: 'grupo/:id', component: GrupoIdComponent },
       { path: 'demandas', component: DemandasComponent },
+      { path: 'demanda/:id', component: DemandaIdComponent },
       { path: 'avisos', component: AvisosComponent },
       { path: 'aviso/:id', component: AvisoIdComponent },
       { path: 'cronogramas', component: CronogramasComponent },
