@@ -9,7 +9,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Group } from '../../core/interfaces/group';
 import { Task } from '../../core/interfaces/task';
@@ -62,7 +62,8 @@ export class GrupoIdComponent {
     private snackbarService: SnackbarService,
     private userService: UserService,
     private openDialog: OpenDialogService,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private router: Router
   ) {
     this.form = this.formBuilder.group({
       nome: ['', Validators.required],
@@ -127,7 +128,9 @@ export class GrupoIdComponent {
     );
   }
 
-  openMember(userId: number) {}
+  openMember(userId: number) {
+    this.router.navigate([`/${this.role}/usuario`, userId]);
+  }
 
   addMembers(groupId: number, funcao: string) {
     const dialogRef = this.openDialog.open(UserSelectionComponent, {

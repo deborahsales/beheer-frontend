@@ -76,7 +76,7 @@
         @if(group.usuarios.length === 0){
         <p class="group-page__message">Nenhum membro...</p>
         } @for (user of group.usuarios; track user.usuarioId) {
-        <div class="group-page__member">
+        <div class="group-page__member" (click)="openMember(user.usuarioId)">
           <app-user-avatar [name]="user.usuario.nome"></app-user-avatar>
           <p class="group-page__member__name">{{ user.usuario.nome }}</p>
         </div>

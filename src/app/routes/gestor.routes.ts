@@ -3,12 +3,13 @@ import { gestorGuard } from '../core/guards/gestor.guard';
 import { DashboardLayoutComponent } from '../layouts/dashboard-layout/dashboard-layout.component';
 import { AvisoIdComponent } from '../pages/aviso-id/aviso-id.component';
 import { AvisosComponent } from '../pages/avisos/avisos.component';
+import { DemandaIdComponent } from '../pages/demanda-id/demanda-id.component';
 import { DemandasComponent } from '../pages/demandas/demandas.component';
 import { CronogramasComponent } from '../pages/gestor/cronogramas/cronogramas.component';
 import { GestorDashboardComponent } from '../pages/gestor/dashboard/dashboard.component';
 import { GrupoIdComponent } from '../pages/grupo-id/grupo-id.component';
 import { GruposComponent } from '../pages/grupos/grupos.component';
-import { DemandaIdComponent } from '../pages/demanda-id/demanda-id.component';
+import { UsuarioIdComponent } from '../pages/usuario-id/usuario-id.component';
 
 export const gestorRoutes: Routes = [
   {
@@ -53,6 +54,7 @@ export const gestorRoutes: Routes = [
       { path: 'demanda/:id', component: DemandaIdComponent },
       { path: 'avisos', component: AvisosComponent },
       { path: 'aviso/:id', component: AvisoIdComponent },
+      { path: 'usuario/:id', component: UsuarioIdComponent },
       { path: 'cronogramas', component: CronogramasComponent },
     ],
   },

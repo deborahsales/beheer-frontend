@@ -26,7 +26,7 @@
           </tr>
         </thead>
         @for (user of filteredUsers; track user.id){
-        <tbody>
+        <tbody class="table-container__line" (click)="openUser(user.id!)">
           <td class="table-container__name">
             <app-user-avatar [name]="user.nome"></app-user-avatar>
             <span class="table-container__overflow-text">{{ user.nome }}</span>
@@ -52,12 +52,15 @@
             </span>
           </td>
           <td class="text-center">
-            <button class="action-button" (click)="editUser(user.id!)">
+            <button
+              class="action-button"
+              (click)="editUser(user.id!); $event.stopPropagation()"
+            >
               <span class="material-icons">edit</span>
             </button>
             <button
               class="action-button action-button--delete"
-              (click)="deleteUser(user.id!)"
+              (click)="deleteUser(user.id!); $event.stopPropagation()"
             >
               <span class="material-icons">delete</span>
             </button>

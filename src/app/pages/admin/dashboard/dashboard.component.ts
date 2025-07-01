@@ -58,11 +58,15 @@ export class AdminDashboardComponent {
   }
 
   createUser() {
-    this.router.navigate(['/admin/novo-usuario']);
+    this.router.navigate(['/administrador/novo-usuario']);
   }
 
   editUser(userId: number) {
-    this.router.navigate(['/admin/usuarios', userId, 'editar']);
+    this.router.navigate(['/administrador/usuarios', userId, 'editar']);
+  }
+
+  openUser(userId: number) {
+    this.router.navigate([`/administrador/usuario`, userId]);
   }
 
   deleteUser(userId: number) {

@@ -6,6 +6,7 @@ import { EditarUsuarioComponent } from '../pages/admin/editar-usuario/editar-usu
 import { NovoUsuarioComponent } from '../pages/admin/novo-usuario/novo-usuario.component';
 import { AvisoIdComponent } from '../pages/aviso-id/aviso-id.component';
 import { AvisosComponent } from '../pages/avisos/avisos.component';
+import { UsuarioIdComponent } from '../pages/usuario-id/usuario-id.component';
 
 export const adminRoutes: Routes = [
   {
@@ -29,6 +30,7 @@ export const adminRoutes: Routes = [
       { path: 'aviso/:id', component: AvisoIdComponent },
       { path: 'novo-usuario', component: NovoUsuarioComponent },
       { path: 'usuarios/:id/editar', component: EditarUsuarioComponent },
+      { path: 'usuario/:id', component: UsuarioIdComponent },
     ],
   },
 ];

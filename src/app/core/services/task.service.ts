@@ -20,6 +20,10 @@ export class TaskService {
     return this.http.get<Task[]>(`${this.apiUrl}/grupo/${groupId}`);
   }
 
+  getTasksByUser(groupId: number): Observable<Task[]> {
+    return this.http.get<Task[]>(`${this.apiUrl}/usuario/${groupId}`);
+  }
+
   getTaskById(taskId: number): Observable<Task> {
     return this.http.get<Task>(`${this.apiUrl}/${taskId}`);
   }

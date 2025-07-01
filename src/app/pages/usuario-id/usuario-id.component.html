@@ -1,0 +1,43 @@
+<app-container>
+  <section class="user-page">
+    <div class="user-page__container">
+      @if (isLoading()) {
+      <app-progress-spinner></app-progress-spinner>
+      } @else{
+      <h1 class="user-page__title">{{ user.nome }}</h1>
+      <p class="user-page__description">{{ user.email }}</p>
+      }
+      <h2 class="user-page__subtitle">Grupos</h2>
+      @if(filteredTasks.length > 0){
+      <div class="user-page__wrapper">
+        @for (group of groups; track group.id) {
+        <div class="user-page__group" (click)="openGroup(group.id)">
+          <app-user-avatar [name]="group.nome"></app-user-avatar>
+          <p class="user-page__group__name">{{ group.nome }}</p>
+        </div>
+        }
+      </div>
+      } @else {
+      <p class="user-page__message">Nenhum grupo encontrado...</p>
+      }
+      <h2 class="user-page__subtitle">Demandas</h2>
+      <div class="user-page__tasks">
+        <app-search-bar
+          [(value)]="searchInput"
+          [placeholder]="'Buscar demanda...'"
+          (search)="applyFilter()"
+        ></app-search-bar>
+        @if(filteredTasks.length > 0){
+        <app-tasks-table
+          [canManage]="canManage"
+          [role]="role"
+          [filteredTasks]="filteredTasks"
+          (applyFilter)="applyFilter()"
+        ></app-tasks-table>
+        } @else {
+        <p class="user-page__message">Nenhuma demanda encontrada...</p>
+        }
+      </div>
+    </div>
+  </section>
+</app-container>
