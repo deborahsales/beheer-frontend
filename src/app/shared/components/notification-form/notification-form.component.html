@@ -31,9 +31,10 @@
     </button>
   </mat-dialog-actions>
   } @else {
-  <app-user-selection
+  <app-item-selection
+    [title]="'Selecionar usuários'"
     (save)="onSubmit($event)"
     (step)="previousStep()"
-  ></app-user-selection>
+  ></app-item-selection>
   }
 </div>

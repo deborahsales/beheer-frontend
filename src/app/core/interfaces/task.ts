@@ -8,6 +8,7 @@ export interface Task {
   prioridade: string;
   cronogramaId: number;
   gestorUsuarioId: number;
+  gestor: { nome: string };
   usuariosDemanda: UsuariosDemanda[];
   gruposDemanda: GruposDemanda[];
 }
@@ -15,9 +16,11 @@ export interface Task {
 interface UsuariosDemanda {
   demandaId: number;
   usuarioId: number;
+  usuario: { nome: string };
 }
 
 interface GruposDemanda {
   demandaId: number;
   grupoId: number;
+  grupo: { nome: string };
 }

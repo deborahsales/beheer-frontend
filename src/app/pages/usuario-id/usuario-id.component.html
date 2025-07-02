@@ -6,7 +6,6 @@
       } @else{
       <h1 class="user-page__title">{{ user.nome }}</h1>
       <p class="user-page__description">{{ user.email }}</p>
-      }
       <h2 class="user-page__subtitle">Grupos</h2>
       @if(filteredTasks.length > 0){
       <div class="user-page__wrapper">
@@ -38,6 +37,7 @@
         <p class="user-page__message">Nenhuma demanda encontrada...</p>
         }
       </div>
+      }
     </div>
   </section>
 </app-container>

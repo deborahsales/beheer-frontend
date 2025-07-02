@@ -1,0 +1,116 @@
+.task-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xl);
+  }
+
+  &__container {
+    background-color: var(--white);
+    padding: var(--space-lg);
+    height: 86dvh;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      border-radius: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+    }
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border-radius: 16px;
+    padding: var(--space-xxs) var(--space-sm);
+
+    &--atrasada {
+      background-color: var(--error-color);
+    }
+
+    &--iniciada {
+      background-color: var(--orange);
+    }
+
+    &--finalizada {
+      background-color: var(--sucess-color);
+    }
+  }
+
+  &__subtitle {
+    margin: var(--space-sm) 0;
+  }
+
+  &__details {
+    margin: var(--space-sm) 0 0 0;
+    overflow: hidden;
+    font-size: var(--font-size-md);
+  }
+
+  &__description {
+    margin: var(--space-sm) 0 0 0;
+    max-width: 100%;
+    overflow: hidden;
+    font-size: var(--font-size-md);
+    border-bottom: 1px solid var(--black);
+    padding-bottom: var(--space-sm);
+  }
+
+  &__message {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-light);
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  &__group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    background-color: var(--light-gray);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 30px;
+    transition: transform 0.3s;
+    box-shadow: 0 2px 5px #0000001a;
+
+    &__name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 160px;
+    }
+
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.05);
+    }
+  }
+
+  &__tasks {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+}

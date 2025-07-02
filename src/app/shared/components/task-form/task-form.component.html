@@ -1,0 +1,81 @@
+<div class="task-modal">
+  @if(step === 1){
+  <h2 class="task-modal__title">Novo aviso</h2>
+  <mat-dialog-content>
+    <form [formGroup]="form" class="task-modal__wrapper">
+      <mat-form-field appearance="outline">
+        <mat-label>Título</mat-label>
+        <input matInput formControlName="titulo" />
+        <mat-error *ngIf="form.get('titulo')?.hasError('required')">
+          Título é obrigatório
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição</mat-label>
+        <textarea matInput formControlName="descricao"></textarea>
+        <mat-error *ngIf="form.get('descricao')?.hasError('required')">
+          Descrição é obrigatória
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Prazo</mat-label>
+        <input
+          input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="prazo"
+        />
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="form.get('prazo')?.hasError('required')">
+          Prazo é obrigatório
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Prioridade</mat-label>
+        <mat-select formControlName="prioridade">
+          <mat-option>--</mat-option>
+          @for (prioridade of Prioridades; track prioridade) {
+          <mat-option [value]="prioridade.value">{{
+            prioridade.viewValue
+          }}</mat-option>
+          }
+        </mat-select>
+
+        <mat-error *ngIf="form.get('prioridade')?.hasError('required')">
+          Prioridade é obrigatória
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button
+      mat-flat-button
+      color="primary"
+      [disabled]="form.invalid"
+      (click)="nextStep([])"
+    >
+      Avançar
+    </button>
+  </mat-dialog-actions>
+  } @else if (step === 2) {
+  <app-item-selection
+    [title]="'Selecionar usuários'"
+    [funcao]="'COLABORADOR'"
+    [steps]="true"
+    (save)="nextStep($event)"
+    (step)="previousStep()"
+  ></app-item-selection>
+  } @else{
+  <app-item-selection
+    [title]="'Selecionar grupos'"
+    [funcao]="'GRUPO'"
+    (save)="onSubmit($event)"
+    (step)="previousStep()"
+  ></app-item-selection>
+  }
+</div>

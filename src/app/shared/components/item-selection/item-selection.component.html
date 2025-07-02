@@ -1,0 +1,52 @@
+<div class="item-selector">
+  @if(isLoading()){
+  <app-progress-spinner></app-progress-spinner>
+  } @else {
+  <p class="item-selector__title">{{ title }}</p>
+  <div class="item-selector__search">
+    <app-search-bar
+      [(value)]="searchInput"
+      [placeholder]="'Buscar usuários...'"
+      (search)="applyFilter()"
+    ></app-search-bar>
+  </div>
+  @if (filteredItens.length > 0){
+  <label class="item-selector__item select-all">
+    <input
+      type="checkbox"
+      [checked]="allVisibleSelected()"
+      (change)="onSelectAllVisible($event)"
+    />
+    <span class="item-selector__selection-text"
+      >Selecionar todos os visíveis</span
+    >
+  </label>
+  }
+  <div class="item-selector__wrapper">
+    <ul>
+      @for (item of filteredItens; track item.id){
+      <li>
+        <label class="item-selector__item">
+          <input
+            type="checkbox"
+            [value]="item.id"
+            (change)="onSelect(item.id, $event)"
+            [checked]="selected.includes(item.id)"
+          />
+          <app-user-avatar [name]="item.nome"></app-user-avatar>
+          <span class="item-selector__info">{{ item.nome }}</span>
+        </label>
+      </li>
+      }
+    </ul>
+  </div>
+  <div class="item-selector__actions">
+    @if(steps){
+    <button mat-button (click)="previousStep()">Voltar</button>
+    }
+    <button mat-flat-button color="primary" (click)="onSave()">
+      {{ steps ? "Avançar" : "Confirmar" }}
+    </button>
+  </div>
+  }
+</div>

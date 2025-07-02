@@ -10,7 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { UserSelectionComponent } from '../user-selection/user-selection.component';
+import { ItemSelectionComponent } from '../item-selection/item-selection.component';
 
 @Component({
   selector: 'app-notification-form',
@@ -21,7 +21,7 @@ import { UserSelectionComponent } from '../user-selection/user-selection.compone
     MatButtonModule,
     MatDialogModule,
     CommonModule,
-    UserSelectionComponent,
+    ItemSelectionComponent,
   ],
   templateUrl: './notification-form.component.html',
   styleUrl: './notification-form.component.scss',

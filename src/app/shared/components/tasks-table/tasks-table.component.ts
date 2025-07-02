@@ -16,7 +16,6 @@ import { CapitalizeFirstPipe } from '../../pipes/capitalize-first.pipe';
 export class TasksTableComponent {
   @Input() canManage!: boolean;
   @Input() role!: string;
-  @Input() tasks!: Task[];
   @Input() filteredTasks!: Task[];
 
   @Output() filter = new EventEmitter<void>();
@@ -46,7 +45,7 @@ export class TasksTableComponent {
   }
 
   deleteTask(taskId: number) {
-    const task = this.tasks.find((task) => task.id === taskId);
+    const task = this.filteredTasks.find((task) => task.id === taskId);
     if (!task) return;
 
     this.openDialog
@@ -68,7 +67,9 @@ export class TasksTableComponent {
 
     this.taskService.deleteTask(taskId).subscribe({
       next: () => {
-        this.tasks = this.tasks.filter((task) => task.id !== taskId);
+        this.filteredTasks = this.filteredTasks.filter(
+          (task) => task.id !== taskId
+        );
         this.applyFilter();
         this.snackbarService.show('Demanda deletada com sucesso');
         this.isLoading.set(false);
