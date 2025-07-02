@@ -9,11 +9,11 @@
 .user-selector {
   display: flex;
   flex-direction: column;
-  max-height: 73vh;
+  max-height: 73dvh;
 
   &__wrapper {
     overflow-y: auto;
-    max-height: 60vh;
+    max-height: 60dvh;
   }
 
   &__title {

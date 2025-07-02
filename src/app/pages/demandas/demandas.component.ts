@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Task } from '../../core/interfaces/task';
@@ -10,7 +10,6 @@ import { ContainerComponent } from '../../shared/components/container/container.
 import { FeaturesHeaderComponent } from '../../shared/components/features-header/features-header.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
 import { TasksTableComponent } from '../../shared/components/tasks-table/tasks-table.component';
-import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
 
 @Component({
   selector: 'app-demandas',
@@ -18,8 +17,6 @@ import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
     ContainerComponent,
     ProgressSpinnerComponent,
     FeaturesHeaderComponent,
-    DatePipe,
-    CapitalizeFirstPipe,
     CommonModule,
     TasksTableComponent,
   ],
