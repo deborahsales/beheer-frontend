@@ -1,1 +1,61 @@
-<p>demanda-id works!</p>
+<app-container>
+  <section class="task-page">
+    <div class="task-page__container">
+      @if (isLoading()) {
+      <app-progress-spinner></app-progress-spinner>
+      } @else{
+      <div class="task-page__header">
+        <h1 class="task-page__title">{{ task.titulo }}</h1>
+        <p
+          class="task-page__status"
+          [class.task-page__status--atrasada]="
+            isAtrasada(task.prazo, task.status)
+          "
+          [class.task-page__status--iniciada]="task.status === 'INICIADA'"
+          [class.task-page__status--finalizada]="task.status === 'FINALIZADA'"
+        >
+          {{
+            !isAtrasada(task.prazo, task.status)
+              ? (task.status | capitalizeFirst)
+              : "Atrasada"
+          }}
+        </p>
+      </div>
+      <p class="task-page__details">Gestor: {{ task.gestor.nome }}</p>
+      <p class="task-page__description">{{ task.descricao }}</p>
+      <h2 class="task-page__subtitle">Grupos</h2>
+      @if(task.gruposDemanda.length > 0){
+      <div class="task-page__wrapper">
+        @for (group of task.gruposDemanda; track group.grupoId) {
+        <div class="task-page__group" (click)="openGroup(group.grupoId)">
+          <app-user-avatar [name]="group.grupo.nome"></app-user-avatar>
+          <p class="task-page__group__name">{{ group.grupo.nome }}</p>
+        </div>
+        }
+      </div>
+      } @else {
+      <p class="task-page__message">Nenhum grupo encontrado...</p>
+      }
+      <h2 class="task-page__subtitle">Usuários</h2>
+      @if(task.usuariosDemanda.length > 0){
+      <div class="task-page__wrapper">
+        @for (user of task.usuariosDemanda; track user.usuarioId) {
+        <div class="task-page__group" (click)="openUser(user.usuarioId)">
+          <app-user-avatar [name]="user.usuario.nome"></app-user-avatar>
+          <p class="task-page__group__name">{{ user.usuario.nome }}</p>
+        </div>
+        }
+      </div>
+      } @else {
+      <p class="task-page__message">Nenhum usuário encontrado...</p>
+      }
+      <h2 class="task-page__subtitle">Comentários</h2>
+      <div class="task-page__comments">
+        @if(task){ } @else {
+        <p class="task-page__message">Nenhum comentário encontrado...</p>
+        }
+      </div>
+      }
+    </div>
+  </section>
+</app-container>

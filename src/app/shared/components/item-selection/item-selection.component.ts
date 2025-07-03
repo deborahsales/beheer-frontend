@@ -1,7 +1,13 @@
-import { Component, EventEmitter, Inject, Output, signal } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  Output,
+  signal,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { User } from '../../../core/interfaces/user';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GroupService } from '../../../core/services/group.service';
 import { SnackbarService } from '../../../core/services/snackbar.service';
 import { UserService } from '../../../core/services/user.service';
@@ -10,26 +16,28 @@ import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 
 @Component({
-  selector: 'app-user-selection',
+  selector: 'app-item-selection',
   imports: [
     UserAvatarComponent,
     SearchBarComponent,
     ProgressSpinnerComponent,
     MatButtonModule,
   ],
-  templateUrl: './user-selection.component.html',
-  styleUrl: './user-selection.component.scss',
+  templateUrl: './item-selection.component.html',
+  styleUrl: './item-selection.component.scss',
 })
-export class UserSelectionComponent {
+export class ItemSelectionComponent {
   groupId!: number;
-  users: User[] = [];
-  filteredUsers: any[] = [];
+  itens: any[] = [];
+  filteredItens: any[] = [];
   searchInput = '';
   isLoading = signal(false);
   userId!: number;
+  @Input() title: string = 'Selecionar';
+  @Input() steps: boolean = false;
 
   selected: number[] = [];
-  funcao: string = '';
+  @Input() funcao: string = '';
   @Output() selectionChange = new EventEmitter<number[]>();
   @Output() closed = new EventEmitter<void>();
   @Output() save = new EventEmitter<number[]>();
@@ -37,8 +45,11 @@ export class UserSelectionComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    private data: { groupId: number; funcao: string } | null = null,
-    private dialogRef: MatDialogRef<UserSelectionComponent>,
+    private data: {
+      groupId: number;
+      funcao: string;
+      title: string;
+    } | null = null,
     private userService: UserService,
     private groupService: GroupService,
     private snackbarService: SnackbarService
@@ -46,6 +57,7 @@ export class UserSelectionComponent {
     if (data) {
       this.groupId = data.groupId;
       this.funcao = data.funcao;
+      this.title = data.title;
     }
   }
 
@@ -64,7 +76,13 @@ export class UserSelectionComponent {
           this.loadAllColaboradores();
         }
       } else {
-        this.loadAllUsers();
+        if (this.funcao === 'GRUPO') {
+          this.loadAllGroups();
+        } else if (this.funcao === 'COLABORADOR') {
+          this.loadAllColaboradores();
+        } else {
+          this.loadAllUsers();
+        }
       }
     });
   }
@@ -102,7 +120,7 @@ export class UserSelectionComponent {
   loadAllColaboradores() {
     this.isLoading = signal(true);
     this.userService.getColaboradores().subscribe((res) => {
-      this.users = res;
+      this.itens = res;
       this.applyFilter();
       this.isLoading = signal(false);
     });
@@ -111,7 +129,7 @@ export class UserSelectionComponent {
   loadAllGestores() {
     this.isLoading = signal(true);
     this.userService.getGestores().subscribe((res) => {
-      this.users = res;
+      this.itens = res;
       this.applyFilter();
       this.isLoading = signal(false);
     });
@@ -120,7 +138,16 @@ export class UserSelectionComponent {
   loadAllUsers() {
     this.isLoading = signal(true);
     this.userService.getUsers().subscribe((res) => {
-      this.users = res.filter((user) => user.id !== this.userId);
+      this.itens = res.filter((user) => user.id !== this.userId);
+      this.applyFilter();
+      this.isLoading = signal(false);
+    });
+  }
+
+  loadAllGroups() {
+    this.isLoading = signal(true);
+    this.groupService.getGroups().subscribe((res) => {
+      this.itens = res;
       this.applyFilter();
       this.isLoading = signal(false);
     });
@@ -128,11 +155,11 @@ export class UserSelectionComponent {
 
   applyFilter() {
     const term = this.searchInput.toLowerCase();
-    this.filteredUsers = this.users
+    this.filteredItens = this.itens
       .filter(
-        (user) =>
-          user.nome.toLowerCase().includes(term) ||
-          user.email.toLowerCase().includes(term)
+        (item) =>
+          item.nome.toLowerCase().includes(term) ||
+          item.email.toLowerCase().includes(term)
       )
       .sort((a, b) => {
         const aSelected = this.selected.includes(Number(a.id)) ? 0 : 1;
@@ -160,20 +187,20 @@ export class UserSelectionComponent {
 
   allVisibleSelected(): boolean {
     return (
-      this.filteredUsers.length > 0 &&
-      this.filteredUsers.every((u) => this.selected.includes(u.id))
+      this.filteredItens.length > 0 &&
+      this.filteredItens.every((u) => this.selected.includes(u.id))
     );
   }
 
   toggleSelectAllVisible(checked: boolean) {
     if (checked) {
-      const newIds = this.filteredUsers
+      const newIds = this.filteredItens
         .map((u) => u.id)
         .filter((id) => !this.selected.includes(id));
       this.selected = [...this.selected, ...newIds];
     } else {
       this.selected = this.selected.filter(
-        (id) => !this.filteredUsers.some((u) => u.id === id)
+        (id) => !this.filteredItens.some((u) => u.id === id)
       );
     }
     this.selectionChange.emit(this.selected);
@@ -185,27 +212,5 @@ export class UserSelectionComponent {
 
   previousStep() {
     this.step.emit();
-  }
-
-  confirmar() {
-    const groupId = this.groupId;
-    let groupData: any = {};
-
-    if (this.funcao === 'GESTOR') {
-      groupData = { gestores: this.selected };
-    } else if (this.funcao === 'COLABORADOR') {
-      groupData = { usuarios: this.selected };
-    }
-
-    this.groupService.updateGroup(groupId, groupData).subscribe({
-      next: () => {
-        this.snackbarService.show('Usuários alterados com sucesso.');
-        this.dialogRef.close(true);
-      },
-      error: () => {
-        this.snackbarService.show('Erro ao alterar usuários.');
-        this.dialogRef.close();
-      },
-    });
   }
 }

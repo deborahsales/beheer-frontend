@@ -10,7 +10,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { Group } from '../../core/interfaces/group';
 import { Task } from '../../core/interfaces/task';
 import { GroupService } from '../../core/services/group.service';
@@ -19,11 +18,11 @@ import { SnackbarService } from '../../core/services/snackbar.service';
 import { TaskService } from '../../core/services/task.service';
 import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
+import { ItemSelectionComponent } from '../../shared/components/item-selection/item-selection.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
 import { SearchBarComponent } from '../../shared/components/search-bar/search-bar.component';
 import { TasksTableComponent } from '../../shared/components/tasks-table/tasks-table.component';
 import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
-import { UserSelectionComponent } from '../../shared/components/user-selection/user-selection.component';
 
 @Component({
   selector: 'app-grupo-id',
@@ -133,18 +132,46 @@ export class GrupoIdComponent {
   }
 
   addMembers(groupId: number, funcao: string) {
-    const dialogRef = this.openDialog.open(UserSelectionComponent, {
-      groupId,
-      funcao,
-    });
-
-    if (dialogRef instanceof Observable) {
-      dialogRef.subscribe((confirmed) => {
-        if (confirmed === true) {
-          this.reloadGroup();
+    this.openDialog
+      .open<
+        ItemSelectionComponent,
+        { groupId: number; funcao: string; title: string },
+        number[]
+      >(ItemSelectionComponent, {
+        groupId,
+        funcao,
+        title: 'Editar usuários',
+      })
+      .subscribe((selected) => {
+        if (selected && selected.length > 0) {
+          this.executeAddNewMember(selected, groupId, funcao);
         }
+        this.reloadGroup();
       });
+  }
+
+  private executeAddNewMember(
+    selected: number[],
+    groupId: number,
+    funcao: string
+  ) {
+    this.isLoading.set(true);
+    let groupData: any = {};
+
+    if (funcao === 'GESTOR') {
+      groupData = { gestores: selected };
+    } else if (funcao === 'COLABORADOR') {
+      groupData = { usuarios: selected };
     }
+
+    this.groupService.updateGroup(groupId, groupData).subscribe({
+      next: () => {
+        this.snackbarService.show('Usuários alterados com sucesso.');
+      },
+      error: () => {
+        this.snackbarService.show('Erro ao alterar usuários.');
+      },
+    });
   }
 
   private reloadGroup() {

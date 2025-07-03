@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserSelectionComponent } from './user-selection.component';
+import { UserSelectionComponent } from './item-selection.component';
 
 describe('UserSelectionComponent', () => {
   let component: UserSelectionComponent;
@@ -8,9 +8,8 @@ describe('UserSelectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserSelectionComponent]
-    })
-    .compileComponents();
+      imports: [UserSelectionComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(UserSelectionComponent);
     component = fixture.componentInstance;

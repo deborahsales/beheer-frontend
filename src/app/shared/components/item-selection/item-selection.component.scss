@@ -2,18 +2,18 @@
   display: block;
   padding: var(--space-md);
   background-color: var(--light-gray);
-  width: 500px;
+  width: 400px;
   overflow: auto;
 }
 
-.user-selector {
+.item-selector {
   display: flex;
   flex-direction: column;
-  max-height: 73vh;
+  max-height: 73dvh;
 
   &__wrapper {
     overflow-y: auto;
-    max-height: 60vh;
+    max-height: 60dvh;
   }
 
   &__title {

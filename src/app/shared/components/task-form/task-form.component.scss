@@ -1,0 +1,29 @@
+:host {
+  background-color: var(--light-gray);
+  width: 400px;
+}
+
+.task-modal {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  &__title {
+    margin: var(--space-sm) 0 0 var(--space-sm);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-regular);
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-xs);
+    gap: var(--space-md);
+  }
+}
+
+mat-form-field {
+  width: 300px;
+}
