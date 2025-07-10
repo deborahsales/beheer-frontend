@@ -4,6 +4,7 @@ import { DashboardLayoutComponent } from '../layouts/dashboard-layout/dashboard-
 import { AvisoIdComponent } from '../pages/aviso-id/aviso-id.component';
 import { AvisosComponent } from '../pages/avisos/avisos.component';
 import { ColaboradorDashboardComponent } from '../pages/colaborador/dashboard/dashboard.component';
+import { DemandaIdComponent } from '../pages/demanda-id/demanda-id.component';
 import { DemandasComponent } from '../pages/demandas/demandas.component';
 import { GrupoIdComponent } from '../pages/grupo-id/grupo-id.component';
 import { GruposComponent } from '../pages/grupos/grupos.component';
@@ -43,6 +44,7 @@ export const colaboradorRoutes: Routes = [
       { path: 'grupos', component: GruposComponent },
       { path: 'grupo/:id', component: GrupoIdComponent },
       { path: 'demandas', component: DemandasComponent },
+      { path: 'demanda/:id', component: DemandaIdComponent },
       { path: 'avisos', component: AvisosComponent },
       { path: 'aviso/:id', component: AvisoIdComponent },
     ],

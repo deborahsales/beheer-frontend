@@ -135,10 +135,10 @@ export class GrupoIdComponent {
     this.openDialog
       .open<
         ItemSelectionComponent,
-        { groupId: number; funcao: string; title: string },
+        { id: number; funcao: string; title: string },
         number[]
       >(ItemSelectionComponent, {
-        groupId,
+        id: groupId,
         funcao,
         title: 'Editar usuários',
       })

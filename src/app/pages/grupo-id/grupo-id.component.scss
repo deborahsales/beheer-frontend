@@ -48,11 +48,11 @@
     align-items: stretch;
     padding: var(--space-xs);
     gap: var(--space-md);
-  }
 
-  &__form-actions {
-    border-bottom: 1px solid var(--black);
-    padding-bottom: var(--space-sm);
+    &-actions {
+      border-bottom: 1px solid var(--black);
+      padding-bottom: var(--space-sm);
+    }
   }
 
   &__actions {

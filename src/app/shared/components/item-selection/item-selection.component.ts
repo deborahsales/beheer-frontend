@@ -3,13 +3,15 @@ import {
   EventEmitter,
   Inject,
   Input,
+  Optional,
   Output,
   signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GroupService } from '../../../core/services/group.service';
 import { SnackbarService } from '../../../core/services/snackbar.service';
+import { TaskService } from '../../../core/services/task.service';
 import { UserService } from '../../../core/services/user.service';
 import { ProgressSpinnerComponent } from '../progress-spinner/progress-spinner.component';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
@@ -27,7 +29,7 @@ import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
   styleUrl: './item-selection.component.scss',
 })
 export class ItemSelectionComponent {
-  groupId!: number;
+  id!: number;
   itens: any[] = [];
   filteredItens: any[] = [];
   searchInput = '';
@@ -46,16 +48,18 @@ export class ItemSelectionComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     private data: {
-      groupId: number;
+      id: number;
       funcao: string;
       title: string;
     } | null = null,
     private userService: UserService,
     private groupService: GroupService,
-    private snackbarService: SnackbarService
+    private taskService: TaskService,
+    private snackbarService: SnackbarService,
+    @Optional() private dialogRef?: MatDialogRef<ItemSelectionComponent>
   ) {
     if (data) {
-      this.groupId = data.groupId;
+      this.id = data.id;
       this.funcao = data.funcao;
       this.title = data.title;
     }
@@ -67,13 +71,19 @@ export class ItemSelectionComponent {
     this.userService.getAuthUser().subscribe((user) => {
       this.userId = user?.sub || 0;
 
-      if (this.groupId) {
+      if (this.id) {
         if (this.funcao === 'GESTOR') {
           this.loadGrupoGestores();
           this.loadAllGestores();
         } else if (this.funcao === 'COLABORADOR') {
           this.loadGrupoColaboradores();
           this.loadAllColaboradores();
+        } else if (this.funcao === 'COLABORADOR-DEMANDA') {
+          this.loadDemandaUsuarios();
+          this.loadAllColaboradores();
+        } else if (this.funcao === 'GRUPO-DEMANDA') {
+          this.loadDemandaGrupos();
+          this.loadAllGroups();
         }
       } else {
         if (this.funcao === 'GRUPO') {
@@ -87,9 +97,39 @@ export class ItemSelectionComponent {
     });
   }
 
+  loadDemandaGrupos() {
+    this.isLoading = signal(true);
+    this.taskService.getTaskById(this.id).subscribe({
+      next: (task) => {
+        this.selected =
+          task.gruposDemanda?.map((group: any) => group.grupoId) || [];
+        this.isLoading = signal(false);
+      },
+      error: (err) => {
+        this.snackbarService.show(err);
+        this.isLoading = signal(false);
+      },
+    });
+  }
+
+  loadDemandaUsuarios() {
+    this.isLoading = signal(true);
+    this.taskService.getTaskById(this.id).subscribe({
+      next: (task) => {
+        this.selected =
+          task.usuariosDemanda?.map((user: any) => user.usuarioId) || [];
+        this.isLoading = signal(false);
+      },
+      error: (err) => {
+        this.snackbarService.show(err);
+        this.isLoading = signal(false);
+      },
+    });
+  }
+
   loadGrupoColaboradores() {
     this.isLoading = signal(true);
-    this.groupService.getGroupById(this.groupId).subscribe({
+    this.groupService.getGroupById(this.id).subscribe({
       next: (group) => {
         this.selected =
           group.usuarios?.map((user: any) => user.usuarioId) || [];
@@ -104,7 +144,7 @@ export class ItemSelectionComponent {
 
   loadGrupoGestores() {
     this.isLoading = signal(true);
-    this.groupService.getGroupById(this.groupId).subscribe({
+    this.groupService.getGroupById(this.id).subscribe({
       next: (group) => {
         this.selected =
           group.gestores?.map((user: any) => user.usuarioId) || [];
@@ -207,7 +247,11 @@ export class ItemSelectionComponent {
   }
 
   onSave() {
-    this.save.emit(this.selected);
+    if (this.dialogRef) {
+      this.dialogRef.close(this.selected);
+    } else {
+      this.save.emit(this.selected);
+    }
   }
 
   previousStep() {
