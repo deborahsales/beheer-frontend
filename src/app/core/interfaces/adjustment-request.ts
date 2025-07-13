@@ -1,4 +1,4 @@
-export interface AdjustmentRequests {
+export interface AdjustmentRequest {
   id: number;
   dateTimestampAjustado: string;
   motivo: string;
