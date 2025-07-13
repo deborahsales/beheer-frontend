@@ -4,14 +4,63 @@
   }
   <section class="attendance-page">
     <app-features-header
-      [title]="'Pontos'"
-      [buttonName]="'Registro de ponto'"
+      [title]="'Registros de Ponto'"
+      [buttonName]="'Registrar ponto'"
       [inputPlaceholder]="'Buscar...'"
       [canCreate]="canCreate"
       [(searchInput)]="searchInput"
       (filter)="applyFilter()"
       (buttonClick)="registerAttendance()"
     ></app-features-header>
-    <div class="attendance__content"></div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            @if (role === 'rh'){
+            <th>Usuário</th>
+            }
+            <th class="text-center">Data</th>
+            <th class="text-center">Horário</th>
+            <th class="text-center">IP</th>
+            @if (canCreate){
+            <th class="text-center">Ações</th>
+            }
+          </tr>
+        </thead>
+        @for (attendance of filteredAttendances; track attendance.id){
+        <tbody
+          class="table-container__line"
+          (click)="openAttendance(attendance.id)"
+        >
+          @if (role === 'rh'){
+          <td class="table-container__overflow-text">
+            {{ attendance.usuario.nome }}
+          </td>
+          }
+          <td class="text-center">
+            {{ attendance.dateTimestamp | date : "dd/MM/yyyy" }}
+          </td>
+          <td class="text-center">
+            {{ attendance.dateTimestamp | date : "HH:mm" }}
+          </td>
+          <td class="text-center">
+            {{ attendance.ip }}
+          </td>
+          @if (canCreate){
+          <td class="text-center">
+            <button
+              class="action-button action-button--delete"
+              (click)="
+                deleteAttendance(attendance.id!); $event.stopPropagation()
+              "
+            >
+              <span class="material-icons">delete</span>
+            </button>
+          </td>
+          }
+        </tbody>
+        }
+      </table>
+    </div>
   </section>
 </app-container>

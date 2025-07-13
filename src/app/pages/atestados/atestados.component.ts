@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { MedicalCertificate } from '../../core/interfaces/medical-certificate';
@@ -8,6 +9,7 @@ import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { FeaturesHeaderComponent } from '../../shared/components/features-header/features-header.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
+import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
 
 @Component({
   selector: 'app-atestados',
@@ -15,6 +17,8 @@ import { ProgressSpinnerComponent } from '../../shared/components/progress-spinn
     ContainerComponent,
     ProgressSpinnerComponent,
     FeaturesHeaderComponent,
+    DatePipe,
+    CapitalizeFirstPipe,
   ],
   templateUrl: './atestados.component.html',
   styleUrl: './atestados.component.scss',
@@ -44,6 +48,10 @@ export class AtestadosComponent {
       }
     });
 
+    if (this.role === 'colaborador') {
+      this.canCreate = true;
+    }
+
     this.medicalCertificateService
       .getMedicalCertificates()
       .subscribe((data) => {
@@ -66,4 +74,50 @@ export class AtestadosComponent {
   }
 
   registerMedicalCertificate() {}
+
+  accept(medicalCertificateId: number) {}
+
+  deleteMedicalCertificate(medicalCertificateId: number) {
+    const medicalCertificate = this.medicalCertificates.find(
+      (medicalCertificate) => medicalCertificate.id === medicalCertificateId
+    );
+    if (!medicalCertificate) return;
+
+    this.openDialog
+      .confirm({
+        title: 'Excluir atestado',
+        message: `Tem certeza que deseja excluir o atestado?`,
+        confirmText: 'Excluir',
+        cancelText: 'Cancelar',
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.executeDelete(medicalCertificateId);
+        }
+      });
+  }
+
+  private executeDelete(medicalCertificateId: number): void {
+    this.isLoading.set(true);
+
+    this.medicalCertificateService
+      .deleteMedicalCertificate(medicalCertificateId)
+      .subscribe({
+        next: () => {
+          this.medicalCertificates = this.medicalCertificates.filter(
+            (medicalCertificate) =>
+              medicalCertificate.id !== medicalCertificateId
+          );
+          this.applyFilter();
+          this.snackbarService.show('Atestado deletado com sucesso');
+          this.isLoading.set(false);
+        },
+        error: (err) => {
+          this.snackbarService.show(
+            err.error?.message || 'Erro ao deletar atestado'
+          );
+          this.isLoading.set(false);
+        },
+      });
+  }
 }

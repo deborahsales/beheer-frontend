@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Attendance } from '../../core/interfaces/attendance';
@@ -15,6 +16,7 @@ import { ProgressSpinnerComponent } from '../../shared/components/progress-spinn
     ContainerComponent,
     ProgressSpinnerComponent,
     FeaturesHeaderComponent,
+    DatePipe,
   ],
   templateUrl: './pontos.component.html',
   styleUrl: './pontos.component.scss',
@@ -44,6 +46,10 @@ export class PontosComponent {
       }
     });
 
+    if (this.role === 'colaborador' || this.role === 'rh') {
+      this.canCreate = true;
+    }
+
     this.attendanceService.getAttendances().subscribe((data) => {
       this.attendances = data;
       this.filteredAttendances = [...this.attendances];
@@ -51,11 +57,57 @@ export class PontosComponent {
     });
   }
 
-  applyFilter() {}
+  applyFilter() {
+    const term = this.searchInput.toLowerCase();
+    this.filteredAttendances = this.attendances.filter((attendance) =>
+      attendance.usuario.nome.toLowerCase().includes(term)
+    );
+  }
 
   openAttendance(id: number) {
     this.router.navigate([`/${this.role}/ponto`, id]);
   }
 
   registerAttendance() {}
+
+  deleteAttendance(attendanceId: number) {
+    const attendance = this.attendances.find(
+      (attendance) => attendance.id === attendanceId
+    );
+    if (!attendance) return;
+
+    this.openDialog
+      .confirm({
+        title: 'Excluir ponto',
+        message: `Tem certeza que deseja excluir o registro de ponto?`,
+        confirmText: 'Excluir',
+        cancelText: 'Cancelar',
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.executeDelete(attendanceId);
+        }
+      });
+  }
+
+  private executeDelete(attendanceId: number): void {
+    this.isLoading.set(true);
+
+    this.attendanceService.deleteAttendance(attendanceId).subscribe({
+      next: () => {
+        this.attendances = this.attendances.filter(
+          (attendance) => attendance.id !== attendanceId
+        );
+        this.applyFilter();
+        this.snackbarService.show('Registro de ponto deletado com sucesso');
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        this.snackbarService.show(
+          err.error?.message || 'Erro ao deletar registro de ponto'
+        );
+        this.isLoading.set(false);
+      },
+    });
+  }
 }
