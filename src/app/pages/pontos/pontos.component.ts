@@ -20,5 +20,5 @@ export class PontosComponent {
 
   applyFilter() {}
 
-  clockIn() {}
+  registerAttendance() {}
 }

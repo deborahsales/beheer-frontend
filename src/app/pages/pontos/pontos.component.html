@@ -2,7 +2,7 @@
   @if (isLoading()) {
   <app-progress-spinner></app-progress-spinner>
   }
-  <section class="time-tracking-page">
+  <section class="attendance-page">
     <app-features-header
       [title]="'Pontos'"
       [buttonName]="'Registro de ponto'"
@@ -10,8 +10,8 @@
       [canCreate]="canCreate"
       [(searchInput)]="searchInput"
       (filter)="applyFilter()"
-      (buttonClick)="clockIn()"
+      (buttonClick)="registerAttendance()"
     ></app-features-header>
-    <div class="time-tracking__content"></div>
+    <div class="attendance__content"></div>
   </section>
 </app-container>
