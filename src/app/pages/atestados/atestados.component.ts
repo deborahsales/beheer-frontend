@@ -1,4 +1,10 @@
 import { Component, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { MedicalCertificate } from '../../core/interfaces/medical-certificate';
+import { MedicalCertificateService } from '../../core/services/medical-certificate.service';
+import { OpenDialogService } from '../../core/services/open-dialog.service';
+import { SnackbarService } from '../../core/services/snackbar.service';
+import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { FeaturesHeaderComponent } from '../../shared/components/features-header/features-header.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
@@ -14,11 +20,50 @@ import { ProgressSpinnerComponent } from '../../shared/components/progress-spinn
   styleUrl: './atestados.component.scss',
 })
 export class AtestadosComponent {
-  isLoading = signal(false);
+  medicalCertificates: MedicalCertificate[] = [];
+  filteredMedicalCertificates: MedicalCertificate[] = [];
   searchInput: string = '';
-  canCreate: boolean = true;
+  isLoading = signal(false);
+  canCreate: boolean = false;
+  role: string = 'colaborador';
 
-  applyFilter() {}
+  constructor(
+    private medicalCertificateService: MedicalCertificateService,
+    private openDialog: OpenDialogService,
+    private snackbarService: SnackbarService,
+    private userService: UserService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.isLoading = signal(true);
+
+    this.userService.getRole().subscribe((role) => {
+      if (role) {
+        this.role = role.toLowerCase();
+      }
+    });
+
+    this.medicalCertificateService
+      .getMedicalCertificates()
+      .subscribe((data) => {
+        this.medicalCertificates = data;
+        this.filteredMedicalCertificates = [...this.medicalCertificates];
+        this.isLoading = signal(false);
+      });
+  }
+
+  applyFilter() {
+    const term = this.searchInput.toLowerCase();
+    this.filteredMedicalCertificates = this.medicalCertificates.filter(
+      (medicalCertificate) =>
+        medicalCertificate.status.toLowerCase().includes(term)
+    );
+  }
+
+  openMedicalCertificate(id: number) {
+    this.router.navigate([`/${this.role}/atestado`, id]);
+  }
 
   registerMedicalCertificate() {}
 }
