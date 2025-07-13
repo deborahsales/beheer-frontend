@@ -5,6 +5,7 @@ export interface AdjustmentRequest {
   status: string;
   dateTimestamp: string;
   usuarioId: number;
+  usuario: { nome: string };
   pontoId: number;
   gerenciamentoAJuste: GerenciamentoAjuste[];
 }

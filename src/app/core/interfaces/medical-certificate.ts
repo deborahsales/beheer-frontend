@@ -8,6 +8,7 @@ export interface MedicalCertificate {
   imagem: string;
   status: string;
   usuarioId: number;
+  usuario: { nome: string };
   gerenciamentoAtestado: GerenciamentoAtestado[];
 }
 

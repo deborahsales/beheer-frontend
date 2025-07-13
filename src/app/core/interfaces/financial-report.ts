@@ -7,6 +7,7 @@ export interface FinancialReport {
   dateTimestamp: string;
   status: string;
   usuarioId: number;
+  usuario: { nome: string };
   gerenciamentoPrestacao: GerenciamentoPrestacao[];
 }
 

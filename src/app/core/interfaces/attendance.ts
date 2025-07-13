@@ -7,4 +7,5 @@ export interface Attendance {
   longitude: number;
   ativo: boolean;
   usuarioId: number;
+  usuario: { nome: string };
 }
