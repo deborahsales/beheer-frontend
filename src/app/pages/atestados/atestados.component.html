@@ -1,0 +1,17 @@
+<app-container>
+  @if (isLoading()) {
+  <app-progress-spinner></app-progress-spinner>
+  }
+  <section class="medical-certificate-page">
+    <app-features-header
+      [title]="'Atestados'"
+      [buttonName]="'Novo atestado'"
+      [inputPlaceholder]="'Buscar atestado...'"
+      [canCreate]="canCreate"
+      [(searchInput)]="searchInput"
+      (filter)="applyFilter()"
+      (buttonClick)="registerMedicalCertificate()"
+    ></app-features-header>
+    <div class="medical-certificate-page__content"></div>
+  </section>
+</app-container>

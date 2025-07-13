@@ -1,0 +1,17 @@
+<app-container>
+  @if (isLoading()) {
+  <app-progress-spinner></app-progress-spinner>
+  }
+  <section class="financial-report-page">
+    <app-features-header
+      [title]="'Prestação de contas'"
+      [buttonName]="'Nova prestação'"
+      [inputPlaceholder]="'Buscar...'"
+      [canCreate]="canCreate"
+      [(searchInput)]="searchInput"
+      (filter)="applyFilter()"
+      (buttonClick)="createReport()"
+    ></app-features-header>
+    <div class="financial-report-page__content"></div>
+  </section>
+</app-container>

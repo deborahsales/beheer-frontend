@@ -1,0 +1,17 @@
+<app-container>
+  @if (isLoading()) {
+  <app-progress-spinner></app-progress-spinner>
+  }
+  <section class="requests-page">
+    <app-features-header
+      [title]="'Solicitações de ajuste'"
+      [buttonName]="'Nova solicitação'"
+      [inputPlaceholder]="'Buscar...'"
+      [canCreate]="canCreate"
+      [(searchInput)]="searchInput"
+      (filter)="applyFilter()"
+      (buttonClick)="openRequest()"
+    ></app-features-header>
+    <div class="requests-page__content"></div>
+  </section>
+</app-container>

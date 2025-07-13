@@ -6,7 +6,6 @@ import { AvisosComponent } from '../pages/avisos/avisos.component';
 import { DemandaIdComponent } from '../pages/demanda-id/demanda-id.component';
 import { DemandasComponent } from '../pages/demandas/demandas.component';
 import { CronogramasComponent } from '../pages/gestor/cronogramas/cronogramas.component';
-import { GestorDashboardComponent } from '../pages/gestor/dashboard/dashboard.component';
 import { GrupoIdComponent } from '../pages/grupo-id/grupo-id.component';
 import { GruposComponent } from '../pages/grupos/grupos.component';
 import { UsuarioIdComponent } from '../pages/usuario-id/usuario-id.component';
@@ -18,11 +17,6 @@ export const gestorRoutes: Routes = [
     canActivateChild: [gestorGuard],
     data: {
       sidebarLinks: [
-        {
-          label: 'Dashboard',
-          route: '/gestor/dashboard',
-          icon: 'dashboard',
-        },
         {
           label: 'Grupos',
           route: '/gestor/grupos',
@@ -46,8 +40,7 @@ export const gestorRoutes: Routes = [
       ],
     },
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: GestorDashboardComponent },
+      { path: '', redirectTo: 'grupos', pathMatch: 'full' },
       { path: 'grupos', component: GruposComponent },
       { path: 'grupo/:id', component: GrupoIdComponent },
       { path: 'demandas', component: DemandasComponent },

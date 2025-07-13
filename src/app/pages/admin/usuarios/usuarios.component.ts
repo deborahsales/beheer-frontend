@@ -13,7 +13,7 @@ import { UserAvatarComponent } from '../../../shared/components/user-avatar/user
 import { CapitalizeFirstPipe } from '../../../shared/pipes/capitalize-first.pipe';
 
 @Component({
-  selector: 'app-admin-dashboard',
+  selector: 'app-usuarios',
   imports: [
     CommonModule,
     FormsModule,
@@ -23,10 +23,10 @@ import { CapitalizeFirstPipe } from '../../../shared/pipes/capitalize-first.pipe
     FeaturesHeaderComponent,
     UserAvatarComponent,
   ],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss',
+  templateUrl: './usuarios.component.html',
+  styleUrl: './usuarios.component.scss',
 })
-export class AdminDashboardComponent {
+export class UsuariosComponent {
   users: User[] = [];
   filteredUsers: User[] = [];
   searchInput = '';
