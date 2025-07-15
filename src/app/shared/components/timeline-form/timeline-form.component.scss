@@ -1,0 +1,22 @@
+.timeline-modal {
+  width: 350px;
+
+  &__title {
+    margin: var(--space-sm) 0 0 var(--space-sm);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-regular);
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-xs);
+    gap: var(--space-md);
+  }
+}
+
+mat-form-field {
+  width: 300px;
+}

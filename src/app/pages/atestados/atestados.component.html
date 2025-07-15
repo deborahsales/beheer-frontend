@@ -19,14 +19,18 @@
             @if (role === 'rh'){
             <th>Usuário</th>
             }
-            <th class="text-center">Cadastro</th>
+            <th>Cadastro</th>
             <th class="text-center">Data</th>
             <th class="text-center">Dia Inteiro</th>
             <th class="text-center">Status</th>
             <th class="text-center">Ações</th>
           </tr>
         </thead>
-        @for (medicalCertificate of filteredMedicalCertificates; track
+        @if (!filteredMedicalCertificates.length) {
+        <tr>
+          <td>Nenhum atestado localizado...</td>
+        </tr>
+        } @for (medicalCertificate of filteredMedicalCertificates; track
         medicalCertificate.id){
         <tbody
           class="table-container__line"
@@ -37,7 +41,7 @@
             {{ medicalCertificate.usuario.nome }}
           </td>
           }
-          <td class="text-center">
+          <td>
             {{ medicalCertificate.dateTimestamp | date : "dd/MM/yyyy" }}
           </td>
           <td class="text-center">

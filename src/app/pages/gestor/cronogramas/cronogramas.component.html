@@ -12,6 +12,45 @@
       (filter)="applyFilter()"
       (buttonClick)="createTimeline()"
     ></app-features-header>
-    <div class="timeline-page__content"></div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Titulo</th>
+            <th>Descrição</th>
+            <th class="text-center">Criação</th>
+            <th class="text-center">Ações</th>
+          </tr>
+        </thead>
+        @if (!filteredTimelines.length) {
+        <tr>
+          <td>Nenhum cronograma localizado...</td>
+        </tr>
+        } @for (timeline of filteredTimelines; track timeline.id){
+        <tbody
+          class="table-container__line"
+          (click)="openTimeline(timeline.id)"
+        >
+          <td class="table-container__overflow-text">
+            {{ timeline.titulo }}
+          </td>
+          <td class="table-container__overflow-text">
+            {{ timeline.descricao }}
+          </td>
+          <td class="text-center">
+            {{ timeline.dateTimestamp | date : "dd/MM/yyyy" }}
+          </td>
+          <td class="text-center">
+            <button
+              class="action-button action-button--delete"
+              (click)="deleteTimeline(timeline.id!); $event.stopPropagation()"
+            >
+              <span class="material-icons">delete</span>
+            </button>
+          </td>
+        </tbody>
+        }
+      </table>
+    </div>
   </section>
 </app-container>

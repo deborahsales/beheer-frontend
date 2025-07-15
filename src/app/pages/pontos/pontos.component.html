@@ -19,7 +19,7 @@
             @if (role === 'rh'){
             <th>Usuário</th>
             }
-            <th class="text-center">Data</th>
+            <th>Data</th>
             <th class="text-center">Horário</th>
             <th class="text-center">IP</th>
             @if (canCreate){
@@ -27,7 +27,11 @@
             }
           </tr>
         </thead>
-        @for (attendance of filteredAttendances; track attendance.id){
+        @if (!filteredAttendances.length) {
+        <tr>
+          <td>Nenhum ponto localizado...</td>
+        </tr>
+        } @for (attendance of filteredAttendances; track attendance.id){
         <tbody
           class="table-container__line"
           (click)="openAttendance(attendance.id)"
@@ -37,7 +41,7 @@
             {{ attendance.usuario.nome }}
           </td>
           }
-          <td class="text-center">
+          <td>
             {{ attendance.dateTimestamp | date : "dd/MM/yyyy" }}
           </td>
           <td class="text-center">

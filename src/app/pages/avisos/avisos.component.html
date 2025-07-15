@@ -23,7 +23,11 @@
             <th class="text-center">Ações</th>
           </tr>
         </thead>
-        @for (notification of filteredNotifications; track notification.id){
+        @if (!filteredNotifications.length) {
+        <tr>
+          <td>Nenhum aviso localizado...</td>
+        </tr>
+        } @for (notification of filteredNotifications; track notification.id){
         <tbody
           class="table-container__line"
           [class.table-container__line--read]="

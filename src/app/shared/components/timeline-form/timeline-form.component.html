@@ -1,0 +1,36 @@
+<div class="timeline-modal">
+  <h2 class="timeline-modal__title">Novo cronograma</h2>
+  <mat-dialog-content>
+    <form
+      [formGroup]="form"
+      class="timeline-modal__wrapper"
+      (ngSubmit)="onSubmit()"
+    >
+      <mat-form-field appearance="outline">
+        <mat-label>Título</mat-label>
+        <input matInput formControlName="titulo" />
+        <mat-error *ngIf="form.get('titulo')?.hasError('required')">
+          Título é obrigatório
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição</mat-label>
+        <textarea matInput formControlName="descricao"></textarea>
+        <mat-error *ngIf="form.get('descricao')?.hasError('required')">
+          Descrição é obrigatória
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancelar</button>
+    <button
+      mat-flat-button
+      color="primary"
+      [disabled]="form.invalid"
+      (click)="onSubmit()"
+    >
+      Criar
+    </button>
+  </mat-dialog-actions>
+</div>

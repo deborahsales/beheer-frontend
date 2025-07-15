@@ -20,6 +20,10 @@ export class TaskService {
     return this.http.get<Task[]>(`${this.apiUrl}/grupo/${groupId}`);
   }
 
+  getTasksByTimeline(timelineId: number): Observable<Task[]> {
+    return this.http.get<Task[]>(`${this.apiUrl}/cronograma/${timelineId}`);
+  }
+
   getTasksByUser(groupId: number): Observable<Task[]> {
     return this.http.get<Task[]>(`${this.apiUrl}/usuario/${groupId}`);
   }

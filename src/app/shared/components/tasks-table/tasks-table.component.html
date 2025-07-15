@@ -12,7 +12,12 @@
         }
       </tr>
     </thead>
-    @for (task of filteredTasks; track task.id){
+
+    @if (!filteredTasks.length) {
+    <tr>
+      <td>Nenhuma demanda localizada...</td>
+    </tr>
+    } @for (task of filteredTasks; track task.id){
     <tbody class="table-container__line" (click)="openTask(task.id)">
       <td class="table-container__overflow-text">
         {{ task.titulo }}

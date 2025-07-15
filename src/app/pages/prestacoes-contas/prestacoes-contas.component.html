@@ -27,6 +27,11 @@
             <th class="text-center">Ações</th>
           </tr>
         </thead>
+        @if (!filteredFinancialReports.length) {
+        <tr>
+          <td>Nenhuma prestação de contas localizada...</td>
+        </tr>
+        } 
         @for (financialReport of filteredFinancialReports; track
         financialReport.id){
         <tbody

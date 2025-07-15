@@ -1,1 +1,80 @@
-<p>cronograma-id works!</p>
+<app-container>
+  <section class="timeline-page">
+    <div class="timeline-page__container">
+      @if (isLoading()) {
+      <app-progress-spinner></app-progress-spinner>
+      } @else {@if(isEditing()){
+      <form
+        [formGroup]="form"
+        class="timeline-page__form"
+        (ngSubmit)="onSubmit()"
+      >
+        <mat-form-field appearance="outline">
+          <mat-label>Titulo</mat-label>
+          <input matInput formControlName="titulo" />
+          <mat-error *ngIf="form.get('titulo')?.hasError('required')">
+            Título é obrigatório
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição</mat-label>
+          <textarea matInput formControlName="descricao"></textarea>
+          <mat-error *ngIf="form.get('descricao')?.hasError('required')">
+            Descrição é obrigatória
+          </mat-error>
+        </mat-form-field>
+      </form>
+      <div class="timeline-page__form-actions">
+        <button mat-button (click)="onCancel()">Cancelar</button>
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="form.invalid"
+          (click)="onSubmit()"
+        >
+          Salvar
+        </button>
+      </div>
+      } @else {
+      <div class="timeline-page__actions">
+        <h1 class="timeline-page__title">{{ timeline.titulo }}</h1>
+        @if(canManage){
+        <button class="action-button" (click)="edit()">
+          <span class="material-icons">edit</span>
+        </button>
+        }
+      </div>
+      <p class="timeline-page__details">
+        Criado: {{ timeline.dateTimestamp | date : "dd/MM/yyyy" : "UTC" }}
+      </p>
+      <p class="timeline-page__description">
+        {{ timeline.descricao }}
+      </p>
+      }
+      <div class="timeline-page__actions">
+        <h2 class="timeline-page__subtitle">Demandas</h2>
+        <button class="action-button" (click)="addTasks(timeline.id)">
+          <span class="material-icons">assignment_add</span>
+        </button>
+      </div>
+      <div class="timeline-page__tasks">
+        <app-search-bar
+          [(value)]="searchInput"
+          [placeholder]="'Buscar demanda...'"
+          (search)="applyFilter()"
+        ></app-search-bar>
+        @if(filteredTasks.length > 0){
+        <app-tasks-table
+          [canManage]="canManage"
+          [role]="role"
+          [filteredTasks]="filteredTasks"
+          (applyFilter)="applyFilter()"
+        ></app-tasks-table>
+        } @else {
+        <p class="timeline-page__message">Nenhuma demanda encontrada...</p>
+        }
+      </div>
+      }
+    </div>
+  </section>
+</app-container>

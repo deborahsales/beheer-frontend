@@ -19,7 +19,7 @@
             @if (role === 'rh'){
             <th>Usuário</th>
             }
-            <th class="text-center">Motivo</th>
+            <th>Motivo</th>
             <th class="text-center">Solicitação</th>
             <th class="text-center">Ajuste</th>
             <th class="text-center">Status</th>
@@ -28,7 +28,11 @@
             }
           </tr>
         </thead>
-        @for (adjustmentRequest of filteredAdjustmentRequests; track
+        @if (!filteredAdjustmentRequests.length) {
+        <tr>
+          <td>Nenhuma solicitação de ajuste localizada...</td>
+        </tr>
+        } @for (adjustmentRequest of filteredAdjustmentRequests; track
         adjustmentRequest.id){
         <tbody
           class="table-container__line"
@@ -39,7 +43,7 @@
             {{ adjustmentRequest.usuario.nome }}
           </td>
           }
-          <td class="text-center">
+          <td>
             {{ adjustmentRequest.motivo | capitalizeFirst }}
           </td>
           <td class="text-center">
