@@ -1,12 +1,32 @@
+import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
+import { map } from 'rxjs';
 import { Task } from '../../core/interfaces/task';
+import { OpenDialogService } from '../../core/services/open-dialog.service';
+import { SnackbarService } from '../../core/services/snackbar.service';
 import { TaskService } from '../../core/services/task.service';
 import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
+import { ItemSelectionComponent } from '../../shared/components/item-selection/item-selection.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
 import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
 import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
+
+interface Prioridade {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-demanda-id',
@@ -15,32 +35,61 @@ import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
     ProgressSpinnerComponent,
     UserAvatarComponent,
     CapitalizeFirstPipe,
+    MatInputModule,
+    CommonModule,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatSelectModule,
+    MatButtonModule,
   ],
   templateUrl: './demanda-id.component.html',
   styleUrl: './demanda-id.component.scss',
 })
 export class DemandaIdComponent {
   taskId!: number;
+  userId!: number;
   isLoading = signal(false);
   canManage: boolean = false;
   role: string = 'colaborador';
   task!: Task;
+  isEditing = signal(false);
+  form: FormGroup;
+
+  Prioridades: Prioridade[] = [
+    { value: 'ALTA', viewValue: 'Alta' },
+    { value: 'MEDIA', viewValue: 'Média' },
+    { value: 'BAIXA', viewValue: 'Baixa' },
+  ];
 
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
     private taskService: TaskService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private formBuilder: FormBuilder,
+    private snackbarService: SnackbarService,
+    private openDialog: OpenDialogService
+  ) {
+    this.form = this.formBuilder.group({
+      titulo: ['', Validators.required],
+      descricao: ['', Validators.required],
+      prazo: ['', Validators.required],
+      prioridade: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     this.isLoading = signal(true);
 
-    this.userService.getRole().subscribe((role) => {
-      if (role) {
-        this.role = role.toLowerCase();
-      }
-    });
+    this.userService
+      .getAuthUser()
+      .pipe(
+        map((user) => {
+          this.userId = user?.sub || 0;
+          this.role = user?.funcao.toLowerCase() || '';
+        })
+      )
+      .subscribe();
 
     if (this.role === 'gestor') {
       this.canManage = true;
@@ -52,6 +101,14 @@ export class DemandaIdComponent {
       this.taskService.getTaskById(this.taskId).subscribe({
         next: (task) => {
           this.task = task;
+
+          this.form.patchValue({
+            titulo: task.titulo,
+            descricao: task.descricao,
+            prazo: task.prazo,
+            prioridade: task.prioridade,
+          });
+
           this.isLoading.set(false);
         },
         error: () => {
@@ -59,6 +116,115 @@ export class DemandaIdComponent {
         },
       });
     }
+  }
+
+  updateStatus() {}
+
+  edit() {
+    this.isEditing = signal(true);
+  }
+
+  addAssignes(taskId: number, funcao: string) {
+    this.openDialog
+      .open<
+        ItemSelectionComponent,
+        { id: number; funcao: string; title: string },
+        number[]
+      >(ItemSelectionComponent, {
+        id: taskId,
+        funcao,
+        title: funcao === 'GRUPO-DEMANDA' ? 'Editar grupos' : 'Editar usuários',
+      })
+      .subscribe((selected) => {
+        if (selected && selected.length > 0) {
+          this.executeAddNewAssigne(selected, taskId, funcao);
+        }
+        this.reloadTask();
+      });
+  }
+
+  private executeAddNewAssigne(
+    selected: number[],
+    taskId: number,
+    funcao: string
+  ) {
+    this.isLoading.set(true);
+    let taskData: any = {};
+
+    if (funcao === 'GRUPO-DEMANDA') {
+      taskData = { gruposDemanda: selected };
+    } else if (funcao === 'COLABORADOR-DEMANDA') {
+      taskData = { usuariosDemanda: selected };
+    }
+
+    this.taskService.updateTask(taskId, taskData).subscribe({
+      next: () => {
+        this.snackbarService.show('Dados alterados com sucesso.');
+      },
+      error: () => {
+        this.snackbarService.show('Erro ao alterar dados.');
+      },
+    });
+  }
+
+  private reloadTask() {
+    this.isLoading.set(true);
+
+    this.taskService.getTaskById(this.taskId).subscribe({
+      next: (task) => {
+        task.usuariosDemanda = task.usuariosDemanda.sort((a, b) =>
+          a.usuario.nome.localeCompare(b.usuario.nome)
+        );
+
+        task.gruposDemanda = task.gruposDemanda.sort((a, b) =>
+          a.grupo.nome.localeCompare(b.grupo.nome)
+        );
+
+        this.task = task;
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+        this.snackbarService.show('Erro ao recarregar demanda.');
+      },
+    });
+  }
+
+  onSubmit() {
+    if (this.form.valid) {
+      this.isLoading.set(true);
+
+      const dadosAtualizados = {
+        titulo: this.form.get('titulo')!.value,
+        descricao: this.form.get('descricao')!.value,
+        prazo: this.form.get('prazo')!.value,
+        prioridade: this.form.get('prioridade')!.value,
+      };
+
+      if (dadosAtualizados) {
+        this.taskService.updateTask(this.task.id, dadosAtualizados).subscribe({
+          next: (value) => {
+            this.task = {
+              ...this.task,
+              ...dadosAtualizados,
+            };
+            this.isLoading.set(false);
+            this.snackbarService.show('Demanda editada com sucesso');
+            this.isEditing = signal(false);
+          },
+          error: (err) => {
+            this.isLoading.set(false);
+            this.snackbarService.show(
+              err.error.message || 'Erro ao editar demanda'
+            );
+          },
+        });
+      }
+    }
+  }
+
+  onCancel() {
+    this.isEditing = signal(false);
   }
 
   openGroup(id: number) {

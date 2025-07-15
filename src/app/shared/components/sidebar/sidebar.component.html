@@ -17,7 +17,9 @@
       [routerLink]="link.route"
       routerLinkActive="active"
     >
-      <span *ngIf="link.icon" class="material-icons">{{ link.icon }}</span>
+      <span *ngIf="link.icon" class="material-symbols-outlined">{{
+        link.icon
+      }}</span>
       {{ link.label }}
     </a>
   </nav>

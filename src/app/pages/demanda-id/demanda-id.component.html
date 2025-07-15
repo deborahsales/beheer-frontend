@@ -3,9 +3,76 @@
     <div class="task-page__container">
       @if (isLoading()) {
       <app-progress-spinner></app-progress-spinner>
-      } @else{
+      } @else{ @if(isEditing()){
+      <form [formGroup]="form" class="task-page__form" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Título</mat-label>
+          <input matInput formControlName="titulo" />
+          <mat-error *ngIf="form.get('titulo')?.hasError('required')">
+            Título é obrigatório
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição</mat-label>
+          <textarea matInput formControlName="descricao"></textarea>
+          <mat-error *ngIf="form.get('descricao')?.hasError('required')">
+            Descrição é obrigatória
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Prazo</mat-label>
+          <input
+            input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="prazo"
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="form.get('prazo')?.hasError('required')">
+            Prazo é obrigatório
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Prioridade</mat-label>
+          <mat-select formControlName="prioridade">
+            <mat-option>--</mat-option>
+            @for (prioridade of Prioridades; track prioridade) {
+            <mat-option [value]="prioridade.value">{{
+              prioridade.viewValue
+            }}</mat-option>
+            }
+          </mat-select>
+
+          <mat-error *ngIf="form.get('prioridade')?.hasError('required')">
+            Prioridade é obrigatória
+          </mat-error>
+        </mat-form-field>
+      </form>
+      <div class="task-page__form-actions">
+        <button mat-button (click)="onCancel()">Cancelar</button>
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="form.invalid"
+          (click)="onSubmit()"
+        >
+          Salvar
+        </button>
+      </div>
+      } @else {
       <div class="task-page__header">
-        <h1 class="task-page__title">{{ task.titulo }}</h1>
+        <div class="task-page__actions">
+          <h1 class="task-page__title">{{ task.titulo }}</h1>
+          @if(canManage){
+          <button class="action-button" (click)="edit()">
+            <span class="material-icons">edit</span>
+          </button>
+          }
+        </div>
         <p
           class="task-page__status"
           [class.task-page__status--atrasada]="
@@ -21,9 +88,44 @@
           }}
         </p>
       </div>
-      <p class="task-page__details">Gestor: {{ task.gestor.nome }}</p>
-      <p class="task-page__description">{{ task.descricao }}</p>
-      <h2 class="task-page__subtitle">Grupos</h2>
+      <div class="task-page__actions">
+        <p class="task-page__details">
+          Prazo: {{ task.prazo | date : "dd/MM/yyyy" : "UTC" }}
+        </p>
+        <p class="task-page__details">
+          Prioridade:
+          <span
+            class="table-container__prioridade"
+            [class.table-container__prioridade--media]="
+              task.prioridade === 'MEDIA'
+            "
+            [class.table-container__prioridade--alta]="
+              task.prioridade === 'ALTA'
+            "
+            >{{
+              task.prioridade === "MEDIA"
+                ? "Média"
+                : (task.prioridade | capitalizeFirst)
+            }}</span
+          >
+        </p>
+      </div>
+      <p class="task-page__description">
+        {{ task.descricao | capitalizeFirst }}
+      </p>
+      }
+
+      <div class="task-page__actions">
+        <h2 class="task-page__subtitle">Grupos</h2>
+        @if(canManage){
+        <button
+          class="action-button"
+          (click)="addAssignes(task.id, 'GRUPO-DEMANDA')"
+        >
+          <span class="material-icons">group_add</span>
+        </button>
+        }
+      </div>
       @if(task.gruposDemanda.length > 0){
       <div class="task-page__wrapper">
         @for (group of task.gruposDemanda; track group.grupoId) {
@@ -36,7 +138,17 @@
       } @else {
       <p class="task-page__message">Nenhum grupo encontrado...</p>
       }
-      <h2 class="task-page__subtitle">Usuários</h2>
+      <div class="task-page__actions">
+        <h2 class="task-page__subtitle">Usuários</h2>
+        @if(canManage){
+        <button
+          class="action-button"
+          (click)="addAssignes(task.id, 'COLABORADOR-DEMANDA')"
+        >
+          <span class="material-icons">group_add</span>
+        </button>
+        }
+      </div>
       @if(task.usuariosDemanda.length > 0){
       <div class="task-page__wrapper">
         @for (user of task.usuariosDemanda; track user.usuarioId) {

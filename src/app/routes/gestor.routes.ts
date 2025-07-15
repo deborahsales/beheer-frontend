@@ -1,14 +1,22 @@
 import { Routes } from '@angular/router';
 import { gestorGuard } from '../core/guards/gestor.guard';
 import { DashboardLayoutComponent } from '../layouts/dashboard-layout/dashboard-layout.component';
+import { AtestadoIdComponent } from '../pages/atestado-id/atestado-id.component';
+import { AtestadosComponent } from '../pages/atestados/atestados.component';
 import { AvisoIdComponent } from '../pages/aviso-id/aviso-id.component';
 import { AvisosComponent } from '../pages/avisos/avisos.component';
 import { DemandaIdComponent } from '../pages/demanda-id/demanda-id.component';
 import { DemandasComponent } from '../pages/demandas/demandas.component';
+import { CronogramaIdComponent } from '../pages/gestor/cronograma-id/cronograma-id.component';
 import { CronogramasComponent } from '../pages/gestor/cronogramas/cronogramas.component';
-import { GestorDashboardComponent } from '../pages/gestor/dashboard/dashboard.component';
 import { GrupoIdComponent } from '../pages/grupo-id/grupo-id.component';
 import { GruposComponent } from '../pages/grupos/grupos.component';
+import { PontoIdComponent } from '../pages/ponto-id/ponto-id.component';
+import { PontosComponent } from '../pages/pontos/pontos.component';
+import { PrestacaoContasIdComponent } from '../pages/prestacao-contas-id/prestacao-contas-id.component';
+import { PrestacoesContasComponent } from '../pages/prestacoes-contas/prestacoes-contas.component';
+import { SolicitacaoAjusteIdComponent } from '../pages/solicitacao-ajuste-id/solicitacao-ajuste-id.component';
+import { SolicitacoesAjusteComponent } from '../pages/solicitacoes-ajuste/solicitacoes-ajuste.component';
 import { UsuarioIdComponent } from '../pages/usuario-id/usuario-id.component';
 
 export const gestorRoutes: Routes = [
@@ -18,11 +26,6 @@ export const gestorRoutes: Routes = [
     canActivateChild: [gestorGuard],
     data: {
       sidebarLinks: [
-        {
-          label: 'Dashboard',
-          route: '/gestor/dashboard',
-          icon: 'dashboard',
-        },
         {
           label: 'Grupos',
           route: '/gestor/grupos',
@@ -43,11 +46,30 @@ export const gestorRoutes: Routes = [
           route: '/gestor/cronogramas',
           icon: 'timeline',
         },
+        {
+          label: 'Pontos',
+          route: '/gestor/pontos',
+          icon: 'add_location_alt',
+        },
+        {
+          label: 'Solicitações de ajuste',
+          route: '/gestor/solicitacoes-ajuste',
+          icon: 'approval',
+        },
+        {
+          label: 'Atestados',
+          route: '/gestor/atestados',
+          icon: 'cardiology',
+        },
+        {
+          label: 'Prestações de contas',
+          route: '/gestor/prestacoes-contas',
+          icon: 'receipt_long',
+        },
       ],
     },
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: GestorDashboardComponent },
+      { path: '', redirectTo: 'grupos', pathMatch: 'full' },
       { path: 'grupos', component: GruposComponent },
       { path: 'grupo/:id', component: GrupoIdComponent },
       { path: 'demandas', component: DemandasComponent },
@@ -56,6 +78,18 @@ export const gestorRoutes: Routes = [
       { path: 'aviso/:id', component: AvisoIdComponent },
       { path: 'usuario/:id', component: UsuarioIdComponent },
       { path: 'cronogramas', component: CronogramasComponent },
+      { path: 'cronograma/:id', component: CronogramaIdComponent },
+      { path: 'pontos', component: PontosComponent },
+      { path: 'ponto/:id', component: PontoIdComponent },
+      { path: 'prestacoes-contas', component: PrestacoesContasComponent },
+      { path: 'prestacao-contas/:id', component: PrestacaoContasIdComponent },
+      { path: 'atestados', component: AtestadosComponent },
+      { path: 'atestado/:id', component: AtestadoIdComponent },
+      { path: 'solicitacoes-ajuste', component: SolicitacoesAjusteComponent },
+      {
+        path: 'solicitacao-ajuste/:id',
+        component: SolicitacaoAjusteIdComponent,
+      },
     ],
   },
 ];

@@ -1,0 +1,81 @@
+<app-container>
+  @if (isLoading()) {
+  <app-progress-spinner></app-progress-spinner>
+  }
+  <section class="medical-certificate-page">
+    <app-features-header
+      [title]="'Atestados'"
+      [buttonName]="'Novo atestado'"
+      [inputPlaceholder]="'Buscar atestado...'"
+      [canCreate]="canCreate"
+      [(searchInput)]="searchInput"
+      (filter)="applyFilter()"
+      (buttonClick)="registerMedicalCertificate()"
+    ></app-features-header>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            @if (role === 'rh'){
+            <th>Usuário</th>
+            }
+            <th>Cadastro</th>
+            <th class="text-center">Data</th>
+            <th class="text-center">Dia Inteiro</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Ações</th>
+          </tr>
+        </thead>
+        @if (!filteredMedicalCertificates.length) {
+        <tr>
+          <td>Nenhum atestado localizado...</td>
+        </tr>
+        } @for (medicalCertificate of filteredMedicalCertificates; track
+        medicalCertificate.id){
+        <tbody
+          class="table-container__line"
+          (click)="openMedicalCertificate(medicalCertificate.id)"
+        >
+          @if (role === 'rh'){
+          <td class="table-container__overflow-text">
+            {{ medicalCertificate.usuario.nome }}
+          </td>
+          }
+          <td>
+            {{ medicalCertificate.dateTimestamp | date : "dd/MM/yyyy" }}
+          </td>
+          <td class="text-center">
+            {{ medicalCertificate.dataAtestado | date : "dd/MM/yyyy" }}
+          </td>
+          <td class="text-center">{{ medicalCertificate.diaInteiro }}</td>
+          <td class="text-center">
+            {{ medicalCertificate.status | capitalizeFirst }}
+          </td>
+          @if (canCreate){
+          <td class="text-center">
+            <button
+              class="action-button action-button--delete"
+              (click)="
+                deleteMedicalCertificate(medicalCertificate.id!);
+                $event.stopPropagation()
+              "
+            >
+              <span class="material-icons">delete</span>
+            </button>
+          </td>
+          } @else if (role === 'rh'){
+          <td class="text-center">
+            <button
+              class="action-button"
+              (click)="accept(medicalCertificate.id!); $event.stopPropagation()"
+            >
+              <span class="material-icons">check</span>
+            </button>
+          </td>
+          }
+        </tbody>
+        }
+      </table>
+    </div>
+  </section>
+</app-container>

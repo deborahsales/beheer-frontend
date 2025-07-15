@@ -1,0 +1,88 @@
+<app-container>
+  @if (isLoading()) {
+  <app-progress-spinner></app-progress-spinner>
+  }
+  <section class="financial-report-page">
+    <app-features-header
+      [title]="'Prestação de contas'"
+      [buttonName]="'Nova prestação'"
+      [inputPlaceholder]="'Buscar...'"
+      [canCreate]="canCreate"
+      [(searchInput)]="searchInput"
+      (filter)="applyFilter()"
+      (buttonClick)="createReport()"
+    ></app-features-header>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            @if (role === 'rh'){
+            <th>Usuário</th>
+            }
+            <th>Descrição</th>
+            <th class="text-center">Cadastro</th>
+            <th class="text-center">Data</th>
+            <th class="text-center">Valor</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Ações</th>
+          </tr>
+        </thead>
+        @if (!filteredFinancialReports.length) {
+        <tr>
+          <td>Nenhuma prestação de contas localizada...</td>
+        </tr>
+        } 
+        @for (financialReport of filteredFinancialReports; track
+        financialReport.id){
+        <tbody
+          class="table-container__line"
+          (click)="openFinancialReport(financialReport.id)"
+        >
+          @if (role === 'rh'){
+          <td class="table-container__overflow-text">
+            {{ financialReport.usuario.nome }}
+          </td>
+          }
+          <td class="table-container__overflow-text">
+            {{ financialReport.descricao }}
+          </td>
+          <td class="text-center">
+            {{ financialReport.dateTimestamp | date : "dd/MM/yyyy" }}
+          </td>
+          <td class="text-center">
+            {{ financialReport.data | date : "dd/MM/yyyy" }}
+          </td>
+          <td class="table-container__overflow-text text-center">
+            R$ {{ financialReport.valor | number : "1.2-2" }}
+          </td>
+          <td class="text-center">
+            {{ financialReport.status | capitalizeFirst }}
+          </td>
+          @if (canCreate){
+          <td class="text-center">
+            <button
+              class="action-button action-button--delete"
+              (click)="
+                deleteFinancialReport(financialReport.id!);
+                $event.stopPropagation()
+              "
+            >
+              <span class="material-icons">delete</span>
+            </button>
+          </td>
+          } @else if (role === 'rh'){
+          <td class="text-center">
+            <button
+              class="action-button"
+              (click)="accept(financialReport.id!); $event.stopPropagation()"
+            >
+              <span class="material-icons">check</span>
+            </button>
+          </td>
+          }
+        </tbody>
+        }
+      </table>
+    </div>
+  </section>
+</app-container>
