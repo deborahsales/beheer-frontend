@@ -1,0 +1,64 @@
+.comment-card {
+  &-user {
+    background-color: var(--orange);
+  }
+
+  &__spacer {
+    flex: 1 1 auto;
+  }
+
+  &__content {
+    border-radius: 4px;
+
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    &-text {
+      padding: var(--space-sm);
+    }
+  }
+
+  &__header {
+    display: flex;
+    gap: var(--space-xs);
+    align-items: center;
+    padding: var(--space-xs) var(--space-sm) var(--space-xs) var(--space-sm);
+    width: 100%;
+    background-color: var(--gray);
+
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+
+    &-text {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-lightbold);
+    }
+  }
+
+  &__action-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    .material-icons {
+      font-size: 20px;
+      color: var(--orange);
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: var(--primary-blue);
+      }
+    }
+  }
+}
+
+.edit {
+  .material-icons {
+    font-size: 20px;
+    color: var(--primary-blue);
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: var(--orange);
+    }
+  }
+}

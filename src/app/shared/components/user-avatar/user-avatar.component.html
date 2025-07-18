@@ -1,1 +1,12 @@
-<span class="avatar">{{ name | initials }}</span>
+<span
+  class="avatar"
+  [ngStyle]="{
+    width: size,
+    height: size,
+    lineHeight: size,
+    fontSize: fontSize
+  }"
+  [ngClass]="{ 'avatar-orange': colorOrange, 'avatar-click': hover }"
+  (click)="onClick()"
+  >{{ name | initials }}</span
+>

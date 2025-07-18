@@ -162,8 +162,37 @@
       <p class="task-page__message">Nenhum usuário encontrado...</p>
       }
       <h2 class="task-page__subtitle">Comentários</h2>
+      @if (isLoadingComment()) {
+      <app-progress-spinner></app-progress-spinner>
+      }
+      <form
+        [formGroup]="commentForm"
+        class="task-page__form"
+        (ngSubmit)="onSubmitComment()"
+      >
+        <mat-form-field appearance="outline">
+          <mat-label>Comentário</mat-label>
+          <textarea matInput formControlName="conteudo"></textarea>
+        </mat-form-field>
+        <div class="task-page__form-actions-comment">
+          <button
+            class="beheer-button task-page__button"
+            [disabled]="!commentForm.get('conteudo')?.value?.trim()"
+            type="submit"
+          >
+            Enviar
+          </button>
+        </div>
+      </form>
       <div class="task-page__comments">
-        @if(task){ } @else {
+        @if(comments){ @for(comment of comments; track comment.id){
+        <app-comment-card
+          [comment]="comment"
+          [userId]="userId"
+          (commentDelete)="deleteComment(comment.id)"
+          (openUser)="openUser(comment.usuario.id)"
+        ></app-comment-card>
+        } } @else {
         <p class="task-page__message">Nenhum comentário encontrado...</p>
         }
       </div>

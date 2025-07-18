@@ -21,12 +21,18 @@
     flex-direction: column;
     justify-content: start;
     align-items: stretch;
-    padding: var(--space-xs);
-    gap: var(--space-md);
+    gap: var(--space-xs);
 
     &-actions {
       border-bottom: 1px solid var(--black);
       padding-bottom: var(--space-sm);
+
+      &-comment {
+        display: flex;
+        border-bottom: none;
+        justify-content: flex-end;
+        padding-bottom: var(--space-md);
+      }
     }
   }
 
@@ -140,6 +146,17 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
+  }
+
+  &__comments {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  &__button {
+    font-size: var(--font-size-sm);
+    margin: 0;
   }
 }
 
