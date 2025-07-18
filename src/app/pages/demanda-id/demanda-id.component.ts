@@ -8,15 +8,19 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs';
 import { Task } from '../../core/interfaces/task';
+import { TaskComment } from '../../core/interfaces/task-comment';
+import { CommentService } from '../../core/services/comment.service';
 import { OpenDialogService } from '../../core/services/open-dialog.service';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { TaskService } from '../../core/services/task.service';
 import { UserService } from '../../core/services/user.service';
+import { CommentCardComponent } from '../../shared/components/comment-card/comment-card.component';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { ItemSelectionComponent } from '../../shared/components/item-selection/item-selection.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
@@ -36,11 +40,13 @@ interface Prioridade {
     UserAvatarComponent,
     CapitalizeFirstPipe,
     MatInputModule,
+    MatButtonModule,
+    MatFormFieldModule,
     CommonModule,
     ReactiveFormsModule,
     MatDatepickerModule,
     MatSelectModule,
-    MatButtonModule,
+    CommentCardComponent,
   ],
   templateUrl: './demanda-id.component.html',
   styleUrl: './demanda-id.component.scss',
@@ -49,11 +55,15 @@ export class DemandaIdComponent {
   taskId!: number;
   userId!: number;
   isLoading = signal(false);
+  isLoadingComment = signal(false);
   canManage: boolean = false;
   role: string = 'colaborador';
   task!: Task;
   isEditing = signal(false);
   form: FormGroup;
+  commentForm: FormGroup;
+
+  comments: TaskComment[] = [];
 
   Prioridades: Prioridade[] = [
     { value: 'ALTA', viewValue: 'Alta' },
@@ -65,6 +75,7 @@ export class DemandaIdComponent {
     private route: ActivatedRoute,
     private userService: UserService,
     private taskService: TaskService,
+    private commentService: CommentService,
     private router: Router,
     private formBuilder: FormBuilder,
     private snackbarService: SnackbarService,
@@ -75,6 +86,9 @@ export class DemandaIdComponent {
       descricao: ['', Validators.required],
       prazo: ['', Validators.required],
       prioridade: ['', Validators.required],
+    });
+    this.commentForm = this.formBuilder.group({
+      conteudo: [''],
     });
   }
 
@@ -116,6 +130,12 @@ export class DemandaIdComponent {
         },
       });
     }
+
+    this.commentService.getCommentByTask(this.taskId).subscribe((data) => {
+      this.comments = data;
+      console.log(this.comments);
+      this.isLoading = signal(false);
+    });
   }
 
   updateStatus() {}
@@ -221,6 +241,66 @@ export class DemandaIdComponent {
         });
       }
     }
+  }
+
+  onSubmitComment() {
+    this.isLoadingComment.set(true);
+
+    const payload = {
+      ...this.commentForm.value,
+      demandaId: this.taskId,
+    };
+
+    this.commentService.createComment(payload).subscribe({
+      next: (newComment) => {
+        this.comments.push(newComment);
+        this.isLoadingComment.set(false);
+        this.snackbarService.show('Comentário criado com sucesso');
+        this.commentForm.reset();
+      },
+      error: (err) => {
+        this.isLoadingComment.set(false);
+        this.snackbarService.show(
+          err.error.message || 'Erro ao criar comentário'
+        );
+      },
+    });
+  }
+
+  deleteComment(commentId: number) {
+    const comment = this.comments.find((u) => u.id === commentId);
+    if (!comment) return;
+
+    this.openDialog
+      .confirm({
+        title: 'Excluir comentário',
+        message: `Tem certeza que deseja excluir o comentário?`,
+        confirmText: 'Excluir',
+        cancelText: 'Cancelar',
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.executeDelete(commentId);
+        }
+      });
+  }
+
+  private executeDelete(commentId: number): void {
+    this.isLoading.set(true);
+
+    this.commentService.deleteComment(commentId).subscribe({
+      next: () => {
+        this.comments = this.comments.filter((u) => u.id !== commentId);
+        this.snackbarService.show('Comentário deletado com sucesso');
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        this.snackbarService.show(
+          err.error?.message || 'Erro ao deletar comentário'
+        );
+        this.isLoading.set(false);
+      },
+    });
   }
 
   onCancel() {

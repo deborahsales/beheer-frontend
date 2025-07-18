@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { enviroment } from '../../../enviroments/enviroment';
-import { Comment } from '../interfaces/comment';
+import { TaskComment } from '../interfaces/task-comment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,12 +12,12 @@ export class CommentService {
 
   constructor(private http: HttpClient) {}
 
-  getCommentByTask(taskId: number): Observable<Comment> {
-    return this.http.get<Comment>(`${this.apiUrl}/demanda/${taskId}`);
+  getCommentByTask(taskId: number): Observable<TaskComment[]> {
+    return this.http.get<TaskComment[]>(`${this.apiUrl}/demanda/${taskId}`);
   }
 
-  getCommentById(commentId: number): Observable<Comment> {
-    return this.http.get<Comment>(`${this.apiUrl}/${commentId}`);
+  getCommentById(commentId: number): Observable<TaskComment> {
+    return this.http.get<TaskComment>(`${this.apiUrl}/${commentId}`);
   }
 
   createComment(commentData: any): Observable<any> {

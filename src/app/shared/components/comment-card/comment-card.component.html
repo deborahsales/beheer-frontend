@@ -1,0 +1,34 @@
+<div class="comment-card">
+  <div class="comment-card__content">
+    <div
+      class="comment-card__header"
+      [ngClass]="{ 'comment-card-user': userId === comment.usuario.id }"
+    >
+      <app-user-avatar
+        [name]="comment.usuario.nome"
+        size="25px"
+        fontSize="12px"
+        [hover]="true"
+        [colorOrange]="userId !== comment.usuario.id"
+        (avatarClick)="onOpenUser()"
+      ></app-user-avatar>
+      <p class="comment-card__header-text">
+        {{ comment.usuario.nome }}
+      </p>
+      <p class="comment-card__header-text">-</p>
+      <p class="comment-card__header-text">
+        {{ comment.dataAlteracao | date : "dd/MM/yyyy" }}
+      </p>
+      <span class="comment-card__spacer"></span>
+      @if (userId === comment.usuario.id){
+      <button class="comment-card__action-button edit" (click)="onEdit()">
+        <span class="material-icons">edit</span>
+      </button>
+      <button class="comment-card__action-button" (click)="onDelete()">
+        <span class="material-icons">delete</span>
+      </button>
+      }
+    </div>
+    <p class="comment-card__content-text">{{ comment.conteudo }}</p>
+  </div>
+</div>
