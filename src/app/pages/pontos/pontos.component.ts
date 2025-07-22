@@ -46,7 +46,7 @@ export class PontosComponent {
       }
     });
 
-    if (this.role === 'colaborador' || this.role === 'rh') {
+    if (this.role === 'colaborador' || this.role === 'gestor') {
       this.canCreate = true;
     }
 
@@ -69,6 +69,8 @@ export class PontosComponent {
   }
 
   registerAttendance() {}
+
+  adjustAttendance(attendanceId: number) {}
 
   deleteAttendance(attendanceId: number) {
     const attendance = this.attendances.find(

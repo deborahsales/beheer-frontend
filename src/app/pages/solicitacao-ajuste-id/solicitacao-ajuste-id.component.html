@@ -1,1 +1,94 @@
-<p>solicitacao-ajuste-id works!</p>
+<app-container>
+  <section class="adjustments-page">
+    <div class="adjustments-page__container">
+      @if (isLoading()) {
+      <app-progress-spinner></app-progress-spinner>
+      } @else {
+
+      <div class="adjustments-page__actions">
+        <h1 class="adjustments-page__title">Solicitação de ajuste</h1>
+        @if(canManage){
+        <button class="action-button" (click)="edit()">
+          <span class="material-icons">edit</span>
+        </button>
+        }
+      </div>
+
+      <p class="adjustments-page__details adjustments-page__user-name">
+        <strong>Usuário:</strong>
+        {{ adjustmentRequest.usuario.nome }}
+      </p>
+      @if(isEditing()){
+      <form
+        [formGroup]="form"
+        class="adjustments-page__form"
+        (ngSubmit)="onSubmit()"
+      >
+        <mat-form-field appearance="outline">
+          <mat-label>Motivo</mat-label>
+          <input matInput formControlName="motivo" />
+          <mat-error *ngIf="form.get('motivo')?.hasError('required')">
+            Motivo é obrigatório
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data ajustada</mat-label>
+          <input
+            input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="dataAjustada"
+          />
+
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="form.get('dataAjustada')?.hasError('required')">
+            Date obrigatória
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Hora</mat-label>
+          <input matInput type="time" formControlName="horaAjustada" />
+          <mat-error *ngIf="form.get('horaAjustada')?.hasError('required')">
+            Hora é obrigatório
+          </mat-error>
+        </mat-form-field>
+      </form>
+      <div class="adjustments-page__form-actions">
+        <button mat-button (click)="onCancel()">Cancelar</button>
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="form.invalid"
+          (click)="onSubmit()"
+        >
+          Salvar
+        </button>
+      </div>
+      } @else {
+      <p class="adjustments-page__details">
+        <strong>Ajuste solicitado:</strong>
+        {{ adjustmentRequest.dateTimestampAjustado | date : "dd/MM/yyyy" }}
+        -
+        {{ adjustmentRequest.dateTimestampAjustado | date : "HH:mm" }}
+      </p>
+      <p class="adjustments-page__details">
+        <strong>Motivo:</strong>
+        {{ adjustmentRequest.motivo }}
+      </p>
+      } @if (role === 'rh'){
+      <div class="adjustments-page__manage">
+        <button mat-flat-button color="primary" (click)="manageRequest(true)">
+          Aceitar
+        </button>
+        <button mat-button (click)="manageRequest(false)">Recusar</button>
+      </div>
+      } }
+    </div>
+  </section>
+</app-container>

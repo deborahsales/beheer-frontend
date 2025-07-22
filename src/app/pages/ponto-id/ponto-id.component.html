@@ -1,1 +1,45 @@
-<p>ponto-id works!</p>
+<app-container>
+  <section class="attendance-page">
+    <div class="attendance-page__container">
+      @if (isLoading()) {
+      <app-progress-spinner></app-progress-spinner>
+      } @else {
+      <h1 class="attendance-page__title">Registro de ponto</h1>
+      <div class="attendance-page__displays">
+        <img
+          class="attendance-page__image"
+          [src]="attendance.imagem"
+          alt="Imagem"
+        />
+        <div class="attendance-page__map" id="map"></div>
+      </div>
+      <div class="attendance-page__details">
+        <p class="attendance-page__text">
+          <strong>Usuário:</strong>
+          {{ attendance.usuario.nome }}
+        </p>
+
+        <p class="attendance-page__text">
+          <strong>IP:</strong>
+          {{ attendance.ip }}
+        </p>
+        <p class="attendance-page__text">
+          <strong>Data:</strong>
+          {{ attendance.dateTimestamp | date : "dd/MM/yyyy" }}
+        </p>
+        <p class="attendance-page__text">
+          <strong>Horário:</strong>
+          {{ attendance.dateTimestamp | date : "HH:mm" }}
+        </p>
+      </div>
+      @if (userId === attendance.usuarioId){
+      <button
+        class="beheer-button attendance-page__button"
+        (click)="requestAdjustment()"
+      >
+        Solicitar ajuste
+      </button>
+      } }
+    </div>
+  </section>
+</app-container>

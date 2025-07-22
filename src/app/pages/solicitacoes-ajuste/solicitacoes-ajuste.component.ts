@@ -18,7 +18,7 @@ import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
     ProgressSpinnerComponent,
     FeaturesHeaderComponent,
     DatePipe,
-    CapitalizeFirstPipe
+    CapitalizeFirstPipe,
   ],
   templateUrl: './solicitacoes-ajuste.component.html',
   styleUrl: './solicitacoes-ajuste.component.scss',
@@ -68,7 +68,7 @@ export class SolicitacoesAjusteComponent {
   }
 
   openAdjustmentRequest(id: number) {
-    this.router.navigate([`/${this.role}/atestado`, id]);
+    this.router.navigate([`/${this.role}/solicitacao-ajuste`, id]);
   }
 
   openRequest() {}
