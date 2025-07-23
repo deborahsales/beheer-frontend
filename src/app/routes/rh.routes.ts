@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { rhGuard } from '../core/guards/rh.guard';
-import { DashboardLayoutComponent } from '../layouts/dashboard-layout/dashboard-layout.component';
 import { AtestadoIdComponent } from '../pages/atestado-id/atestado-id.component';
 import { AtestadosComponent } from '../pages/atestados/atestados.component';
 import { AvisoIdComponent } from '../pages/aviso-id/aviso-id.component';
@@ -15,7 +14,6 @@ import { SolicitacoesAjusteComponent } from '../pages/solicitacoes-ajuste/solici
 export const rhRoutes: Routes = [
   {
     path: '',
-    component: DashboardLayoutComponent,
     canActivateChild: [rhGuard],
     data: {
       sidebarLinks: [
@@ -46,8 +44,12 @@ export const rhRoutes: Routes = [
         },
       ],
     },
+    loadComponent: () =>
+      import('../layouts/dashboard-layout/dashboard-layout.component').then(
+        (m) => m.DashboardLayoutComponent
+      ),
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: 'avisos', pathMatch: 'full' },
       { path: 'avisos', component: AvisosComponent },
       { path: 'aviso/:id', component: AvisoIdComponent },
       { path: 'pontos', component: PontosComponent },

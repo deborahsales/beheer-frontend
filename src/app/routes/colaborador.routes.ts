@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { colaboradorGuard } from '../core/guards/colaborador.guard';
-import { DashboardLayoutComponent } from '../layouts/dashboard-layout/dashboard-layout.component';
 import { AtestadoIdComponent } from '../pages/atestado-id/atestado-id.component';
 import { AtestadosComponent } from '../pages/atestados/atestados.component';
 import { AvisoIdComponent } from '../pages/aviso-id/aviso-id.component';
@@ -19,7 +18,6 @@ import { SolicitacoesAjusteComponent } from '../pages/solicitacoes-ajuste/solici
 export const colaboradorRoutes: Routes = [
   {
     path: '',
-    component: DashboardLayoutComponent,
     canActivateChild: [colaboradorGuard],
     data: {
       sidebarLinks: [
@@ -60,6 +58,10 @@ export const colaboradorRoutes: Routes = [
         },
       ],
     },
+    loadComponent: () =>
+      import('../layouts/dashboard-layout/dashboard-layout.component').then(
+        (m) => m.DashboardLayoutComponent
+      ),
     children: [
       { path: '', redirectTo: 'grupos', pathMatch: 'full' },
       { path: 'grupos', component: GruposComponent },

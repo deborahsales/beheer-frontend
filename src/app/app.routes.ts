@@ -2,10 +2,6 @@ import { Routes } from '@angular/router';
 import { DefaultLayoutComponent } from './layouts/default-layout/default-layout.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
-import { adminRoutes } from './routes/admin.routes';
-import { colaboradorRoutes } from './routes/colaborador.routes';
-import { gestorRoutes } from './routes/gestor.routes';
-import { rhRoutes } from './routes/rh.routes';
 
 export const routes: Routes = [
   {
@@ -18,18 +14,21 @@ export const routes: Routes = [
   },
   {
     path: 'administrador',
-    children: adminRoutes,
+    loadChildren: () =>
+      import('./routes/admin.routes').then((m) => m.adminRoutes),
   },
   {
     path: 'gestor',
-    children: gestorRoutes,
+    loadChildren: () =>
+      import('./routes/gestor.routes').then((m) => m.gestorRoutes),
   },
   {
     path: 'colaborador',
-    children: colaboradorRoutes,
+    loadChildren: () =>
+      import('./routes/colaborador.routes').then((m) => m.colaboradorRoutes),
   },
   {
     path: 'rh',
-    children: rhRoutes,
+    loadChildren: () => import('./routes/rh.routes').then((m) => m.rhRoutes),
   },
 ];
