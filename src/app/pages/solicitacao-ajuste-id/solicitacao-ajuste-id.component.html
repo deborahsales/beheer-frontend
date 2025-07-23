@@ -24,12 +24,19 @@
         class="adjustments-page__form"
         (ngSubmit)="onSubmit()"
       >
+        
+
         <mat-form-field appearance="outline">
           <mat-label>Motivo</mat-label>
-          <input matInput formControlName="motivo" />
-          <mat-error *ngIf="form.get('motivo')?.hasError('required')">
-            Motivo é obrigatório
-          </mat-error>
+          <mat-select formControlName="motivo">
+            <mat-option>--</mat-option>
+            @for (opcao of Motivos; track opcao) {
+            <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('motivo')?.errors) {
+          <mat-error>Motivo é obrigatório</mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -79,7 +86,7 @@
       </p>
       <p class="adjustments-page__details">
         <strong>Motivo:</strong>
-        {{ adjustmentRequest.motivo }}
+        {{ adjustmentRequest.motivo | capitalizeFirst }}
       </p>
       } @if (role === 'rh'){
       <div class="adjustments-page__manage">

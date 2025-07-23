@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute } from '@angular/router';
 import { AdjustmentRequest } from '../../core/interfaces/adjustment-request';
 import { AdjustmentRequestService } from '../../core/services/adjustment-requests.service';
@@ -17,8 +18,7 @@ import { SnackbarService } from '../../core/services/snackbar.service';
 import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
-import { SearchBarComponent } from '../../shared/components/search-bar/search-bar.component';
-import { TasksTableComponent } from '../../shared/components/tasks-table/tasks-table.component';
+import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
 
 @Component({
   selector: 'app-solicitacao-ajuste-id',
@@ -26,14 +26,14 @@ import { TasksTableComponent } from '../../shared/components/tasks-table/tasks-t
     ProgressSpinnerComponent,
     ContainerComponent,
     DatePipe,
-    TasksTableComponent,
-    SearchBarComponent,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     CommonModule,
     MatDatepickerModule,
+    CapitalizeFirstPipe,
+    MatSelectModule,
   ],
   templateUrl: './solicitacao-ajuste-id.component.html',
   styleUrl: './solicitacao-ajuste-id.component.scss',
@@ -47,6 +47,11 @@ export class SolicitacaoAjusteIdComponent {
   role: string = 'colaborador';
   isEditing = signal(false);
   form: FormGroup;
+
+  Motivos: any[] = [
+    { value: 'ERRO', viewValue: 'Erro' },
+    { value: 'DUPLICADO', viewValue: 'Duplicado' },
+  ];
 
   constructor(
     private route: ActivatedRoute,

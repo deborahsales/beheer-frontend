@@ -1,0 +1,103 @@
+.financialReport-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+
+  &__container {
+    background-color: var(--white);
+    padding: var(--space-lg);
+    height: 86dvh;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      border-radius: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+    }
+  }
+
+  &__user-name {
+    border-bottom: 1px solid var(--black);
+  }
+
+  &__details {
+    padding: var(--space-xs) 0;
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+  }
+
+  &__actions {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+  }
+
+  &__manage {
+    margin-top: var(--space-sm);
+    display: flex;
+    align-items: center;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: stretch;
+    margin-top: var(--space-md);
+    gap: var(--space-md);
+
+    &-actions {
+      border-bottom: 1px solid var(--black);
+      padding-bottom: var(--space-sm);
+    }
+  }
+
+  &__displays {
+    margin-top: var(--space-sm);
+  }
+
+  &__image {
+    width: 250px;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+}
+
+.action-button {
+  background: var(--light-gray);
+  padding: var(--space-xs);
+  border-radius: 50%;
+  border: none;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s;
+  box-shadow: 0 2px 5px #0000001a;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+
+  .material-icons {
+    font-size: 16px;
+    color: var(--primary-blue);
+    transition: color 0.3s ease;
+  }
+}
