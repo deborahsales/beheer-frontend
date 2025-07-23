@@ -1,1 +1,127 @@
-<p>atestado-id works!</p>
+<app-container>
+  <section class="medicalCertificate-page">
+    <div class="medicalCertificate-page__container">
+      @if (isLoading()) {
+      <app-progress-spinner></app-progress-spinner>
+      } @else {
+
+      <div class="medicalCertificate-page__actions">
+        <h1 class="medicalCertificate-page__title">Atestado médico</h1>
+        @if(canManage){
+        <button class="action-button" (click)="edit()">
+          <span class="material-icons">edit</span>
+        </button>
+        }
+      </div>
+
+      <p class="medicalCertificate-page__details">
+        <strong>Status:</strong>
+        {{ medicalCertificate.status | capitalizeFirst }}
+      </p>
+
+      <p
+        class="medicalCertificate-page__details medicalCertificate-page__user-name"
+      >
+        <strong>Usuário:</strong>
+        {{ medicalCertificate.usuario.nome }}
+      </p>
+      @if(isEditing()){
+      <form
+        [formGroup]="form"
+        class="medicalCertificate-page__form"
+        (ngSubmit)="onSubmit()"
+      >
+        <mat-form-field appearance="outline">
+          <mat-label>Data atestado</mat-label>
+          <input
+            input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="dataAtestado"
+          />
+
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="form.get('dataAtestado')?.hasError('required')">
+            Data é obrigatória
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Hora de início</mat-label>
+          <input matInput type="time" formControlName="horaInicio" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Hora de termino</mat-label>
+          <input matInput type="time" formControlName="horaTermino" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Dia inteiro</mat-label>
+          <mat-select formControlName="diaInteiro">
+            <mat-option>--</mat-option>
+            @for (opcao of DiaInteiro; track opcao) {
+            <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('diaInteiro')?.errors) {
+          <mat-error>Dia inteiro é obrigatório</mat-error>
+          }
+        </mat-form-field>
+      </form>
+      <div class="medicalCertificate-page__form-actions">
+        <button mat-button (click)="onCancel()">Cancelar</button>
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="form.invalid"
+          (click)="onSubmit()"
+        >
+          Salvar
+        </button>
+      </div>
+      } @else {
+      <p class="medicalCertificate-page__details">
+        <strong>Data Atestado:</strong>
+        {{ medicalCertificate.dataAtestado | date : "dd/MM/yyyy" }}
+      </p>
+      @if (medicalCertificate.horaInicio) {
+      <p class="medicalCertificate-page__details">
+        <strong>Hora de início:</strong>
+        {{ medicalCertificate.horaInicio | date : "HH:mm" }}
+      </p>
+      } @if (medicalCertificate.horaTermino) {
+      <p class="medicalCertificate-page__details">
+        <strong>Hora de termino:</strong>
+        {{ medicalCertificate.horaTermino | date : "HH:mm" }}
+      </p>
+      }
+      <p class="medicalCertificate-page__details">
+        <strong>Dia inteiro:</strong>
+        {{ medicalCertificate.diaInteiro == "NAO" ? "Não" : "Sim" }}
+      </p>
+      }
+
+      <div class="medicalCertificate-page__displays">
+        <img
+          class="medicalCertificate-page__image"
+          [src]="medicalCertificate.imagem"
+          alt="Imagem"
+        />
+      </div>
+
+      @if (role === 'rh'){
+      <div class="medicalCertificate-page__manage">
+        <button mat-flat-button color="primary" (click)="manageRequest(true)">
+          Aceitar
+        </button>
+        <button mat-button (click)="manageRequest(false)">Recusar</button>
+      </div>
+      } }
+    </div>
+  </section>
+</app-container>

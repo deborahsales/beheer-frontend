@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { gestorGuard } from '../core/guards/gestor.guard';
-import { DashboardLayoutComponent } from '../layouts/dashboard-layout/dashboard-layout.component';
 import { AtestadoIdComponent } from '../pages/atestado-id/atestado-id.component';
 import { AtestadosComponent } from '../pages/atestados/atestados.component';
 import { AvisoIdComponent } from '../pages/aviso-id/aviso-id.component';
@@ -22,7 +21,6 @@ import { UsuarioIdComponent } from '../pages/usuario-id/usuario-id.component';
 export const gestorRoutes: Routes = [
   {
     path: '',
-    component: DashboardLayoutComponent,
     canActivateChild: [gestorGuard],
     data: {
       sidebarLinks: [
@@ -68,6 +66,10 @@ export const gestorRoutes: Routes = [
         },
       ],
     },
+    loadComponent: () =>
+      import('../layouts/dashboard-layout/dashboard-layout.component').then(
+        (m) => m.DashboardLayoutComponent
+      ),
     children: [
       { path: '', redirectTo: 'grupos', pathMatch: 'full' },
       { path: 'grupos', component: GruposComponent },

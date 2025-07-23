@@ -47,7 +47,9 @@
           <td class="text-center">
             {{ medicalCertificate.dataAtestado | date : "dd/MM/yyyy" }}
           </td>
-          <td class="text-center">{{ medicalCertificate.diaInteiro }}</td>
+          <td class="text-center">
+            {{ medicalCertificate.diaInteiro | capitalizeFirst }}
+          </td>
           <td class="text-center">
             {{ medicalCertificate.status | capitalizeFirst }}
           </td>
