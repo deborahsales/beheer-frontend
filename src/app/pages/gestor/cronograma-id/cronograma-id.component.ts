@@ -12,11 +12,13 @@ import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute } from '@angular/router';
 import { Task } from '../../../core/interfaces/task';
 import { Timeline } from '../../../core/interfaces/timeline';
+import { OpenDialogService } from '../../../core/services/open-dialog.service';
 import { SnackbarService } from '../../../core/services/snackbar.service';
 import { TaskService } from '../../../core/services/task.service';
 import { TimelineService } from '../../../core/services/timeline.service';
 import { UserService } from '../../../core/services/user.service';
 import { ContainerComponent } from '../../../shared/components/container/container.component';
+import { ItemSelectionComponent } from '../../../shared/components/item-selection/item-selection.component';
 import { ProgressSpinnerComponent } from '../../../shared/components/progress-spinner/progress-spinner.component';
 import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar.component';
 import { TasksTableComponent } from '../../../shared/components/tasks-table/tasks-table.component';
@@ -58,7 +60,8 @@ export class CronogramaIdComponent {
     private userService: UserService,
     private taskService: TaskService,
     private formBuilder: FormBuilder,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private openDialog: OpenDialogService
   ) {
     this.form = this.formBuilder.group({
       titulo: ['', Validators.required],
@@ -101,7 +104,7 @@ export class CronogramaIdComponent {
     this.taskService.getTasksByTimeline(this.timelineId).subscribe((data) => {
       this.tasks = data;
       this.filteredTasks = [...this.tasks];
-      this.isLoading = signal(false);
+      this.isLoading.set(false);
     });
   }
 
@@ -115,7 +118,7 @@ export class CronogramaIdComponent {
   }
 
   edit() {
-    this.isEditing = signal(true);
+    this.isEditing.set(true);
   }
 
   onSubmit() {
@@ -138,7 +141,7 @@ export class CronogramaIdComponent {
               };
               this.isLoading.set(false);
               this.snackbarService.show('Cronograma editado com sucesso');
-              this.isEditing = signal(false);
+              this.isEditing.set(false);
             },
             error: (err) => {
               this.isLoading.set(false);
@@ -152,8 +155,56 @@ export class CronogramaIdComponent {
   }
 
   onCancel() {
-    this.isEditing = signal(false);
+    this.isEditing.set(false);
   }
 
-  addTasks(timelineId: number) {}
+  addTasks(timelineId: number) {
+    this.openDialog
+      .open<
+        ItemSelectionComponent,
+        { id: number; funcao: string; title: string; isDialog: boolean },
+        number[]
+      >(ItemSelectionComponent, {
+        id: timelineId,
+        funcao: 'DEMANDA-CRONOGRAMA',
+        title: 'Editar demandas',
+        isDialog: true,
+      })
+      .subscribe((selected) => {
+        if (selected && selected.length > 0) {
+          this.executeAddNewTask(selected, timelineId);
+        }
+      });
+  }
+
+  private executeAddNewTask(selected: number[], timelineId: number) {
+    this.isLoading.set(true);
+    const timelineData: any = { demandasCronograma: selected };
+
+    this.timelineService.updateTimeline(timelineId, timelineData).subscribe({
+      next: () => {
+        this.snackbarService.show('Dados alterados com sucesso.');
+        this.reloadTasks();
+      },
+      error: () => {
+        this.snackbarService.show('Erro ao alterar dados.');
+      },
+    });
+  }
+
+  private reloadTasks() {
+    this.isLoading.set(true);
+
+    this.taskService.getTasksByTimeline(this.timelineId).subscribe({
+      next: (data) => {
+        this.tasks = data;
+        this.filteredTasks = [...this.tasks];
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+        this.snackbarService.show('Erro ao recarregar demandas.');
+      },
+    });
+  }
 }

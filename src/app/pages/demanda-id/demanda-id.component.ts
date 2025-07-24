@@ -93,7 +93,7 @@ export class DemandaIdComponent {
   }
 
   ngOnInit(): void {
-    this.isLoading = signal(true);
+    this.isLoading.set(true);
 
     this.userService
       .getAuthUser()
@@ -133,33 +133,32 @@ export class DemandaIdComponent {
 
     this.commentService.getCommentByTask(this.taskId).subscribe((data) => {
       this.comments = data;
-      console.log(this.comments);
-      this.isLoading = signal(false);
+      this.isLoading.set(false);
     });
   }
 
   updateStatus() {}
 
   edit() {
-    this.isEditing = signal(true);
+    this.isEditing.set(true);
   }
 
   addAssignes(taskId: number, funcao: string) {
     this.openDialog
       .open<
         ItemSelectionComponent,
-        { id: number; funcao: string; title: string },
+        { id: number; funcao: string; title: string; isDialog: boolean },
         number[]
       >(ItemSelectionComponent, {
         id: taskId,
         funcao,
         title: funcao === 'GRUPO-DEMANDA' ? 'Editar grupos' : 'Editar usuários',
+        isDialog: true,
       })
       .subscribe((selected) => {
         if (selected && selected.length > 0) {
           this.executeAddNewAssigne(selected, taskId, funcao);
         }
-        this.reloadTask();
       });
   }
 
@@ -180,6 +179,7 @@ export class DemandaIdComponent {
     this.taskService.updateTask(taskId, taskData).subscribe({
       next: () => {
         this.snackbarService.show('Dados alterados com sucesso.');
+        this.reloadTask();
       },
       error: () => {
         this.snackbarService.show('Erro ao alterar dados.');
@@ -230,7 +230,7 @@ export class DemandaIdComponent {
             };
             this.isLoading.set(false);
             this.snackbarService.show('Demanda editada com sucesso');
-            this.isEditing = signal(false);
+            this.isEditing.set(false);
           },
           error: (err) => {
             this.isLoading.set(false);
@@ -304,7 +304,7 @@ export class DemandaIdComponent {
   }
 
   onCancel() {
-    this.isEditing = signal(false);
+    this.isEditing.set(false);
   }
 
   openGroup(id: number) {

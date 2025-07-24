@@ -48,7 +48,7 @@ export class SolicitacoesAjusteComponent {
       }
     });
 
-    if (this.role === 'colaborador') {
+    if (this.role === 'colaborador' || this.role === 'gestor') {
       this.canCreate = true;
     }
 

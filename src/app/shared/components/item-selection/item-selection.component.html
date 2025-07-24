@@ -33,8 +33,12 @@
             (change)="onSelect(item.id, $event)"
             [checked]="selected.includes(item.id)"
           />
+          @if (funcao === 'DEMANDA-CRONOGRAMA'){
+          <span class="item-selector__info">{{ item.titulo }}</span>
+          } @else {
           <app-user-avatar [name]="item.nome"></app-user-avatar>
           <span class="item-selector__info">{{ item.nome }}</span>
+          }
         </label>
       </li>
       }

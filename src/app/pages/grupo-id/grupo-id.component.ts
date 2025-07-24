@@ -135,18 +135,19 @@ export class GrupoIdComponent {
     this.openDialog
       .open<
         ItemSelectionComponent,
-        { id: number; funcao: string; title: string },
+        { id: number; funcao: string; title: string; isDialog: boolean },
         number[]
       >(ItemSelectionComponent, {
         id: groupId,
         funcao,
         title: 'Editar usuários',
+        isDialog: true,
       })
       .subscribe((selected) => {
         if (selected && selected.length > 0) {
           this.executeAddNewMember(selected, groupId, funcao);
         }
-        this.reloadGroup();
+        
       });
   }
 
@@ -167,6 +168,7 @@ export class GrupoIdComponent {
     this.groupService.updateGroup(groupId, groupData).subscribe({
       next: () => {
         this.snackbarService.show('Usuários alterados com sucesso.');
+        this.reloadGroup();
       },
       error: () => {
         this.snackbarService.show('Erro ao alterar usuários.');
