@@ -6,8 +6,19 @@
 
   &__header {
     display: flex;
-    align-items: center;
+    align-items: start;
     gap: var(--space-xl);
+    height: fit-content;
+  }
+
+  &__title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__actions-wrapper {
+    max-width: 75%;
   }
 
   &__actions {
@@ -60,11 +71,17 @@
     }
   }
 
+  &__collapsible {
+    transition: max-height 0.4s ease;
+  }
+
   &__status {
     display: flex;
     align-items: center;
+    justify-content: center;
     background-color: var(--primary-blue);
     color: var(--white);
+    border: none;
     border-radius: 16px;
     padding: var(--space-xxs) var(--space-sm);
     transition: transform 0.3s;
@@ -85,6 +102,12 @@
     &--finalizada {
       background-color: var(--sucess-color);
     }
+  }
+
+  &__panel-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
   }
 
   &__subtitle {
@@ -182,5 +205,72 @@
     font-size: 16px;
     color: var(--primary-blue);
     transition: color 0.3s ease;
+  }
+}
+
+.full-width-panel {
+  min-width: fit-content;
+  padding: 0;
+  background-color: var(--primary-blue);
+  border-radius: 30px;
+  margin-top: var(--space-xs);
+
+  &__header {
+    height: fit-content;
+    padding: 0 var(--space-sm);
+  }
+
+  &__title {
+    padding: 0 var(--space-xxs);
+    color: var(--white);
+    background-color: var(--primary-blue);
+    border-radius: 16px;
+    font-size: var(--font-size-sm);
+    display: flex;
+    justify-content: center;
+
+    &--atrasada {
+      background-color: var(--error-color);
+    }
+
+    &--iniciada {
+      background-color: var(--orange);
+    }
+
+    &--finalizada {
+      background-color: var(--sucess-color);
+    }
+  }
+
+  &--atrasada {
+    background-color: var(--error-color);
+  }
+
+  &--iniciada {
+    background-color: var(--orange);
+  }
+
+  &--finalizada {
+    background-color: var(--sucess-color);
+  }
+
+  &.mat-expanded {
+    background-color: transparent;
+    // box-shadow: none;
+
+    ::ng-deep .mat-expansion-indicator svg {
+      fill: var(--black);
+    }
+  }
+
+  &:hover {
+    .full-width-panel__title,
+    ::ng-deep .mat-expansion-panel-header {
+      filter: brightness(0.97);
+    }
+  }
+
+  ::ng-deep .mat-expansion-indicator svg {
+    fill: var(--white);
   }
 }

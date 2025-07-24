@@ -36,6 +36,10 @@ export class TaskService {
     return this.http.post<any>(this.apiUrl, taskData);
   }
 
+  updateTaskStatus(taskId: number, TaskData: any): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/status/${taskId}`, TaskData);
+  }
+
   updateTask(taskId: number, TaskData: any): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/${taskId}`, TaskData);
   }

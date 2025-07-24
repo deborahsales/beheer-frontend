@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import {
   FormBuilder,
@@ -62,7 +62,8 @@ export class GrupoIdComponent {
     private userService: UserService,
     private openDialog: OpenDialogService,
     private taskService: TaskService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.form = this.formBuilder.group({
       nome: ['', Validators.required],
@@ -106,7 +107,8 @@ export class GrupoIdComponent {
           this.isLoading.set(false);
         },
         error: () => {
-          this.isLoading.set(false);
+          this.location.back();
+          this.snackbarService.show('Grupo não encontrado.');
         },
       });
     }
@@ -147,7 +149,6 @@ export class GrupoIdComponent {
         if (selected && selected.length > 0) {
           this.executeAddNewMember(selected, groupId, funcao);
         }
-        
       });
   }
 

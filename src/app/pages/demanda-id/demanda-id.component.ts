@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -47,6 +48,7 @@ interface Prioridade {
     MatDatepickerModule,
     MatSelectModule,
     CommentCardComponent,
+    MatExpansionModule,
   ],
   templateUrl: './demanda-id.component.html',
   styleUrl: './demanda-id.component.scss',
@@ -137,7 +139,22 @@ export class DemandaIdComponent {
     });
   }
 
-  updateStatus() {}
+  updateStatus(status: string) {
+    this.isLoading.set(true);
+    const taskStatus = { status: status };
+
+    this.taskService.updateTaskStatus(this.taskId, taskStatus).subscribe({
+      next: () => {
+        this.snackbarService.show('Status alterado com sucesso.');
+        this.task.status = status;
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.snackbarService.show('Erro ao alterar status.');
+        this.isLoading.set(false);
+      },
+    });
+  }
 
   edit() {
     this.isEditing.set(true);
@@ -179,10 +196,12 @@ export class DemandaIdComponent {
     this.taskService.updateTask(taskId, taskData).subscribe({
       next: () => {
         this.snackbarService.show('Dados alterados com sucesso.');
+        this.isLoading.set(false);
         this.reloadTask();
       },
       error: () => {
         this.snackbarService.show('Erro ao alterar dados.');
+        this.isLoading.set(false);
       },
     });
   }
