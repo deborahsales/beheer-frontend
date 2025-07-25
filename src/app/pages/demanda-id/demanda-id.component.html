@@ -65,50 +65,89 @@
       </div>
       } @else {
       <div class="task-page__header">
-        <div class="task-page__actions">
-          <h1 class="task-page__title">{{ task.titulo }}</h1>
-          @if(canManage){
-          <button class="action-button" (click)="edit()">
-            <span class="material-icons">edit</span>
-          </button>
-          }
+        <div class="task-page__actions-wrapper">
+          <div class="task-page__actions">
+            <h1 class="task-page__title">{{ task.titulo }}</h1>
+            @if(canManage){
+            <button class="action-button" (click)="edit()">
+              <span class="material-icons">edit</span>
+            </button>
+            }
+          </div>
+
+          <div class="task-page__actions">
+            <p class="task-page__details">
+              Prazo: {{ task.prazo | date : "dd/MM/yyyy" : "UTC" }}
+            </p>
+            <p class="task-page__details">
+              Prioridade:
+              <span
+                class="table-container__prioridade"
+                [class.table-container__prioridade--media]="
+                  task.prioridade === 'MEDIA'
+                "
+                [class.table-container__prioridade--alta]="
+                  task.prioridade === 'ALTA'
+                "
+                >{{
+                  task.prioridade === "MEDIA"
+                    ? "Média"
+                    : (task.prioridade | capitalizeFirst)
+                }}</span
+              >
+            </p>
+          </div>
         </div>
-        <p
-          class="task-page__status"
-          [class.task-page__status--atrasada]="
-            isAtrasada(task.prazo, task.status)
-          "
-          [class.task-page__status--iniciada]="task.status === 'INICIADA'"
-          [class.task-page__status--finalizada]="task.status === 'FINALIZADA'"
-        >
-          {{
-            !isAtrasada(task.prazo, task.status)
-              ? (task.status | capitalizeFirst)
-              : "Atrasada"
-          }}
-        </p>
-      </div>
-      <div class="task-page__actions">
-        <p class="task-page__details">
-          Prazo: {{ task.prazo | date : "dd/MM/yyyy" : "UTC" }}
-        </p>
-        <p class="task-page__details">
-          Prioridade:
-          <span
-            class="table-container__prioridade"
-            [class.table-container__prioridade--media]="
-              task.prioridade === 'MEDIA'
-            "
-            [class.table-container__prioridade--alta]="
-              task.prioridade === 'ALTA'
-            "
-            >{{
-              task.prioridade === "MEDIA"
-                ? "Média"
-                : (task.prioridade | capitalizeFirst)
-            }}</span
+        <div class="task-page__expansion-wrapper">
+          <mat-expansion-panel
+            class="full-width-panel"
+            [ngClass]="{
+              'full-width-panel--iniciada': task.status === 'INICIADA',
+              'full-width-panel--finalizada': task.status === 'FINALIZADA',
+              'full-width-panel--atrasada': isAtrasada(task.prazo, task.status)
+            }"
           >
-        </p>
+            <mat-expansion-panel-header class="full-width-panel__header">
+              <mat-panel-title
+                class="full-width-panel__title"
+                [ngClass]="{
+                  'full-width-panel--iniciada': task.status === 'INICIADA',
+                  'full-width-panel--finalizada': task.status === 'FINALIZADA',
+                  'full-width-panel--atrasada': isAtrasada(
+                    task.prazo,
+                    task.status
+                  )
+                }"
+              >
+                {{
+                  !isAtrasada(task.prazo, task.status)
+                    ? (task.status | capitalizeFirst)
+                    : "Atrasada"
+                }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="task-page__panel-buttons">
+              <button
+                class="task-page__status"
+                (click)="updateStatus('CRIADA')"
+              >
+                Criada
+              </button>
+              <button
+                class="task-page__status task-page__status--iniciada"
+                (click)="updateStatus('INICIADA')"
+              >
+                Iniciada
+              </button>
+              <button
+                class="task-page__status task-page__status--finalizada"
+                (click)="updateStatus('FINALIZADA')"
+              >
+                Finalizada
+              </button>
+            </div>
+          </mat-expansion-panel>
+        </div>
       </div>
       <p class="task-page__description">
         {{ task.descricao | capitalizeFirst }}
@@ -172,7 +211,11 @@
       >
         <mat-form-field appearance="outline">
           <mat-label>Comentário</mat-label>
-          <textarea matInput formControlName="conteudo"></textarea>
+          <textarea
+            #commentTextarea
+            matInput
+            formControlName="conteudo"
+          ></textarea>
         </mat-form-field>
         <div class="task-page__form-actions-comment">
           <button
@@ -180,7 +223,7 @@
             [disabled]="!commentForm.get('conteudo')?.value?.trim()"
             type="submit"
           >
-            Enviar
+            {{ isEditingComment() ? "Editar" : "Enviar" }}
           </button>
         </div>
       </form>
@@ -189,7 +232,8 @@
         <app-comment-card
           [comment]="comment"
           [userId]="userId"
-          (commentDelete)="deleteComment(comment.id)"
+          (editComment)="editComment(comment.id)"
+          (deleteComment)="deleteComment(comment.id)"
           (openUser)="openUser(comment.usuario.id)"
         ></app-comment-card>
         } } @else {

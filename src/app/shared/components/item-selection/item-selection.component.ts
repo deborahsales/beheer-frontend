@@ -12,6 +12,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GroupService } from '../../../core/services/group.service';
 import { SnackbarService } from '../../../core/services/snackbar.service';
 import { TaskService } from '../../../core/services/task.service';
+import { TimelineService } from '../../../core/services/timeline.service';
 import { UserService } from '../../../core/services/user.service';
 import { ProgressSpinnerComponent } from '../progress-spinner/progress-spinner.component';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
@@ -37,6 +38,7 @@ export class ItemSelectionComponent {
   userId!: number;
   @Input() title: string = 'Selecionar';
   @Input() steps: boolean = false;
+  isDialog = false;
 
   selected: number[] = [];
   @Input() funcao: string = '';
@@ -51,10 +53,12 @@ export class ItemSelectionComponent {
       id: number;
       funcao: string;
       title: string;
+      isDialog: boolean;
     } | null = null,
     private userService: UserService,
     private groupService: GroupService,
     private taskService: TaskService,
+    private timelineService: TimelineService,
     private snackbarService: SnackbarService,
     @Optional() private dialogRef?: MatDialogRef<ItemSelectionComponent>
   ) {
@@ -62,6 +66,7 @@ export class ItemSelectionComponent {
       this.id = data.id;
       this.funcao = data.funcao;
       this.title = data.title;
+      this.isDialog = data.isDialog;
     }
   }
 
@@ -84,6 +89,9 @@ export class ItemSelectionComponent {
         } else if (this.funcao === 'GRUPO-DEMANDA') {
           this.loadDemandaGrupos();
           this.loadAllGroups();
+        } else if (this.funcao === 'DEMANDA-CRONOGRAMA') {
+          this.loadCronogramaDemandas();
+          this.loadAllDemandas();
         }
       } else {
         if (this.funcao === 'GRUPO') {
@@ -94,6 +102,30 @@ export class ItemSelectionComponent {
           this.loadAllUsers();
         }
       }
+    });
+  }
+
+  loadCronogramaDemandas() {
+    this.isLoading = signal(true);
+    this.timelineService.getTimelineById(this.id).subscribe({
+      next: (timeline) => {
+        this.selected =
+          timeline.demandasCronograma?.map((task: any) => task.id) || [];
+        this.isLoading = signal(false);
+      },
+      error: (err) => {
+        this.snackbarService.show(err);
+        this.isLoading = signal(false);
+      },
+    });
+  }
+
+  loadAllDemandas() {
+    this.isLoading = signal(true);
+    this.taskService.getTasks().subscribe((res) => {
+      this.itens = res;
+      this.applyFilter();
+      this.isLoading = signal(false);
     });
   }
 
@@ -196,10 +228,10 @@ export class ItemSelectionComponent {
   applyFilter() {
     const term = this.searchInput.toLowerCase();
     this.filteredItens = this.itens
-      .filter(
-        (item) =>
-          item.nome.toLowerCase().includes(term) ||
-          item.email.toLowerCase().includes(term)
+      .filter((item) =>
+        this.funcao === 'DEMANDA-CRONOGRAMA'
+          ? item.titulo.toLowerCase().includes(term)
+          : item.nome.toLowerCase().includes(term)
       )
       .sort((a, b) => {
         const aSelected = this.selected.includes(Number(a.id)) ? 0 : 1;
@@ -247,7 +279,7 @@ export class ItemSelectionComponent {
   }
 
   onSave() {
-    if (this.dialogRef) {
+    if (this.dialogRef && this.isDialog) {
       this.dialogRef.close(this.selected);
     } else {
       this.save.emit(this.selected);
@@ -255,6 +287,7 @@ export class ItemSelectionComponent {
   }
 
   previousStep() {
+    console.log('próximo passo - item componente');
     this.step.emit();
   }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, signal, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -47,6 +48,7 @@ interface Prioridade {
     MatDatepickerModule,
     MatSelectModule,
     CommentCardComponent,
+    MatExpansionModule,
   ],
   templateUrl: './demanda-id.component.html',
   styleUrl: './demanda-id.component.scss',
@@ -60,8 +62,12 @@ export class DemandaIdComponent {
   role: string = 'colaborador';
   task!: Task;
   isEditing = signal(false);
+  isEditingComment = signal(false);
   form: FormGroup;
   commentForm: FormGroup;
+  editingCommentId: number | null = null;
+  @ViewChild('commentTextarea')
+  commentTextarea!: ElementRef<HTMLTextAreaElement>;
 
   comments: TaskComment[] = [];
 
@@ -93,7 +99,8 @@ export class DemandaIdComponent {
   }
 
   ngOnInit(): void {
-    this.isLoading = signal(true);
+    this.isEditingComment.set(false);
+    this.isLoading.set(true);
 
     this.userService
       .getAuthUser()
@@ -132,34 +139,52 @@ export class DemandaIdComponent {
     }
 
     this.commentService.getCommentByTask(this.taskId).subscribe((data) => {
-      this.comments = data;
-      console.log(this.comments);
-      this.isLoading = signal(false);
+      this.comments = data.sort(
+        (a, b) =>
+          new Date(a.dateTimestamp).getTime() -
+          new Date(b.dateTimestamp).getTime()
+      );
+      this.isLoading.set(false);
     });
   }
 
-  updateStatus() {}
+  updateStatus(status: string) {
+    this.isLoading.set(true);
+    const taskStatus = { status: status };
+
+    this.taskService.updateTaskStatus(this.taskId, taskStatus).subscribe({
+      next: () => {
+        this.snackbarService.show('Status alterado com sucesso.');
+        this.task.status = status;
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.snackbarService.show('Erro ao alterar status.');
+        this.isLoading.set(false);
+      },
+    });
+  }
 
   edit() {
-    this.isEditing = signal(true);
+    this.isEditing.set(true);
   }
 
   addAssignes(taskId: number, funcao: string) {
     this.openDialog
       .open<
         ItemSelectionComponent,
-        { id: number; funcao: string; title: string },
+        { id: number; funcao: string; title: string; isDialog: boolean },
         number[]
       >(ItemSelectionComponent, {
         id: taskId,
         funcao,
         title: funcao === 'GRUPO-DEMANDA' ? 'Editar grupos' : 'Editar usuários',
+        isDialog: true,
       })
       .subscribe((selected) => {
         if (selected && selected.length > 0) {
           this.executeAddNewAssigne(selected, taskId, funcao);
         }
-        this.reloadTask();
       });
   }
 
@@ -180,9 +205,12 @@ export class DemandaIdComponent {
     this.taskService.updateTask(taskId, taskData).subscribe({
       next: () => {
         this.snackbarService.show('Dados alterados com sucesso.');
+        this.isLoading.set(false);
+        this.reloadTask();
       },
       error: () => {
         this.snackbarService.show('Erro ao alterar dados.');
+        this.isLoading.set(false);
       },
     });
   }
@@ -230,7 +258,7 @@ export class DemandaIdComponent {
             };
             this.isLoading.set(false);
             this.snackbarService.show('Demanda editada com sucesso');
-            this.isEditing = signal(false);
+            this.isEditing.set(false);
           },
           error: (err) => {
             this.isLoading.set(false);
@@ -251,20 +279,61 @@ export class DemandaIdComponent {
       demandaId: this.taskId,
     };
 
-    this.commentService.createComment(payload).subscribe({
-      next: (newComment) => {
-        this.comments.push(newComment);
-        this.isLoadingComment.set(false);
-        this.snackbarService.show('Comentário criado com sucesso');
-        this.commentForm.reset();
-      },
-      error: (err) => {
-        this.isLoadingComment.set(false);
-        this.snackbarService.show(
-          err.error.message || 'Erro ao criar comentário'
-        );
-      },
-    });
+    if (this.isEditingComment() && this.editingCommentId !== null) {
+      this.commentService
+        .updateComment(this.editingCommentId, payload)
+        .subscribe({
+          next: (updatedComment) => {
+            this.comments = this.comments.map((c) =>
+              c.id === this.editingCommentId ? { ...c, ...updatedComment } : c
+            );
+            this.isLoadingComment.set(false);
+            this.snackbarService.show('Comentário atualizado com sucesso');
+            this.commentForm.reset();
+            this.isEditingComment.set(false);
+            this.editingCommentId = null;
+          },
+          error: (err) => {
+            this.isLoadingComment.set(false);
+            this.snackbarService.show(
+              err.error.message || 'Erro ao criar comentário'
+            );
+          },
+        });
+    } else {
+      this.commentService.createComment(payload).subscribe({
+        next: (newComment) => {
+          this.comments.push(newComment);
+          this.isLoadingComment.set(false);
+          this.snackbarService.show('Comentário criado com sucesso');
+          this.commentForm.reset();
+        },
+        error: (err) => {
+          this.isLoadingComment.set(false);
+          this.snackbarService.show(
+            err.error.message || 'Erro ao criar comentário'
+          );
+        },
+      });
+    }
+  }
+
+  editComment(commentId: number) {
+    this.isEditingComment.set(true);
+    this.editingCommentId = commentId;
+
+    const comment = this.comments.find((c) => c.id === commentId);
+
+    if (comment) {
+      this.commentForm.patchValue({ conteudo: comment.conteudo });
+      setTimeout(() => {
+        this.commentTextarea?.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+        this.commentTextarea?.nativeElement.focus();
+      });
+    }
   }
 
   deleteComment(commentId: number) {
@@ -304,7 +373,7 @@ export class DemandaIdComponent {
   }
 
   onCancel() {
-    this.isEditing = signal(false);
+    this.isEditing.set(false);
   }
 
   openGroup(id: number) {
