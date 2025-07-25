@@ -206,7 +206,11 @@
       >
         <mat-form-field appearance="outline">
           <mat-label>Comentário</mat-label>
-          <textarea matInput formControlName="conteudo"></textarea>
+          <textarea
+            #commentTextarea
+            matInput
+            formControlName="conteudo"
+          ></textarea>
         </mat-form-field>
         <div class="task-page__form-actions-comment">
           <button
@@ -214,7 +218,7 @@
             [disabled]="!commentForm.get('conteudo')?.value?.trim()"
             type="submit"
           >
-            Enviar
+            {{ isEditingComment() ? "Editar" : "Enviar" }}
           </button>
         </div>
       </form>
@@ -223,6 +227,7 @@
         <app-comment-card
           [comment]="comment"
           [userId]="userId"
+          (editComment)="editComment(comment.id)"
           (deleteComment)="deleteComment(comment.id)"
           (openUser)="openUser(comment.usuario.id)"
         ></app-comment-card>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, signal, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -62,8 +62,12 @@ export class DemandaIdComponent {
   role: string = 'colaborador';
   task!: Task;
   isEditing = signal(false);
+  isEditingComment = signal(false);
   form: FormGroup;
   commentForm: FormGroup;
+  editingCommentId: number | null = null;
+  @ViewChild('commentTextarea')
+  commentTextarea!: ElementRef<HTMLTextAreaElement>;
 
   comments: TaskComment[] = [];
 
@@ -95,6 +99,7 @@ export class DemandaIdComponent {
   }
 
   ngOnInit(): void {
+    this.isEditingComment.set(false);
     this.isLoading.set(true);
 
     this.userService
@@ -134,7 +139,11 @@ export class DemandaIdComponent {
     }
 
     this.commentService.getCommentByTask(this.taskId).subscribe((data) => {
-      this.comments = data;
+      this.comments = data.sort(
+        (a, b) =>
+          new Date(a.dateTimestamp).getTime() -
+          new Date(b.dateTimestamp).getTime()
+      );
       this.isLoading.set(false);
     });
   }
@@ -270,20 +279,61 @@ export class DemandaIdComponent {
       demandaId: this.taskId,
     };
 
-    this.commentService.createComment(payload).subscribe({
-      next: (newComment) => {
-        this.comments.push(newComment);
-        this.isLoadingComment.set(false);
-        this.snackbarService.show('Comentário criado com sucesso');
-        this.commentForm.reset();
-      },
-      error: (err) => {
-        this.isLoadingComment.set(false);
-        this.snackbarService.show(
-          err.error.message || 'Erro ao criar comentário'
-        );
-      },
-    });
+    if (this.isEditingComment() && this.editingCommentId !== null) {
+      this.commentService
+        .updateComment(this.editingCommentId, payload)
+        .subscribe({
+          next: (updatedComment) => {
+            this.comments = this.comments.map((c) =>
+              c.id === this.editingCommentId ? { ...c, ...updatedComment } : c
+            );
+            this.isLoadingComment.set(false);
+            this.snackbarService.show('Comentário atualizado com sucesso');
+            this.commentForm.reset();
+            this.isEditingComment.set(false);
+            this.editingCommentId = null;
+          },
+          error: (err) => {
+            this.isLoadingComment.set(false);
+            this.snackbarService.show(
+              err.error.message || 'Erro ao criar comentário'
+            );
+          },
+        });
+    } else {
+      this.commentService.createComment(payload).subscribe({
+        next: (newComment) => {
+          this.comments.push(newComment);
+          this.isLoadingComment.set(false);
+          this.snackbarService.show('Comentário criado com sucesso');
+          this.commentForm.reset();
+        },
+        error: (err) => {
+          this.isLoadingComment.set(false);
+          this.snackbarService.show(
+            err.error.message || 'Erro ao criar comentário'
+          );
+        },
+      });
+    }
+  }
+
+  editComment(commentId: number) {
+    this.isEditingComment.set(true);
+    this.editingCommentId = commentId;
+
+    const comment = this.comments.find((c) => c.id === commentId);
+
+    if (comment) {
+      this.commentForm.patchValue({ conteudo: comment.conteudo });
+      setTimeout(() => {
+        this.commentTextarea?.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+        this.commentTextarea?.nativeElement.focus();
+      });
+    }
   }
 
   deleteComment(commentId: number) {

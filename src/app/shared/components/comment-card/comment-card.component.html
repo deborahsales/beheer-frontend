@@ -17,6 +17,9 @@
       </p>
       <p class="comment-card__header-text">-</p>
       <p class="comment-card__header-text">
+        {{
+          comment.dataAlteracao !== comment.dateTimestamp ? "Editado em" : ""
+        }}
         {{ comment.dataAlteracao | date : "dd/MM/yyyy" }}
       </p>
       <span class="comment-card__spacer"></span>
