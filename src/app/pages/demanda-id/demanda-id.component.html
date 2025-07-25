@@ -98,51 +98,56 @@
             </p>
           </div>
         </div>
-        <mat-expansion-panel
-          class="full-width-panel"
-          [ngClass]="{
-            'full-width-panel--iniciada': task.status === 'INICIADA',
-            'full-width-panel--finalizada': task.status === 'FINALIZADA',
-            'full-width-panel--atrasada': isAtrasada(task.prazo, task.status)
-          }"
-        >
-          <mat-expansion-panel-header class="full-width-panel__header">
-            <mat-panel-title
-              class="full-width-panel__title"
-              [ngClass]="{
-                'full-width-panel--iniciada': task.status === 'INICIADA',
-                'full-width-panel--finalizada': task.status === 'FINALIZADA',
-                'full-width-panel--atrasada': isAtrasada(
-                  task.prazo,
-                  task.status
-                )
-              }"
-            >
-              {{
-                !isAtrasada(task.prazo, task.status)
-                  ? (task.status | capitalizeFirst)
-                  : "Atrasada"
-              }}
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="task-page__panel-buttons">
-            <button class="task-page__status" (click)="updateStatus('CRIADA')">
-              Criada
-            </button>
-            <button
-              class="task-page__status task-page__status--iniciada"
-              (click)="updateStatus('INICIADA')"
-            >
-              Iniciada
-            </button>
-            <button
-              class="task-page__status task-page__status--finalizada"
-              (click)="updateStatus('FINALIZADA')"
-            >
-              Finalizada
-            </button>
-          </div>
-        </mat-expansion-panel>
+        <div class="task-page__expansion-wrapper">
+          <mat-expansion-panel
+            class="full-width-panel"
+            [ngClass]="{
+              'full-width-panel--iniciada': task.status === 'INICIADA',
+              'full-width-panel--finalizada': task.status === 'FINALIZADA',
+              'full-width-panel--atrasada': isAtrasada(task.prazo, task.status)
+            }"
+          >
+            <mat-expansion-panel-header class="full-width-panel__header">
+              <mat-panel-title
+                class="full-width-panel__title"
+                [ngClass]="{
+                  'full-width-panel--iniciada': task.status === 'INICIADA',
+                  'full-width-panel--finalizada': task.status === 'FINALIZADA',
+                  'full-width-panel--atrasada': isAtrasada(
+                    task.prazo,
+                    task.status
+                  )
+                }"
+              >
+                {{
+                  !isAtrasada(task.prazo, task.status)
+                    ? (task.status | capitalizeFirst)
+                    : "Atrasada"
+                }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="task-page__panel-buttons">
+              <button
+                class="task-page__status"
+                (click)="updateStatus('CRIADA')"
+              >
+                Criada
+              </button>
+              <button
+                class="task-page__status task-page__status--iniciada"
+                (click)="updateStatus('INICIADA')"
+              >
+                Iniciada
+              </button>
+              <button
+                class="task-page__status task-page__status--finalizada"
+                (click)="updateStatus('FINALIZADA')"
+              >
+                Finalizada
+              </button>
+            </div>
+          </mat-expansion-panel>
+        </div>
       </div>
       <p class="task-page__description">
         {{ task.descricao | capitalizeFirst }}
