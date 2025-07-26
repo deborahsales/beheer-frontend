@@ -1,0 +1,61 @@
+<div class="adjustment-request-modal">
+  <h2 class="adjustment-request-modal__title">Nova solicitação</h2>
+  <mat-dialog-content>
+    <form
+      [formGroup]="form"
+      class="financialReport-page__form"
+      (ngSubmit)="onSubmit()"
+    >
+      <mat-form-field appearance="outline">
+        <mat-label>Motivo</mat-label>
+        <mat-select formControlName="motivo">
+          <mat-option>--</mat-option>
+          @for (opcao of Motivos; track opcao) {
+          <mat-option [value]="opcao.value">{{ opcao.viewValue }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('motivo')?.errors) {
+        <mat-error>Motivo é obrigatório</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data ajustada</mat-label>
+        <input
+          input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="dataAjustada"
+        />
+
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="form.get('dataAjustada')?.hasError('required')">
+          Date obrigatória
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Hora</mat-label>
+        <input matInput type="time" formControlName="horaAjustada" />
+        <mat-error *ngIf="form.get('horaAjustada')?.hasError('required')">
+          Hora é obrigatório
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancelar</button>
+    <button
+      mat-flat-button
+      color="primary"
+      [disabled]="form.invalid"
+      (click)="onSubmit()"
+    >
+      Criar
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -73,6 +73,31 @@ export class SolicitacoesAjusteComponent {
 
   openRequest() {}
 
+  manageRequest(adjustmentRequestId: number, manage: boolean) {
+    this.isLoading.set(true);
+    const status = manage ? 'AJUSTADO' : 'RECUSADO';
+    const adjustmentRequest = { status };
+
+    this.adjustmentRequestService
+      .manageAdjustmentRequest(adjustmentRequestId, adjustmentRequest)
+      .subscribe({
+        next: () => {
+          const adjustmentRequest = this.adjustmentRequests.find(
+            (n) => n.id === adjustmentRequestId
+          );
+          if (adjustmentRequest) {
+            adjustmentRequest.status = status;
+          }
+          this.snackbarService.show('Status alterado com sucesso.');
+          this.isLoading.set(false);
+        },
+        error: () => {
+          this.snackbarService.show('Erro ao alterar status.');
+          this.isLoading.set(false);
+        },
+      });
+  }
+
   deleteAdjustmentRequest(adjustmentRequestId: number) {
     const adjustmentRequest = this.adjustmentRequests.find(
       (adjustmentRequest) => adjustmentRequest.id === adjustmentRequestId

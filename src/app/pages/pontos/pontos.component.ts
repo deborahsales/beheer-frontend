@@ -1,14 +1,18 @@
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Attendance } from '../../core/interfaces/attendance';
+import { AdjustmentRequestService } from '../../core/services/adjustment-requests.service';
 import { AttendanceService } from '../../core/services/attendance.service';
 import { OpenDialogService } from '../../core/services/open-dialog.service';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { UserService } from '../../core/services/user.service';
+import { AdjustmentRequestFormComponent } from '../../shared/components/adjustment-request-form/adjustment-request-form.component';
+import { AttendanceFormComponent } from '../../shared/components/attendance-form/attendance-form.component';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { FeaturesHeaderComponent } from '../../shared/components/features-header/features-header.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
+import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
 
 @Component({
   selector: 'app-pontos',
@@ -17,6 +21,8 @@ import { ProgressSpinnerComponent } from '../../shared/components/progress-spinn
     ProgressSpinnerComponent,
     FeaturesHeaderComponent,
     DatePipe,
+    CapitalizeFirstPipe,
+    CommonModule,
   ],
   templateUrl: './pontos.component.html',
   styleUrl: './pontos.component.scss',
@@ -31,6 +37,7 @@ export class PontosComponent {
 
   constructor(
     private attendanceService: AttendanceService,
+    private adjustmentRequestService: AdjustmentRequestService,
     private openDialog: OpenDialogService,
     private snackbarService: SnackbarService,
     private userService: UserService,
@@ -68,9 +75,98 @@ export class PontosComponent {
     this.router.navigate([`/${this.role}/ponto`, id]);
   }
 
-  registerAttendance() {}
+  registerAttendance() {
+    this.openDialog
+      .open<AttendanceFormComponent, void, any>(AttendanceFormComponent)
+      .subscribe((result) => {
+        if (result) {
+          this.executeCreateAttendance(result);
+        }
+      });
+  }
 
-  adjustAttendance(attendanceId: number) {}
+  private executeCreateAttendance(data: any) {
+    this.isLoading.set(true);
+
+    const formData = new FormData();
+    formData.append('latitude', data.latitude);
+    formData.append('longitude', data.longitude);
+
+    if (data.imagem) {
+      formData.append('imagem', data.imagem, data.imagem.name);
+    }
+
+    this.attendanceService.createAttendance(formData).subscribe({
+      next: (newAttendance) => {
+        this.attendances.push(newAttendance);
+        this.applyFilter();
+        this.isLoading.set(false);
+        this.snackbarService.show('Ponto registrado com sucesso');
+        this.openAttendance(newAttendance.id);
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        this.snackbarService.show(
+          err.error.message || 'Erro ao registrar ponto'
+        );
+      },
+    });
+  }
+
+  requestAdjustment(attendanceId: number) {
+    this.openDialog
+      .open<AdjustmentRequestFormComponent, void, any>(
+        AdjustmentRequestFormComponent
+      )
+      .subscribe((result) => {
+        if (result) {
+          this.executeCreate(result, attendanceId);
+        }
+      });
+  }
+
+  private executeCreate(data: any, attendanceId: number) {
+    this.isLoading.set(true);
+
+    const { dataAjustada, horaAjustada, motivo } = data;
+
+    const dadosAtualizados: any = {
+      motivo: motivo,
+    };
+
+    if (dataAjustada && horaAjustada) {
+      const [hours, minutes] = horaAjustada.split(':');
+      const combinedDate = new Date(dataAjustada);
+      combinedDate.setHours(+hours, +minutes, 0, 0);
+
+      const isoString = combinedDate.toISOString();
+
+      dadosAtualizados.dateTimestampAjustado = isoString;
+    }
+
+    if (dadosAtualizados) {
+      this.adjustmentRequestService
+        .createAdjustmentRequest(attendanceId, dadosAtualizados)
+        .subscribe({
+          next: (newAttendance) => {
+            this.router.navigate([
+              `/${this.role}/solicitacao-ajuste`,
+              newAttendance.id,
+            ]);
+            this.isLoading.set(false);
+            this.snackbarService.show(
+              'Solicitação de ajuste criada com sucesso'
+            );
+          },
+          error: (err) => {
+            this.isLoading.set(false);
+            this.snackbarService.show(
+              err.error.message || 'Erro ao criar solicitação de ajuste'
+            );
+          },
+        });
+    }
+  }
 
   deleteAttendance(attendanceId: number) {
     const attendance = this.attendances.find(

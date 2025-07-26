@@ -19,8 +19,8 @@
             @if (role === 'rh'){
             <th>Usuário</th>
             }
-            <th>Cadastro</th>
-            <th class="text-center">Data</th>
+            <th class="text-center">Cadastro</th>
+            <th class="text-center">Atestado</th>
             <th class="text-center">Dia Inteiro</th>
             <th class="text-center">Status</th>
             <th class="text-center">Ações</th>
@@ -34,29 +34,66 @@
         medicalCertificate.id){
         <tbody
           class="table-container__line"
+          [class.table-container__line--read]="
+            medicalCertificate.status !== 'CADASTRADO'
+          "
           (click)="openMedicalCertificate(medicalCertificate.id)"
         >
           @if (role === 'rh'){
-          <td class="table-container__overflow-text">
+          <td
+            class="table-container__text table-container__overflow-text"
+            [class.table-container__text--read]="
+              medicalCertificate.status !== 'CADASTRADO'
+            "
+          >
             {{ medicalCertificate.usuario.nome }}
           </td>
           }
-          <td>
+          <td
+            class="table-container__text text-center"
+            [class.table-container__text--read]="
+              medicalCertificate.status !== 'CADASTRADO'
+            "
+          >
             {{ medicalCertificate.dateTimestamp | date : "dd/MM/yyyy" }}
           </td>
-          <td class="text-center">
+          <td
+            class="table-container__text text-center"
+            [class.table-container__text--read]="
+              medicalCertificate.status !== 'CADASTRADO'
+            "
+          >
             {{ medicalCertificate.dataAtestado | date : "dd/MM/yyyy" }}
           </td>
-          <td class="text-center">
-            {{ medicalCertificate.diaInteiro | capitalizeFirst }}
+          <td
+            class="table-container__text text-center"
+            [class.table-container__text--read]="
+              medicalCertificate.status !== 'CADASTRADO'
+            "
+          >
+            {{ medicalCertificate.diaInteiro === "NAO" ? "Não" : "Sim" }}
           </td>
           <td class="text-center">
-            {{ medicalCertificate.status | capitalizeFirst }}
+            <span
+              class="table-container__status"
+              [class.table-container__status--finalizada]="
+                medicalCertificate.status === 'ACEITE'
+              "
+              [class.table-container__status--atrasada]="
+                medicalCertificate.status === 'RECUSADO'
+              "
+            >
+              {{ medicalCertificate.status | capitalizeFirst }}
+            </span>
           </td>
           @if (canCreate){
           <td class="text-center">
             <button
               class="action-button action-button--delete"
+              [disabled]="
+                medicalCertificate.status === 'ACEITE' ||
+                medicalCertificate.status === 'RECUSADO'
+              "
               (click)="
                 deleteMedicalCertificate(medicalCertificate.id!);
                 $event.stopPropagation()
@@ -68,8 +105,28 @@
           } @else if (role === 'rh'){
           <td class="text-center">
             <button
+              class="action-button action-button--delete"
+              [disabled]="
+                medicalCertificate.status === 'ACEITE' ||
+                medicalCertificate.status === 'RECUSADO'
+              "
+              (click)="
+                manageRequest(medicalCertificate.id!, false);
+                $event.stopPropagation()
+              "
+            >
+              <span class="material-icons">close</span>
+            </button>
+            <button
               class="action-button"
-              (click)="accept(medicalCertificate.id!); $event.stopPropagation()"
+              [disabled]="
+                medicalCertificate.status === 'ACEITE' ||
+                medicalCertificate.status === 'RECUSADO'
+              "
+              (click)="
+                manageRequest(medicalCertificate.id!, true);
+                $event.stopPropagation()
+              "
             >
               <span class="material-icons">check</span>
             </button>

@@ -8,6 +8,7 @@ import { SnackbarService } from '../../core/services/snackbar.service';
 import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { FeaturesHeaderComponent } from '../../shared/components/features-header/features-header.component';
+import { FinancialReportFormComponent } from '../../shared/components/financial-report-form/financial-report-form.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
 import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
 
@@ -73,9 +74,70 @@ export class PrestacoesContasComponent {
     this.router.navigate([`/${this.role}/prestacao-contas`, id]);
   }
 
-  createReport() {}
+  createReport() {
+    this.openDialog
+      .open<FinancialReportFormComponent, void, any>(
+        FinancialReportFormComponent
+      )
+      .subscribe((result) => {
+        if (result) {
+          this.executeCreate(result);
+        }
+      });
+  }
 
-  accept(financialReportId: number) {}
+  private executeCreate(data: any) {
+    this.isLoading.set(true);
+
+    const formData = new FormData();
+    formData.append('descricao', data.descricao);
+    formData.append('data', new Date(data.data).toISOString());
+    formData.append('valor', data.valor.toString());
+
+    if (data.imagemFile) {
+      formData.append('imagem', data.imagemFile, data.imagemFile.name);
+    }
+
+    this.financialReportService.createFinancialReport(formData).subscribe({
+      next: (newReport) => {
+        this.financialReports.push(newReport);
+        this.applyFilter();
+        this.isLoading.set(false);
+        this.snackbarService.show('Prestação de contas criada com sucesso');
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        this.snackbarService.show(
+          err.error.message || 'Erro ao criar prestação de contas'
+        );
+      },
+    });
+  }
+
+  manageRequest(financialReportId: number, manage: boolean) {
+    this.isLoading.set(true);
+    const status = manage ? 'ACEITE' : 'RECUSADA';
+    const financialReport = { status };
+
+    this.financialReportService
+      .manageFinancialReport(financialReportId, financialReport)
+      .subscribe({
+        next: () => {
+          const financialReport = this.financialReports.find(
+            (n) => n.id === financialReportId
+          );
+          if (financialReport) {
+            financialReport.status = status;
+          }
+          this.snackbarService.show('Status alterado com sucesso.');
+          this.isLoading.set(false);
+        },
+        error: () => {
+          this.snackbarService.show('Erro ao alterar status.');
+          this.isLoading.set(false);
+        },
+      });
+  }
 
   deleteFinancialReport(financialReportId: number) {
     const financialReport = this.financialReports.find(

@@ -24,16 +24,32 @@ export class AdjustmentRequestService {
     );
   }
 
-  createAdjustmentRequest(adjustmentRequestData: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, adjustmentRequestData);
+  createAdjustmentRequest(
+    adjustmentRequestId: number,
+    adjustmentRequestData: any
+  ): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/${adjustmentRequestId}`,
+      adjustmentRequestData
+    );
   }
 
   updateAdjustmentRequest(
     adjustmentRequestId: number,
-    AdjustmentRequestData: any
+    adjustmentRequestData: any
   ): Observable<any> {
     return this.http.patch<any>(
       `${this.apiUrl}/${adjustmentRequestId}`,
+      adjustmentRequestData
+    );
+  }
+
+  manageAdjustmentRequest(
+    adjustmentRequestId: number,
+    AdjustmentRequestData: any
+  ): Observable<any> {
+    return this.http.patch<any>(
+      `${this.apiUrl}/gerenciamento/${adjustmentRequestId}`,
       AdjustmentRequestData
     );
   }

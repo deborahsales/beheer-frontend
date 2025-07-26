@@ -145,5 +145,23 @@ export class PrestacaoContasIdComponent {
     this.isEditing = signal(false);
   }
 
-  manageRequest(manage: boolean) {}
+  manageRequest(manage: boolean) {
+    this.isLoading.set(true);
+    const status = manage ? 'ACEITE' : 'RECUSADA';
+    const financialReport = { status };
+
+    this.financialReportService
+      .manageFinancialReport(this.financialReportId, financialReport)
+      .subscribe({
+        next: () => {
+          this.snackbarService.show('Status alterado com sucesso.');
+          this.financialReport.status = status;
+          this.isLoading.set(false);
+        },
+        error: () => {
+          this.snackbarService.show('Erro ao alterar status.');
+          this.isLoading.set(false);
+        },
+      });
+  }
 }

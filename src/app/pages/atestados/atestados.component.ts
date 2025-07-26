@@ -8,6 +8,7 @@ import { SnackbarService } from '../../core/services/snackbar.service';
 import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { FeaturesHeaderComponent } from '../../shared/components/features-header/features-header.component';
+import { MedicalCertificateFormComponent } from '../../shared/components/medical-certificate-form/medical-certificate-form.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
 import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
 
@@ -73,9 +74,90 @@ export class AtestadosComponent {
     this.router.navigate([`/${this.role}/atestado`, id]);
   }
 
-  registerMedicalCertificate() {}
+  registerMedicalCertificate() {
+    this.openDialog
+      .open<MedicalCertificateFormComponent, void, any>(
+        MedicalCertificateFormComponent
+      )
+      .subscribe((result) => {
+        if (result) {
+          this.executeCreate(result);
+        }
+      });
+  }
 
-  accept(medicalCertificateId: number) {}
+  private executeCreate(data: any) {
+    this.isLoading.set(true);
+
+    const formData = new FormData();
+    formData.append('dataAtestado', new Date(data.dataAtestado).toISOString());
+    formData.append('diaInteiro', data.diaInteiro);
+
+    if (data.diaInteiro === 'SIM') {
+      formData.append('horaInicio', 'null');
+      formData.append('horaTermino', 'null');
+    } else {
+      if (data.horaInicio) {
+        const [sHours, sMinutes] = data.horaInicio.split(':');
+        const combinedDatehoraInicio = new Date(data.dataAtestado);
+        combinedDatehoraInicio.setHours(+sHours, +sMinutes, 0, 0);
+        formData.append('horaInicio', combinedDatehoraInicio.toISOString());
+      }
+
+      if (data.horaTermino) {
+        const [sHours, sMinutes] = data.horaTermino.split(':');
+        const combinedDatehoraTermino = new Date(data.dataAtestado);
+        combinedDatehoraTermino.setHours(+sHours, +sMinutes, 0, 0);
+        formData.append('horaTermino', combinedDatehoraTermino.toISOString());
+      }
+    }
+
+    if (data.imagemFile) {
+      formData.append('imagem', data.imagemFile, data.imagemFile.name);
+    }
+
+    this.medicalCertificateService
+      .createMedicalCertificate(formData)
+      .subscribe({
+        next: (newMedicalCertificate) => {
+          this.medicalCertificates.push(newMedicalCertificate);
+          this.applyFilter();
+          this.isLoading.set(false);
+          this.snackbarService.show('Atestado cadastrado com sucesso');
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          this.snackbarService.show(
+            err.error.message || 'Erro ao cadastrar atestado'
+          );
+        },
+      });
+  }
+
+  manageRequest(medicalCertificateId: number, manage: boolean) {
+    this.isLoading.set(true);
+    const status = manage ? 'ACEITE' : 'RECUSADO';
+    const medicalCertificate = { status };
+
+    this.medicalCertificateService
+      .manageMedicalCertificate(medicalCertificateId, medicalCertificate)
+      .subscribe({
+        next: () => {
+          const medicalCertificate = this.medicalCertificates.find(
+            (n) => n.id === medicalCertificateId
+          );
+          if (medicalCertificate) {
+            medicalCertificate.status = status;
+          }
+          this.snackbarService.show('Status alterado com sucesso.');
+          this.isLoading.set(false);
+        },
+        error: () => {
+          this.snackbarService.show('Erro ao alterar status.');
+          this.isLoading.set(false);
+        },
+      });
+  }
 
   deleteMedicalCertificate(medicalCertificateId: number) {
     const medicalCertificate = this.medicalCertificates.find(

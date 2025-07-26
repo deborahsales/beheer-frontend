@@ -1,0 +1,27 @@
+<div class="attendance-modal">
+  <h2 class="attendance-modal__title">Registrar ponto</h2>
+  <mat-dialog-content>
+    <video *ngIf="cameraOn" #video autoplay playsinline></video>
+    <canvas #canvas hidden></canvas>
+
+    <div *ngIf="photoPreview" class="attendance-modal__image-wrapper">
+      <img [src]="photoPreview" alt="Foto tirada" width="200" />
+    </div>
+    <div class="attendance-modal__details">
+      <p class="attendance-modal__text">
+        <strong>Data:</strong>
+        {{ dateTimestamp | date : "dd/MM/yyyy" }}
+      </p>
+      <p class="attendance-modal__text">
+        <strong>Horário:</strong>
+        {{ dateTimestamp | date : "HH:mm" }}
+      </p>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancelar</button>
+    <button mat-flat-button color="primary" (click)="onSubmit()">
+      Registrar
+    </button>
+  </mat-dialog-actions>
+</div>

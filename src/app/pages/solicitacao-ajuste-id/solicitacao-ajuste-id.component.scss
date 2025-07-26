@@ -82,10 +82,11 @@
     margin: var(--space-sm) 0;
   }
 
-  &__tasks {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
+  &__attendance {
+    &:hover {
+      cursor: pointer;
+      color: var(--primary-blue);
+    }
   }
 }
 
@@ -111,5 +112,19 @@
     font-size: 16px;
     color: var(--primary-blue);
     transition: color 0.3s ease;
+  }
+
+  &[disabled] {
+    cursor: default;
+    opacity: 0.5;
+
+    .material-icons {
+      color: gray;
+      pointer-events: none;
+    }
+
+    &:hover {
+      transform: none;
+    }
   }
 }

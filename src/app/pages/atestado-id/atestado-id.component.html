@@ -8,7 +8,14 @@
       <div class="medicalCertificate-page__actions">
         <h1 class="medicalCertificate-page__title">Atestado médico</h1>
         @if(canManage){
-        <button class="action-button" (click)="edit()">
+        <button
+          class="action-button"
+          [disabled]="
+            medicalCertificate.status === 'ACEITE' ||
+            medicalCertificate.status === 'RECUSADO'
+          "
+          (click)="edit()"
+        >
           <span class="material-icons">edit</span>
         </button>
         }
@@ -116,10 +123,27 @@
 
       @if (role === 'rh'){
       <div class="medicalCertificate-page__manage">
-        <button mat-flat-button color="primary" (click)="manageRequest(true)">
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="
+            medicalCertificate.status === 'ACEITE' ||
+            medicalCertificate.status === 'RECUSADO'
+          "
+          (click)="manageRequest(true)"
+        >
           Aceitar
         </button>
-        <button mat-button (click)="manageRequest(false)">Recusar</button>
+        <button
+          mat-button
+          [disabled]="
+            medicalCertificate.status === 'ACEITE' ||
+            medicalCertificate.status === 'RECUSADO'
+          "
+          (click)="manageRequest(false)"
+        >
+          Recusar
+        </button>
       </div>
       } }
     </div>

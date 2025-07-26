@@ -62,9 +62,25 @@ export class AtestadoIdComponent {
   ) {
     this.form = this.formBuilder.group({
       dataAtestado: ['', Validators.required],
-      horaInicio: ['', Validators.required],
-      horaTermino: ['', Validators.required],
+      horaInicio: [''],
+      horaTermino: [''],
       diaInteiro: ['', Validators.required],
+    });
+
+    this.form.get('diaInteiro')?.valueChanges.subscribe((value) => {
+      const horaInicio = this.form.get('horaInicio');
+      const horaTermino = this.form.get('horaTermino');
+
+      if (value === 'SIM') {
+        horaInicio?.disable();
+        horaTermino?.disable();
+      } else {
+        horaInicio?.enable();
+        horaTermino?.enable();
+      }
+
+      horaInicio?.updateValueAndValidity();
+      horaTermino?.updateValueAndValidity();
     });
   }
 
@@ -123,22 +139,29 @@ export class AtestadoIdComponent {
       const { dataAtestado, horaInicio, horaTermino, diaInteiro } =
         this.form.value;
 
-      const [sHours, sMinutes] = horaInicio.split(':');
-      const combinedDatehoraInicio = new Date(dataAtestado);
-      combinedDatehoraInicio.setHours(+sHours, +sMinutes, 0, 0);
-      const isoStringhoraInicio = combinedDatehoraInicio.toISOString();
-
-      const [eHours, eMinutes] = horaTermino.split(':');
-      const combinedDatehoraTermino = new Date(dataAtestado);
-      combinedDatehoraTermino.setHours(+eHours, +eMinutes, 0, 0);
-      const isoStringhoraTermino = combinedDatehoraTermino.toISOString();
-
-      const dadosAtualizados = {
-        dataAtestado: dataAtestado,
-        horaInicio: isoStringhoraInicio,
-        horaTermino: isoStringhoraTermino,
-        diaInteiro: diaInteiro,
+      let dadosAtualizados: any = {
+        dataAtestado,
+        diaInteiro,
       };
+
+      if (diaInteiro === 'SIM') {
+        dadosAtualizados.horaInicio = null;
+        dadosAtualizados.horaTermino = null;
+      } else {
+        if (horaInicio) {
+          const [sHours, sMinutes] = horaInicio.split(':');
+          const combinedDatehoraInicio = new Date(dataAtestado);
+          combinedDatehoraInicio.setHours(+sHours, +sMinutes, 0, 0);
+          dadosAtualizados.horaInicio = combinedDatehoraInicio.toISOString();
+        }
+
+        if (horaTermino) {
+          const [eHours, eMinutes] = horaTermino.split(':');
+          const combinedDatehoraTermino = new Date(dataAtestado);
+          combinedDatehoraTermino.setHours(+eHours, +eMinutes, 0, 0);
+          dadosAtualizados.horaTermino = combinedDatehoraTermino.toISOString();
+        }
+      }
 
       if (dadosAtualizados) {
         this.medicalCertificateService
@@ -171,5 +194,23 @@ export class AtestadoIdComponent {
     this.isEditing = signal(false);
   }
 
-  manageRequest(manage: boolean) {}
+  manageRequest(manage: boolean) {
+    this.isLoading.set(true);
+    const status = manage ? 'ACEITE' : 'RECUSADO';
+    const medicalCertificate = { status };
+
+    this.medicalCertificateService
+      .manageMedicalCertificate(this.medicalCertificateId, medicalCertificate)
+      .subscribe({
+        next: () => {
+          this.snackbarService.show('Status alterado com sucesso.');
+          this.medicalCertificate.status = status;
+          this.isLoading.set(false);
+        },
+        error: () => {
+          this.snackbarService.show('Erro ao alterar status.');
+          this.isLoading.set(false);
+        },
+      });
+  }
 }

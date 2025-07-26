@@ -1,0 +1,46 @@
+.attendance-modal {
+  width: 350px;
+  background-color: var(--white);
+
+  &__title {
+    margin: var(--space-sm) 0 0 var(--space-sm);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-regular);
+  }
+
+  &__image-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-md) 0;
+  }
+
+  &__text {
+    padding: var(--space-xs) 0;
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+  }
+
+  &__details {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-sm);
+
+    margin-bottom: var(--space-sm);
+  }
+
+  video {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+}

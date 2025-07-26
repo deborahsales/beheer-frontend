@@ -6,8 +6,10 @@
   }
 
   &__button {
+    min-height: fit-content;
     height: 40px;
     font-size: var(--font-size-md);
+    white-space: nowrap;
   }
 
   &__search {
