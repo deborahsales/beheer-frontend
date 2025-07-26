@@ -11,7 +11,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AdjustmentRequest } from '../../core/interfaces/adjustment-request';
 import { AdjustmentRequestService } from '../../core/services/adjustment-requests.service';
 import { SnackbarService } from '../../core/services/snackbar.service';
@@ -58,7 +58,8 @@ export class SolicitacaoAjusteIdComponent {
     private adjustmentRequestService: AdjustmentRequestService,
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private router: Router
   ) {
     this.form = this.formBuilder.group({
       motivo: ['', Validators.required],
@@ -156,5 +157,27 @@ export class SolicitacaoAjusteIdComponent {
     this.isEditing = signal(false);
   }
 
-  manageRequest(manage: boolean) {}
+  openAttendance(id: number) {
+    this.router.navigate([`/${this.role}/ponto`, id]);
+  }
+
+  manageRequest(manage: boolean) {
+    this.isLoading.set(true);
+    const status = manage ? 'AJUSTADO' : 'RECUSADO';
+    const adjustmentRequest = { status };
+
+    this.adjustmentRequestService
+      .manageAdjustmentRequest(this.adjustmentRequestId, adjustmentRequest)
+      .subscribe({
+        next: () => {
+          this.snackbarService.show('Status alterado com sucesso.');
+          this.adjustmentRequest.status = status;
+          this.isLoading.set(false);
+        },
+        error: () => {
+          this.snackbarService.show('Erro ao alterar status.');
+          this.isLoading.set(false);
+        },
+      });
+  }
 }

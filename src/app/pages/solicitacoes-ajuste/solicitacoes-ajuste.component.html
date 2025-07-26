@@ -23,9 +23,7 @@
             <th class="text-center">Solicitação</th>
             <th class="text-center">Ajuste</th>
             <th class="text-center">Status</th>
-            @if (canCreate){
             <th class="text-center">Ações</th>
-            }
           </tr>
         </thead>
         @if (!filteredAdjustmentRequests.length) {
@@ -36,35 +34,111 @@
         adjustmentRequest.id){
         <tbody
           class="table-container__line"
+          [class.table-container__line--read]="
+            adjustmentRequest.status !== 'PENDENTE'
+          "
           (click)="openAdjustmentRequest(adjustmentRequest.id)"
         >
           @if (role === 'rh'){
-          <td class="table-container__overflow-text">
+          <td
+            class="table-container__text table-container__overflow-text"
+            [class.table-container__text--read]="
+              adjustmentRequest.status !== 'PENDENTE'
+            "
+          >
             {{ adjustmentRequest.usuario.nome }}
           </td>
           }
-          <td>
+          <td
+            class="table-container__text"
+            [class.table-container__text--read]="
+              adjustmentRequest.status !== 'PENDENTE'
+            "
+          >
             {{ adjustmentRequest.motivo | capitalizeFirst }}
           </td>
-          <td class="text-center">
+          <td
+            class="table-container__text text-center"
+            [class.table-container__text--read]="
+              adjustmentRequest.status !== 'PENDENTE'
+            "
+          >
             {{ adjustmentRequest.dateTimestamp | date : "dd/MM/yyyy" }}
           </td>
-          <td class="text-center">
+          <td
+            class="table-container__text text-center"
+            [class.table-container__text--read]="
+              adjustmentRequest.status !== 'PENDENTE'
+            "
+          >
             {{ adjustmentRequest.dateTimestampAjustado | date : "dd/MM/yyyy" }}
           </td>
-          <td class="text-center">
-            {{ adjustmentRequest.status | capitalizeFirst }}
+          <td
+            class="table-container__text text-center"
+            [class.table-container__text--read]="
+              adjustmentRequest.status !== 'PENDENTE'
+            "
+          >
+            <span
+              class="table-container__status"
+              [class.table-container__status--finalizada]="
+                adjustmentRequest.status === 'AJUSTADO'
+              "
+              [class.table-container__status--atrasada]="
+                adjustmentRequest.status === 'RECUSADO'
+              "
+            >
+              {{ adjustmentRequest.status | capitalizeFirst }}
+            </span>
           </td>
           @if (canCreate){
-          <td class="text-center">
+          <td
+            class="table-container__text text-center"
+            [class.table-container__text--read]="
+              adjustmentRequest.status !== 'PENDENTE'
+            "
+          >
             <button
               class="action-button action-button--delete"
+              [disabled]="
+                adjustmentRequest.status === 'AJUSTADO' ||
+                adjustmentRequest.status === 'RECUSADO'
+              "
               (click)="
                 deleteAdjustmentRequest(adjustmentRequest.id!);
                 $event.stopPropagation()
               "
             >
               <span class="material-icons">delete</span>
+            </button>
+          </td>
+          } @else if (role === 'rh'){
+          <td class="text-center">
+            <button
+              class="action-button action-button--delete"
+              [disabled]="
+                adjustmentRequest.status === 'AJUSTADO' ||
+                adjustmentRequest.status === 'RECUSADO'
+              "
+              (click)="
+                manageRequest(adjustmentRequest.id!, false);
+                $event.stopPropagation()
+              "
+            >
+              <span class="material-icons">close</span>
+            </button>
+            <button
+              class="action-button"
+              [disabled]="
+                adjustmentRequest.status === 'AJUSTADO' ||
+                adjustmentRequest.status === 'RECUSADO'
+              "
+              (click)="
+                manageRequest(adjustmentRequest.id!, true);
+                $event.stopPropagation()
+              "
+            >
+              <span class="material-icons">check</span>
             </button>
           </td>
           }

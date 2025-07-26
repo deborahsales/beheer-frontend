@@ -32,7 +32,7 @@
           {{ attendance.dateTimestamp | date : "HH:mm" }}
         </p>
       </div>
-      @if (userId === attendance.usuarioId){
+      @if (userId === attendance.usuarioId && attendance.ativo){
       <button
         class="beheer-button attendance-page__button"
         (click)="requestAdjustment()"

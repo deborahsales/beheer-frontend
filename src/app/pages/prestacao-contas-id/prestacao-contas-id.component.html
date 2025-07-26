@@ -107,10 +107,27 @@
 
       @if (role === 'rh'){
       <div class="financialReport-page__manage">
-        <button mat-flat-button color="primary" (click)="manageRequest(true)">
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="
+            financialReport.status === 'ACEITE' ||
+            financialReport.status === 'RECUSADA'
+          "
+          (click)="manageRequest(true)"
+        >
           Aceitar
         </button>
-        <button mat-button (click)="manageRequest(false)">Recusar</button>
+        <button
+          mat-button
+          [disabled]="
+            financialReport.status === 'ACEITE' ||
+            financialReport.status === 'RECUSADA'
+          "
+          (click)="manageRequest(false)"
+        >
+          Recusar
+        </button>
       </div>
       } }
     </div>

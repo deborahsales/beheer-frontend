@@ -62,9 +62,25 @@ export class AtestadoIdComponent {
   ) {
     this.form = this.formBuilder.group({
       dataAtestado: ['', Validators.required],
-      horaInicio: ['', Validators.required],
-      horaTermino: ['', Validators.required],
+      horaInicio: [''],
+      horaTermino: [''],
       diaInteiro: ['', Validators.required],
+    });
+
+    this.form.get('diaInteiro')?.valueChanges.subscribe((value) => {
+      const horaInicio = this.form.get('horaInicio');
+      const horaTermino = this.form.get('horaTermino');
+
+      if (value === 'SIM') {
+        horaInicio?.disable();
+        horaTermino?.disable();
+      } else {
+        horaInicio?.enable();
+        horaTermino?.enable();
+      }
+
+      horaInicio?.updateValueAndValidity();
+      horaTermino?.updateValueAndValidity();
     });
   }
 
@@ -171,5 +187,23 @@ export class AtestadoIdComponent {
     this.isEditing = signal(false);
   }
 
-  manageRequest(manage: boolean) {}
+  manageRequest(manage: boolean) {
+    this.isLoading.set(true);
+    const status = manage ? 'ACEITE' : 'RECUSADO';
+    const medicalCertificate = { status };
+
+    this.medicalCertificateService
+      .manageMedicalCertificate(this.medicalCertificateId, medicalCertificate)
+      .subscribe({
+        next: () => {
+          this.snackbarService.show('Status alterado com sucesso.');
+          this.medicalCertificate.status = status;
+          this.isLoading.set(false);
+        },
+        error: () => {
+          this.snackbarService.show('Erro ao alterar status.');
+          this.isLoading.set(false);
+        },
+      });
+  }
 }

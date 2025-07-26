@@ -82,10 +82,11 @@
     margin: var(--space-sm) 0;
   }
 
-  &__tasks {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
+  &__attendance {
+    &:hover {
+      cursor: pointer;
+      color: var(--primary-blue);
+    }
   }
 }
 

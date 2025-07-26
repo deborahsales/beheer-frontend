@@ -38,6 +38,16 @@ export class FinancialReportService {
     );
   }
 
+  manageFinancialReport(
+    financialReportId: number,
+    FinancialReportData: any
+  ): Observable<any> {
+    return this.http.patch<any>(
+      `${this.apiUrl}/gerenciamento/${financialReportId}`,
+      FinancialReportData
+    );
+  }
+
   deleteFinancialReport(financialReportId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${financialReportId}`);
   }

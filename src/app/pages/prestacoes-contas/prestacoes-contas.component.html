@@ -31,37 +31,83 @@
         <tr>
           <td>Nenhuma prestação de contas localizada...</td>
         </tr>
-        } 
-        @for (financialReport of filteredFinancialReports; track
+        } @for (financialReport of filteredFinancialReports; track
         financialReport.id){
         <tbody
           class="table-container__line"
+          [class.table-container__line--read]="
+            financialReport.status !== 'CADASTRADA'
+          "
           (click)="openFinancialReport(financialReport.id)"
         >
           @if (role === 'rh'){
-          <td class="table-container__overflow-text">
+          <td
+            class="table-container__text table-container__overflow-text"
+            [class.table-container__text--read]="
+              financialReport.status !== 'CADASTRADA'
+            "
+          >
             {{ financialReport.usuario.nome }}
           </td>
           }
-          <td class="table-container__overflow-text">
+          <td
+            class="table-container__text table-container__overflow-text"
+            [class.table-container__text--read]="
+              financialReport.status !== 'CADASTRADA'
+            "
+          >
             {{ financialReport.descricao }}
           </td>
-          <td class="text-center">
+          <td
+            class="table-container__text text-center"
+            [class.table-container__text--read]="
+              financialReport.status !== 'CADASTRADA'
+            "
+          >
             {{ financialReport.dateTimestamp | date : "dd/MM/yyyy" }}
           </td>
-          <td class="text-center">
+          <td
+            class="table-container__text text-center"
+            [class.table-container__text--read]="
+              financialReport.status !== 'CADASTRADA'
+            "
+          >
             {{ financialReport.data | date : "dd/MM/yyyy" }}
           </td>
-          <td class="table-container__overflow-text text-center">
+          <td
+            class="table-container__text table-container__overflow-text text-center"
+            [class.table-container__text--read]="
+              financialReport.status !== 'CADASTRADA'
+            "
+          >
             R$ {{ financialReport.valor | number : "1.2-2" }}
           </td>
-          <td class="text-center">
-            {{ financialReport.status | capitalizeFirst }}
+          <td
+            class="table-container__text text-center"
+            [class.table-container__text--read]="
+              financialReport.status !== 'CADASTRADA'
+            "
+          >
+            <span
+              class="table-container__status"
+              [class.table-container__status--finalizada]="
+                financialReport.status === 'ACEITE'
+              "
+              [class.table-container__status--atrasada]="
+                financialReport.status === 'RECUSADA'
+              "
+            >
+              {{ financialReport.status | capitalizeFirst }}
+            </span>
           </td>
           @if (canCreate){
           <td class="text-center">
             <button
               class="action-button action-button--delete"
+              [disabled]="
+                financialReport.status === 'ACEITE' ||
+                financialReport.status === 'RECUSADA'
+              "
               (click)="
                 deleteFinancialReport(financialReport.id!);
                 $event.stopPropagation()
@@ -73,8 +119,28 @@
           } @else if (role === 'rh'){
           <td class="text-center">
             <button
+              class="action-button action-button--delete"
+              [disabled]="
+                financialReport.status === 'ACEITE' ||
+                financialReport.status === 'RECUSADA'
+              "
+              (click)="
+                manageRequest(financialReport.id!, false);
+                $event.stopPropagation()
+              "
+            >
+              <span class="material-icons">close</span>
+            </button>
+            <button
               class="action-button"
-              (click)="accept(financialReport.id!); $event.stopPropagation()"
+              [disabled]="
+                financialReport.status === 'ACEITE' ||
+                financialReport.status === 'RECUSADA'
+              "
+              (click)="
+                manageRequest(financialReport.id!, true);
+                $event.stopPropagation()
+              "
             >
               <span class="material-icons">check</span>
             </button>

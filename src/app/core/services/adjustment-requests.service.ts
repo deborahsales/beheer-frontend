@@ -38,6 +38,16 @@ export class AdjustmentRequestService {
     );
   }
 
+  manageAdjustmentRequest(
+    adjustmentRequestId: number,
+    AdjustmentRequestData: any
+  ): Observable<any> {
+    return this.http.patch<any>(
+      `${this.apiUrl}/gerenciamento/${adjustmentRequestId}`,
+      AdjustmentRequestData
+    );
+  }
+
   deleteAdjustmentRequest(adjustmentRequestId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${adjustmentRequestId}`);
   }

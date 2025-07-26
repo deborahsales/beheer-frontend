@@ -1,3 +1,5 @@
+import { Attendance } from './attendance';
+
 export interface AdjustmentRequest {
   id: number;
   dateTimestampAjustado: string;
@@ -8,6 +10,7 @@ export interface AdjustmentRequest {
   usuario: { nome: string };
   pontoId: number;
   gerenciamentoAJuste: GerenciamentoAjuste[];
+  ponto: Attendance;
 }
 
 interface GerenciamentoAjuste {

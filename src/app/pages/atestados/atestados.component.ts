@@ -8,6 +8,7 @@ import { SnackbarService } from '../../core/services/snackbar.service';
 import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { FeaturesHeaderComponent } from '../../shared/components/features-header/features-header.component';
+import { MedicalCertificateFormComponent } from '../../shared/components/medical-certificate-form/medical-certificate-form.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
 import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
 
@@ -73,9 +74,85 @@ export class AtestadosComponent {
     this.router.navigate([`/${this.role}/atestado`, id]);
   }
 
-  registerMedicalCertificate() {}
+  registerMedicalCertificate() {
+    this.openDialog
+      .open<MedicalCertificateFormComponent, void, any>(
+        MedicalCertificateFormComponent
+      )
+      .subscribe((result) => {
+        if (result) {
+          this.executeCreate(result);
+        }
+      });
+  }
 
-  accept(medicalCertificateId: number) {}
+  private executeCreate(data: any) {
+    this.isLoading.set(true);
+
+    const formData = new FormData();
+    formData.append('dataAtestado', new Date(data.dataAtestado).toISOString());
+
+    if (data.horaInicio) {
+      const horaInicioDate = new Date(data.horaInicio);
+      if (!isNaN(horaInicioDate.getTime())) {
+        formData.append('horaInicio', horaInicioDate.toISOString());
+      }
+    }
+
+    if (data.horaTermino) {
+      const horaTerminoDate = new Date(data.horaTermino);
+      if (!isNaN(horaTerminoDate.getTime())) {
+        formData.append('horaTermino', horaTerminoDate.toISOString());
+      }
+    }
+    formData.append('diaInteiro', data.diaInteiro);
+
+    if (data.imagemFile) {
+      formData.append('imagem', data.imagemFile, data.imagemFile.name);
+    }
+
+    this.medicalCertificateService
+      .createMedicalCertificate(formData)
+      .subscribe({
+        next: (newMedicalCertificate) => {
+          this.medicalCertificates.push(newMedicalCertificate);
+          this.applyFilter();
+          this.isLoading.set(false);
+          this.snackbarService.show('Atestado cadastrado com sucesso');
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          this.snackbarService.show(
+            err.error.message || 'Erro ao cadastrar atestado'
+          );
+        },
+      });
+  }
+
+  manageRequest(medicalCertificateId: number, manage: boolean) {
+    this.isLoading.set(true);
+    const status = manage ? 'ACEITE' : 'RECUSADO';
+    const medicalCertificate = { status };
+
+    this.medicalCertificateService
+      .manageMedicalCertificate(medicalCertificateId, medicalCertificate)
+      .subscribe({
+        next: () => {
+          const medicalCertificate = this.medicalCertificates.find(
+            (n) => n.id === medicalCertificateId
+          );
+          if (medicalCertificate) {
+            medicalCertificate.status = status;
+          }
+          this.snackbarService.show('Status alterado com sucesso.');
+          this.isLoading.set(false);
+        },
+        error: () => {
+          this.snackbarService.show('Erro ao alterar status.');
+          this.isLoading.set(false);
+        },
+      });
+  }
 
   deleteMedicalCertificate(medicalCertificateId: number) {
     const medicalCertificate = this.medicalCertificates.find(

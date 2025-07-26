@@ -38,6 +38,16 @@ export class MedicalCertificateService {
     );
   }
 
+  manageMedicalCertificate(
+    medicalCertificateId: number,
+    MedicalCertificateData: any
+  ): Observable<any> {
+    return this.http.patch<any>(
+      `${this.apiUrl}/gerenciamento/${medicalCertificateId}`,
+      MedicalCertificateData
+    );
+  }
+
   deleteMedicalCertificate(medicalCertificateId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${medicalCertificateId}`);
   }

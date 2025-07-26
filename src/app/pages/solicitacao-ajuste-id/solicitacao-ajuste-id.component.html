@@ -24,8 +24,6 @@
         class="adjustments-page__form"
         (ngSubmit)="onSubmit()"
       >
-        
-
         <mat-form-field appearance="outline">
           <mat-label>Motivo</mat-label>
           <mat-select formControlName="motivo">
@@ -78,6 +76,15 @@
         </button>
       </div>
       } @else {
+      <p
+        class="adjustments-page__details adjustments-page__attendance"
+        (click)="openAttendance(adjustmentRequest.ponto.id)"
+      >
+        <strong>Ponto:</strong>
+        {{ adjustmentRequest.ponto.dateTimestamp | date : "dd/MM/yyyy" }}
+        -
+        {{ adjustmentRequest.ponto.dateTimestamp | date : "HH:mm" }}
+      </p>
       <p class="adjustments-page__details">
         <strong>Ajuste solicitado:</strong>
         {{ adjustmentRequest.dateTimestampAjustado | date : "dd/MM/yyyy" }}
@@ -90,10 +97,27 @@
       </p>
       } @if (role === 'rh'){
       <div class="adjustments-page__manage">
-        <button mat-flat-button color="primary" (click)="manageRequest(true)">
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="
+            adjustmentRequest.status === 'AJUSTADO' ||
+            adjustmentRequest.status === 'RECUSADO'
+          "
+          (click)="manageRequest(true)"
+        >
           Aceitar
         </button>
-        <button mat-button (click)="manageRequest(false)">Recusar</button>
+        <button
+          mat-button
+          [disabled]="
+            adjustmentRequest.status === 'AJUSTADO' ||
+            adjustmentRequest.status === 'RECUSADO'
+          "
+          (click)="manageRequest(false)"
+        >
+          Recusar
+        </button>
       </div>
       } }
     </div>
