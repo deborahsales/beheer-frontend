@@ -34,6 +34,7 @@ import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
     MatDatepickerModule,
     CapitalizeFirstPipe,
     MatSelectModule,
+    CapitalizeFirstPipe,
   ],
   templateUrl: './solicitacao-ajuste-id.component.html',
   styleUrl: './solicitacao-ajuste-id.component.scss',

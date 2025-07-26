@@ -73,4 +73,11 @@
     border-radius: 4px;
     display: block;
   }
+
+  &__adjustment {
+    &:hover {
+      cursor: pointer;
+      color: var(--primary-blue);
+    }
+  }
 }

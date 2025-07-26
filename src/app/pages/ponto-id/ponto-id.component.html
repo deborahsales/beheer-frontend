@@ -32,7 +32,16 @@
           {{ attendance.dateTimestamp | date : "HH:mm" }}
         </p>
       </div>
-      @if (userId === attendance.usuarioId && attendance.ativo){
+      @if (attendance.ajuste){
+      <p
+        class="attendance-page__text attendance-page__adjustment"
+        (click)="openAdjustmentRequest(attendance.ajuste.id)"
+      >
+        <strong>Ajuste:</strong>
+        {{ attendance.ajuste.status | capitalizeFirst }}
+      </p>
+      } @if (userId === attendance.usuarioId && attendance.ativo &&
+      !attendance.ajuste){
       <button
         class="beheer-button attendance-page__button"
         (click)="requestAdjustment()"

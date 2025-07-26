@@ -113,4 +113,18 @@
     color: var(--primary-blue);
     transition: color 0.3s ease;
   }
+
+  &[disabled] {
+    cursor: default;
+    opacity: 0.5;
+
+    .material-icons {
+      color: gray;
+      pointer-events: none;
+    }
+
+    &:hover {
+      transform: none;
+    }
+  }
 }

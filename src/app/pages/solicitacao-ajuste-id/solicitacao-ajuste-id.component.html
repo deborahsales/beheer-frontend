@@ -8,11 +8,23 @@
       <div class="adjustments-page__actions">
         <h1 class="adjustments-page__title">Solicitação de ajuste</h1>
         @if(canManage){
-        <button class="action-button" (click)="edit()">
+        <button
+          class="action-button"
+          [disabled]="
+            adjustmentRequest.status === 'AJUSTADO' ||
+            adjustmentRequest.status === 'RECUSADO'
+          "
+          (click)="edit()"
+        >
           <span class="material-icons">edit</span>
         </button>
         }
       </div>
+
+      <p class="adjustments-page__details">
+        <strong>Status:</strong>
+        {{ adjustmentRequest.status | capitalizeFirst }}
+      </p>
 
       <p class="adjustments-page__details adjustments-page__user-name">
         <strong>Usuário:</strong>
@@ -85,12 +97,14 @@
         -
         {{ adjustmentRequest.ponto.dateTimestamp | date : "HH:mm" }}
       </p>
+      @if (adjustmentRequest.motivo !== 'DUPLICADO'){
       <p class="adjustments-page__details">
         <strong>Ajuste solicitado:</strong>
         {{ adjustmentRequest.dateTimestampAjustado | date : "dd/MM/yyyy" }}
         -
         {{ adjustmentRequest.dateTimestampAjustado | date : "HH:mm" }}
       </p>
+      }
       <p class="adjustments-page__details">
         <strong>Motivo:</strong>
         {{ adjustmentRequest.motivo | capitalizeFirst }}

@@ -139,22 +139,29 @@ export class AtestadoIdComponent {
       const { dataAtestado, horaInicio, horaTermino, diaInteiro } =
         this.form.value;
 
-      const [sHours, sMinutes] = horaInicio.split(':');
-      const combinedDatehoraInicio = new Date(dataAtestado);
-      combinedDatehoraInicio.setHours(+sHours, +sMinutes, 0, 0);
-      const isoStringhoraInicio = combinedDatehoraInicio.toISOString();
-
-      const [eHours, eMinutes] = horaTermino.split(':');
-      const combinedDatehoraTermino = new Date(dataAtestado);
-      combinedDatehoraTermino.setHours(+eHours, +eMinutes, 0, 0);
-      const isoStringhoraTermino = combinedDatehoraTermino.toISOString();
-
-      const dadosAtualizados = {
-        dataAtestado: dataAtestado,
-        horaInicio: isoStringhoraInicio,
-        horaTermino: isoStringhoraTermino,
-        diaInteiro: diaInteiro,
+      let dadosAtualizados: any = {
+        dataAtestado,
+        diaInteiro,
       };
+
+      if (diaInteiro === 'SIM') {
+        dadosAtualizados.horaInicio = null;
+        dadosAtualizados.horaTermino = null;
+      } else {
+        if (horaInicio) {
+          const [sHours, sMinutes] = horaInicio.split(':');
+          const combinedDatehoraInicio = new Date(dataAtestado);
+          combinedDatehoraInicio.setHours(+sHours, +sMinutes, 0, 0);
+          dadosAtualizados.horaInicio = combinedDatehoraInicio.toISOString();
+        }
+
+        if (horaTermino) {
+          const [eHours, eMinutes] = horaTermino.split(':');
+          const combinedDatehoraTermino = new Date(dataAtestado);
+          combinedDatehoraTermino.setHours(+eHours, +eMinutes, 0, 0);
+          dadosAtualizados.horaTermino = combinedDatehoraTermino.toISOString();
+        }
+      }
 
       if (dadosAtualizados) {
         this.medicalCertificateService

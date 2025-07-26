@@ -91,21 +91,26 @@ export class AtestadosComponent {
 
     const formData = new FormData();
     formData.append('dataAtestado', new Date(data.dataAtestado).toISOString());
-
-    if (data.horaInicio) {
-      const horaInicioDate = new Date(data.horaInicio);
-      if (!isNaN(horaInicioDate.getTime())) {
-        formData.append('horaInicio', horaInicioDate.toISOString());
-      }
-    }
-
-    if (data.horaTermino) {
-      const horaTerminoDate = new Date(data.horaTermino);
-      if (!isNaN(horaTerminoDate.getTime())) {
-        formData.append('horaTermino', horaTerminoDate.toISOString());
-      }
-    }
     formData.append('diaInteiro', data.diaInteiro);
+
+    if (data.diaInteiro === 'SIM') {
+      formData.append('horaInicio', 'null');
+      formData.append('horaTermino', 'null');
+    } else {
+      if (data.horaInicio) {
+        const [sHours, sMinutes] = data.horaInicio.split(':');
+        const combinedDatehoraInicio = new Date(data.dataAtestado);
+        combinedDatehoraInicio.setHours(+sHours, +sMinutes, 0, 0);
+        formData.append('horaInicio', combinedDatehoraInicio.toISOString());
+      }
+
+      if (data.horaTermino) {
+        const [sHours, sMinutes] = data.horaTermino.split(':');
+        const combinedDatehoraTermino = new Date(data.dataAtestado);
+        combinedDatehoraTermino.setHours(+sHours, +sMinutes, 0, 0);
+        formData.append('horaTermino', combinedDatehoraTermino.toISOString());
+      }
+    }
 
     if (data.imagemFile) {
       formData.append('imagem', data.imagemFile, data.imagemFile.name);

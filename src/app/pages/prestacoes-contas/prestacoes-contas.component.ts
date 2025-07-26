@@ -100,8 +100,6 @@ export class PrestacoesContasComponent {
 
     this.financialReportService.createFinancialReport(formData).subscribe({
       next: (newReport) => {
-        console.log('enviado');
-        console.log(newReport);
         this.financialReports.push(newReport);
         this.applyFilter();
         this.isLoading.set(false);

@@ -22,6 +22,7 @@
             <th>Data</th>
             <th class="text-center">Horário</th>
             <th class="text-center">IP</th>
+            <th class="text-center">Ajuste</th>
             @if (canCreate){
             <th class="text-center">Ações</th>
             }
@@ -50,12 +51,32 @@
           <td class="text-center">
             {{ attendance.ip }}
           </td>
+          <td class="text-center">
+            <span
+              [ngClass]="{
+                'table-container__status':
+                  attendance.ajuste?.status === 'PENDENTE' ||
+                  attendance.ajuste?.status === 'AJUSTADO' ||
+                  attendance.ajuste?.status === 'RECUSADO',
+                'table-container__status--finalizada':
+                  attendance.ajuste?.status === 'AJUSTADO',
+                'table-container__status--atrasada':
+                  attendance.ajuste?.status === 'RECUSADO'
+              }"
+            >
+              {{
+                attendance.ajuste?.status
+                  ? (attendance.ajuste.status | capitalizeFirst)
+                  : "-"
+              }}
+            </span>
+          </td>
           @if (canCreate){
           <td class="text-center">
             <button
               class="action-button action-button--delete"
               (click)="
-                adjustAttendance(attendance.id!); $event.stopPropagation()
+                requestAdjustment(attendance.id!); $event.stopPropagation()
               "
             >
               <span class="material-icons">tune</span>

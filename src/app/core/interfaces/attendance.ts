@@ -1,3 +1,5 @@
+import { AdjustmentRequest } from './adjustment-request';
+
 export interface Attendance {
   id: number;
   dateTimestamp: string;
@@ -8,4 +10,5 @@ export interface Attendance {
   ativo: boolean;
   usuarioId: number;
   usuario: { nome: string };
+  ajuste: AdjustmentRequest;
 }
