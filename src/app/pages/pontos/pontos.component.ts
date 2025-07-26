@@ -8,6 +8,7 @@ import { OpenDialogService } from '../../core/services/open-dialog.service';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { UserService } from '../../core/services/user.service';
 import { AdjustmentRequestFormComponent } from '../../shared/components/adjustment-request-form/adjustment-request-form.component';
+import { AttendanceFormComponent } from '../../shared/components/attendance-form/attendance-form.component';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { FeaturesHeaderComponent } from '../../shared/components/features-header/features-header.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
@@ -74,7 +75,43 @@ export class PontosComponent {
     this.router.navigate([`/${this.role}/ponto`, id]);
   }
 
-  registerAttendance() {}
+  registerAttendance() {
+    this.openDialog
+      .open<AttendanceFormComponent, void, any>(AttendanceFormComponent)
+      .subscribe((result) => {
+        if (result) {
+          this.executeCreateAttendance(result);
+        }
+      });
+  }
+
+  private executeCreateAttendance(data: any) {
+    this.isLoading.set(true);
+
+    const formData = new FormData();
+    formData.append('latitude', data.latitude);
+    formData.append('longitude', data.longitude);
+
+    if (data.imagem) {
+      formData.append('imagem', data.imagem, data.imagem.name);
+    }
+
+    this.attendanceService.createAttendance(formData).subscribe({
+      next: (newAttendance) => {
+        this.attendances.push(newAttendance);
+        this.applyFilter();
+        this.isLoading.set(false);
+        this.snackbarService.show('Ponto registrado com sucesso');
+        this.openAttendance(newAttendance.id);
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        this.snackbarService.show(
+          err.error.message || 'Erro ao registrar ponto'
+        );
+      },
+    });
+  }
 
   requestAdjustment(attendanceId: number) {
     this.openDialog
@@ -111,10 +148,10 @@ export class PontosComponent {
       this.adjustmentRequestService
         .createAdjustmentRequest(attendanceId, dadosAtualizados)
         .subscribe({
-          next: (newReport) => {
+          next: (newAttendance) => {
             this.router.navigate([
               `/${this.role}/solicitacao-ajuste`,
-              newReport.id,
+              newAttendance.id,
             ]);
             this.isLoading.set(false);
             this.snackbarService.show(

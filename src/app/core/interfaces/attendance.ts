@@ -10,5 +10,5 @@ export interface Attendance {
   ativo: boolean;
   usuarioId: number;
   usuario: { nome: string };
-  ajuste: AdjustmentRequest;
+  ajuste?: AdjustmentRequest;
 }

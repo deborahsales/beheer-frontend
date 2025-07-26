@@ -64,11 +64,7 @@
                   attendance.ajuste?.status === 'RECUSADO'
               }"
             >
-              {{
-                attendance.ajuste?.status
-                  ? (attendance.ajuste.status | capitalizeFirst)
-                  : "-"
-              }}
+              {{ attendance.ajuste?.status || "-" | capitalizeFirst }}
             </span>
           </td>
           @if (canCreate){
