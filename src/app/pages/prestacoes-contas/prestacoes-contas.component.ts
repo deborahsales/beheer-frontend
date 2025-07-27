@@ -122,7 +122,7 @@ export class PrestacoesContasComponent {
     const formData = new FormData();
     formData.append('descricao', data.descricao);
     formData.append('data', new Date(data.data).toISOString());
-    formData.append('valor', data.valor.toString());
+    formData.append('valor', Number(data.valor).toString());
 
     if (data.imagemFile) {
       formData.append('imagem', data.imagemFile, data.imagemFile.name);

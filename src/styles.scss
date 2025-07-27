@@ -6,6 +6,10 @@
 @use "./styles/reset";
 @use "./styles/buttons";
 @use "./styles/tables";
+@import "../node_modules/@syncfusion/ej2-base/styles/material3.css";
+@import "../node_modules/@syncfusion/ej2-layouts/styles/material3.css";
+@import "../node_modules/@syncfusion/ej2-popups/styles/material3.css";
+@import "../node_modules/@syncfusion/ej2-angular-kanban/styles/material3.css";
 
 html {
   @include mat.theme(

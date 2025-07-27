@@ -26,12 +26,23 @@
       <button class="action-button" (click)="reset(); $event.stopPropagation()">
         <span class="material-icons">close</span>
       </button>
+
+      <mat-slide-toggle [(ngModel)]="isChecked">{{
+        isChecked ? "Kanban" : "Tabela"
+      }}</mat-slide-toggle>
     </div>
+    @if (!isChecked){
     <app-tasks-table
       [canManage]="canManage"
       [role]="role"
       [filteredTasks]="filteredTasks"
       (applyFilter)="applyFilter()"
     ></app-tasks-table>
+    } @else {
+    <app-tasks-kanban
+      [filteredTasks]="filteredTasks"
+      (updateStatus)="handleUpdateStatus($event)"
+    ></app-tasks-kanban>
+    }
   </section>
 </app-container>

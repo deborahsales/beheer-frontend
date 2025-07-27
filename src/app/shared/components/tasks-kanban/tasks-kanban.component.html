@@ -1,0 +1,14 @@
+<ejs-kanban
+  keyField="status"
+  [dataSource]="filteredTasks"
+  [cardSettings]="cardSettings"
+  (dragStop)="onDragStop($event)"
+  (cardDoubleClick)="onCardDoubleClick($event)"
+>
+  <e-columns>
+    <e-column headerText="Criada" keyField="CRIADA"></e-column>
+    <e-column headerText="Iniciada" keyField="INICIADA"></e-column>
+    <e-column headerText="Atrasada" keyField="ATRASADA"></e-column>
+    <e-column headerText="Finalizada" keyField="FINALIZADA"></e-column>
+  </e-columns>
+</ejs-kanban>

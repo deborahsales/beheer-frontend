@@ -3,6 +3,7 @@ import { DefaultLayoutComponent } from './layouts/default-layout/default-layout.
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SobreComponent } from './pages/sobre/sobre.component';
+import { TasksKanbanComponent } from './shared/components/tasks-kanban/tasks-kanban.component';
 
 export const routes: Routes = [
   {
@@ -12,6 +13,7 @@ export const routes: Routes = [
       { path: '', component: HomeComponent },
       { path: 'login', component: LoginComponent },
       { path: 'sobre', component: SobreComponent },
+      { path: 'kanban', component: TasksKanbanComponent },
     ],
   },
   {
