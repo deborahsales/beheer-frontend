@@ -1,3 +1,3 @@
 export const enviroment = {
-  apiUrl: 'http://localhost:3000',
+  apiUrl: 'https://beheer-backend.vercel.app',
 };
