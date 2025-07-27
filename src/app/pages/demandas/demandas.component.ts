@@ -40,7 +40,7 @@ export class DemandasComponent {
   canManage: boolean = false;
   role: string = 'colaborador';
   today = new Date().getTime();
-  isChecked = true;
+  isChecked = false;
 
   tasks: Task[] = [];
   filteredTasks: Task[] = [];

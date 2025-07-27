@@ -171,7 +171,7 @@ export class CronogramaIdComponent {
         isDialog: true,
       })
       .subscribe((selected) => {
-        if (selected && selected.length > 0) {
+        if (selected) {
           this.executeAddNewTask(selected, timelineId);
         }
       });
