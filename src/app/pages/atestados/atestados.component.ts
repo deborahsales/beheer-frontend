@@ -137,8 +137,8 @@ export class AtestadosComponent {
     formData.append('diaInteiro', data.diaInteiro);
 
     if (data.diaInteiro === 'SIM') {
-      formData.append('horaInicio', 'null');
-      formData.append('horaTermino', 'null');
+      formData.append('horaInicio', '');
+      formData.append('horaTermino', '');
     } else {
       if (data.horaInicio) {
         const [sHours, sMinutes] = data.horaInicio.split(':');
