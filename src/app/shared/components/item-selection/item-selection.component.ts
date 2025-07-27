@@ -287,7 +287,6 @@ export class ItemSelectionComponent {
   }
 
   previousStep() {
-    console.log('próximo passo - item componente');
     this.step.emit();
   }
 }

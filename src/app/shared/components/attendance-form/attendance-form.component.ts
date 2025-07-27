@@ -58,7 +58,6 @@ export class AttendanceFormComponent {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           };
-          console.log('Localização obtida:', this.localizacao);
         },
         (error) => {
           console.error('Erro ao obter localização:', error);
