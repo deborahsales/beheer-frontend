@@ -8,10 +8,33 @@
       [buttonName]="'Registrar ponto'"
       [inputPlaceholder]="'Buscar...'"
       [canCreate]="canCreate"
+      [canSearch]="canSearch"
       [(searchInput)]="searchInput"
       (filter)="applyFilter()"
       (buttonClick)="registerAttendance()"
     ></app-features-header>
+    <div class="filter">
+      <form [formGroup]="filterControl" class="adjustments-page__form">
+        <mat-form-field appearance="outline">
+          <mat-label>Data ajustada</mat-label>
+          <input
+            input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="dataAjustada"
+          />
+
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </form>
+      <button class="action-button" (click)="reset(); $event.stopPropagation()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
     <div class="table-container">
       <table>
         <thead>

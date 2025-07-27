@@ -8,10 +8,25 @@
       [buttonName]="'Nova solicitação'"
       [inputPlaceholder]="'Buscar...'"
       [canCreate]="false"
+      [canSearch]="canSearch"
       [(searchInput)]="searchInput"
       (filter)="applyFilter()"
       (buttonClick)="openRequest()"
     ></app-features-header>
+    <div class="toggle">
+      <mat-button-toggle-group
+        class="custom-toggle-group"
+        [formControl]="statusFilterControl"
+      >
+        <mat-button-toggle value="AJUSTADO">Ajustado</mat-button-toggle>
+        <mat-button-toggle value="RECUSADO">Recusado</mat-button-toggle>
+        <mat-button-toggle value="PENDENTE">Pendente</mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <button class="action-button" (click)="reset(); $event.stopPropagation()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
     <div class="table-container">
       <table>
         <thead>

@@ -13,6 +13,7 @@ export class FeaturesHeaderComponent {
   @Input() inputPlaceholder: string = 'Buscar...';
   @Input() searchInput: string = '';
   @Input() canCreate: boolean = false;
+  @Input() canSearch: boolean = true;
   @Output() searchInputChange = new EventEmitter<string>();
 
   @Output() filter = new EventEmitter<void>();

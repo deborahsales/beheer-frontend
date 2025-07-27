@@ -1,5 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { Router } from '@angular/router';
 import { FinancialReport } from '../../core/interfaces/financial-report';
 import { FinancialReportService } from '../../core/services/financial-report.service';
@@ -21,6 +23,8 @@ import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
     DatePipe,
     CommonModule,
     CapitalizeFirstPipe,
+    MatButtonToggleModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './prestacoes-contas.component.html',
   styleUrl: './prestacoes-contas.component.scss',
@@ -32,6 +36,25 @@ export class PrestacoesContasComponent {
   isLoading = signal(false);
   canCreate: boolean = false;
   role: string = 'colaborador';
+  statusFilterControl = new FormControl('');
+  statusFilter?: string;
+
+  filterByStatus(status: string) {
+    if (!status) {
+      this.filteredFinancialReports = [...this.financialReports];
+      return;
+    }
+
+    const statusLower = status.toLowerCase();
+
+    this.filteredFinancialReports = this.financialReports.filter((data) =>
+      data.status.toLowerCase().includes(statusLower)
+    );
+  }
+
+  reset() {
+    this.statusFilterControl.setValue('');
+  }
 
   constructor(
     private financialReportService: FinancialReportService,
@@ -39,7 +62,13 @@ export class PrestacoesContasComponent {
     private snackbarService: SnackbarService,
     private userService: UserService,
     private router: Router
-  ) {}
+  ) {
+    this.statusFilterControl.valueChanges.subscribe((value) => {
+      const safeValue = value ?? '';
+      this.statusFilter = safeValue;
+      this.filterByStatus(safeValue);
+    });
+  }
 
   ngOnInit() {
     this.isLoading = signal(true);
@@ -66,7 +95,8 @@ export class PrestacoesContasComponent {
     this.filteredFinancialReports = this.financialReports.filter(
       (financialReport) =>
         financialReport.usuario.nome.toLowerCase().includes(term) ||
-        financialReport.status.toLowerCase().includes(term)
+        financialReport.status.toLowerCase().includes(term) ||
+        financialReport.descricao.toLowerCase().includes(term)
     );
   }
 

@@ -1,5 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { Router } from '@angular/router';
 import { map } from 'rxjs';
 import { Notification } from '../../core/interfaces/notification';
@@ -19,6 +21,8 @@ import { ProgressSpinnerComponent } from '../../shared/components/progress-spinn
     ProgressSpinnerComponent,
     FeaturesHeaderComponent,
     DatePipe,
+    MatButtonToggleModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './avisos.component.html',
   styleUrl: './avisos.component.scss',
@@ -34,13 +38,63 @@ export class AvisosComponent {
   notifications: Notification[] = [];
   filteredNotifications: Notification[] = [];
 
+  statusFilterControl = new FormControl('');
+  statusFilter?: string;
+
+  filterByReadStatus(readStatus: string) {
+    if (!readStatus) {
+      this.filteredNotifications = [...this.notifications];
+      return;
+    }
+
+    const statusUpper = readStatus.toUpperCase();
+
+    this.filteredNotifications = this.notifications.filter((notification) => {
+      const isSender = this.userId === notification.gestorRhUsuarioId;
+      const isReceiver = !isSender;
+      const hasAviso = notification.avisoUsuario?.length > 0;
+      const isRead = hasAviso && notification.avisoUsuario[0].status === 'LIDO';
+
+      switch (statusUpper) {
+        case 'ENVIADO':
+          return isSender;
+
+        case 'RECEBIDO':
+          return isReceiver;
+
+        case 'LIDO':
+          return isReceiver && isRead;
+
+        case 'NAO LIDO':
+        case 'NÃO LIDO':
+          return (
+            isReceiver &&
+            (!hasAviso || notification.avisoUsuario[0].status !== 'LIDO')
+          );
+
+        default:
+          return true;
+      }
+    });
+  }
+
+  reset() {
+    this.statusFilterControl.setValue('');
+  }
+
   constructor(
     private userService: UserService,
     private notificationService: NotificationService,
     private openDialog: OpenDialogService,
     private snackbarService: SnackbarService,
     private router: Router
-  ) {}
+  ) {
+    this.statusFilterControl.valueChanges.subscribe((value) => {
+      const safeValue = value ?? '';
+      this.statusFilter = safeValue;
+      this.filterByReadStatus(safeValue);
+    });
+  }
 
   ngOnInit() {
     this.isLoading = signal(true);

@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { Router } from '@angular/router';
 import { Task } from '../../core/interfaces/task';
 import { OpenDialogService } from '../../core/services/open-dialog.service';
@@ -20,6 +22,8 @@ import { TasksTableComponent } from '../../shared/components/tasks-table/tasks-t
     FeaturesHeaderComponent,
     CommonModule,
     TasksTableComponent,
+    MatButtonToggleModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './demandas.component.html',
   styleUrl: './demandas.component.scss',
@@ -34,6 +38,9 @@ export class DemandasComponent {
   tasks: Task[] = [];
   filteredTasks: Task[] = [];
 
+  statusFilterControl = new FormControl('');
+  statusFilter?: string;
+
   constructor(
     private userService: UserService,
     private taskService: TaskService,
@@ -44,6 +51,12 @@ export class DemandasComponent {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     this.today = today.getTime();
+
+    this.statusFilterControl.valueChanges.subscribe((value) => {
+      const safeValue = value ?? '';
+      this.statusFilter = safeValue;
+      this.filterByStatus(safeValue);
+    });
   }
 
   ngOnInit() {
@@ -64,6 +77,23 @@ export class DemandasComponent {
       this.filteredTasks = [...this.tasks];
       this.isLoading = signal(false);
     });
+  }
+
+  filterByStatus(status: string) {
+    if (!status) {
+      this.filteredTasks = [...this.tasks];
+      return;
+    }
+
+    const statusLower = status.toLowerCase();
+
+    this.filteredTasks = this.tasks.filter((task) =>
+      task.status.toLowerCase().includes(statusLower)
+    );
+  }
+
+  reset() {
+    this.statusFilterControl.setValue('');
   }
 
   applyFilter() {
