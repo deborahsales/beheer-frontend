@@ -1,5 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { Router } from '@angular/router';
 import { AdjustmentRequest } from '../../core/interfaces/adjustment-request';
 import { AdjustmentRequestService } from '../../core/services/adjustment-requests.service';
@@ -19,6 +21,8 @@ import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
     FeaturesHeaderComponent,
     DatePipe,
     CapitalizeFirstPipe,
+    MatButtonToggleModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './solicitacoes-ajuste.component.html',
   styleUrl: './solicitacoes-ajuste.component.scss',
@@ -29,7 +33,28 @@ export class SolicitacoesAjusteComponent {
   searchInput: string = '';
   isLoading = signal(false);
   canCreate: boolean = false;
+  canSearch: boolean = true;
   role: string = 'colaborador';
+
+  statusFilterControl = new FormControl('');
+  statusFilter?: string;
+
+  filterByStatus(status: string) {
+    if (!status) {
+      this.filteredAdjustmentRequests = [...this.adjustmentRequests];
+      return;
+    }
+
+    const statusLower = status.toLowerCase();
+
+    this.filteredAdjustmentRequests = this.adjustmentRequests.filter((data) =>
+      data.status.toLowerCase().includes(statusLower)
+    );
+  }
+
+  reset() {
+    this.statusFilterControl.setValue('');
+  }
 
   constructor(
     private adjustmentRequestService: AdjustmentRequestService,
@@ -37,7 +62,13 @@ export class SolicitacoesAjusteComponent {
     private snackbarService: SnackbarService,
     private userService: UserService,
     private router: Router
-  ) {}
+  ) {
+    this.statusFilterControl.valueChanges.subscribe((value) => {
+      const safeValue = value ?? '';
+      this.statusFilter = safeValue;
+      this.filterByStatus(safeValue);
+    });
+  }
 
   ngOnInit() {
     this.isLoading = signal(true);
@@ -50,6 +81,7 @@ export class SolicitacoesAjusteComponent {
 
     if (this.role === 'colaborador' || this.role === 'gestor') {
       this.canCreate = true;
+      this.canSearch = false;
     }
 
     this.adjustmentRequestService.getAdjustmentRequests().subscribe((data) => {
@@ -63,7 +95,9 @@ export class SolicitacoesAjusteComponent {
     const term = this.searchInput.toLowerCase();
     this.filteredAdjustmentRequests = this.adjustmentRequests.filter(
       (adjustmentRequest) =>
-        adjustmentRequest.status.toLowerCase().includes(term)
+        adjustmentRequest.usuario.nome.toLowerCase().includes(term) ||
+        adjustmentRequest.status.toLowerCase().includes(term) ||
+        adjustmentRequest.motivo.toLowerCase().includes(term)
     );
   }
 

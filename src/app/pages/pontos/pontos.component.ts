@@ -1,6 +1,11 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { distinctUntilChanged } from 'rxjs';
 import { Attendance } from '../../core/interfaces/attendance';
 import { AdjustmentRequestService } from '../../core/services/adjustment-requests.service';
 import { AttendanceService } from '../../core/services/attendance.service';
@@ -23,6 +28,11 @@ import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
     DatePipe,
     CapitalizeFirstPipe,
     CommonModule,
+    CommonModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatInputModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './pontos.component.html',
   styleUrl: './pontos.component.scss',
@@ -33,7 +43,33 @@ export class PontosComponent {
   searchInput: string = '';
   isLoading = signal(false);
   canCreate: boolean = false;
+  canSearch: boolean = true;
   role: string = 'colaborador';
+  filterControl = new FormGroup({
+    dataAjustada: new FormControl(null),
+  });
+
+  filterByDate() {
+    const selectedDate = this.filterControl.get('dataAjustada')?.value;
+
+    if (!selectedDate) {
+      this.filteredAttendances = [...this.attendances];
+      return;
+    }
+
+    const formattedSelectedDate = new Date(selectedDate)
+      .toISOString()
+      .split('T')[0];
+
+    this.filteredAttendances = this.attendances.filter((data) => {
+      const itemDate = new Date(data.dateTimestamp).toISOString().split('T')[0];
+      return itemDate === formattedSelectedDate;
+    });
+  }
+
+  reset() {
+    this.filterControl.reset();
+  }
 
   constructor(
     private attendanceService: AttendanceService,
@@ -42,7 +78,11 @@ export class PontosComponent {
     private snackbarService: SnackbarService,
     private userService: UserService,
     private router: Router
-  ) {}
+  ) {
+    this.filterControl.valueChanges
+      .pipe(distinctUntilChanged())
+      .subscribe(() => this.filterByDate());
+  }
 
   ngOnInit() {
     this.isLoading = signal(true);
@@ -55,6 +95,7 @@ export class PontosComponent {
 
     if (this.role === 'colaborador' || this.role === 'gestor') {
       this.canCreate = true;
+      this.canSearch = false;
     }
 
     this.attendanceService.getAttendances().subscribe((data) => {

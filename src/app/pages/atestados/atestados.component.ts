@@ -1,5 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { Router } from '@angular/router';
 import { MedicalCertificate } from '../../core/interfaces/medical-certificate';
 import { MedicalCertificateService } from '../../core/services/medical-certificate.service';
@@ -20,6 +22,8 @@ import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
     FeaturesHeaderComponent,
     DatePipe,
     CapitalizeFirstPipe,
+    MatButtonToggleModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './atestados.component.html',
   styleUrl: './atestados.component.scss',
@@ -30,7 +34,28 @@ export class AtestadosComponent {
   searchInput: string = '';
   isLoading = signal(false);
   canCreate: boolean = false;
+  canSearch: boolean = true;
   role: string = 'colaborador';
+
+  statusFilterControl = new FormControl('');
+  statusFilter?: string;
+
+  filterByStatus(status: string) {
+    if (!status) {
+      this.filteredMedicalCertificates = [...this.medicalCertificates];
+      return;
+    }
+
+    const statusLower = status.toLowerCase();
+
+    this.filteredMedicalCertificates = this.medicalCertificates.filter((data) =>
+      data.status.toLowerCase().includes(statusLower)
+    );
+  }
+
+  reset() {
+    this.statusFilterControl.setValue('');
+  }
 
   constructor(
     private medicalCertificateService: MedicalCertificateService,
@@ -38,7 +63,13 @@ export class AtestadosComponent {
     private snackbarService: SnackbarService,
     private userService: UserService,
     private router: Router
-  ) {}
+  ) {
+    this.statusFilterControl.valueChanges.subscribe((value) => {
+      const safeValue = value ?? '';
+      this.statusFilter = safeValue;
+      this.filterByStatus(safeValue);
+    });
+  }
 
   ngOnInit() {
     this.isLoading = signal(true);
@@ -51,6 +82,7 @@ export class AtestadosComponent {
 
     if (this.role === 'colaborador' || this.role === 'gestor') {
       this.canCreate = true;
+      this.canSearch = false;
     }
 
     this.medicalCertificateService
@@ -66,7 +98,18 @@ export class AtestadosComponent {
     const term = this.searchInput.toLowerCase();
     this.filteredMedicalCertificates = this.medicalCertificates.filter(
       (medicalCertificate) =>
-        medicalCertificate.status.toLowerCase().includes(term)
+        medicalCertificate.status.toLowerCase().includes(term) ||
+        medicalCertificate.usuario.nome.toLowerCase().includes(term) ||
+        medicalCertificate.diaInteiro
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase()
+          .includes(
+            term
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase()
+          )
     );
   }
 

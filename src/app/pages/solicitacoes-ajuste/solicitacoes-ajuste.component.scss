@@ -1,0 +1,43 @@
+.toggle {
+  display: flex;
+  margin-bottom: var(--space-sm);
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.action-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  .material-icons {
+    font-size: 20px;
+    color: var(--black);
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: var(--light-brown);
+    }
+  }
+}
+
+::ng-deep .custom-toggle-group .mat-button-toggle {
+  background-color: white !important;
+  color: var(--black);
+}
+
+::ng-deep .custom-toggle-group .mat-button-toggle.mat-button-toggle-checked {
+  background-color: var(--orange) !important;
+  color: var(--white) !important;
+}
+
+::ng-deep
+  .custom-toggle-group
+  .mat-button-toggle.mat-button-toggle-checked
+  .mat-pseudo-checkbox.mat-pseudo-checkbox-checked::after {
+  border-color: white !important; /* muda a cor das bordas do "check" */
+}
+
+::ng-deep app-features-header .feature-header {
+  margin-bottom: var(--space-md) !important;
+}

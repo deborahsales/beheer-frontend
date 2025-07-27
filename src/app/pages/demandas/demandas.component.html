@@ -12,6 +12,21 @@
       (filter)="applyFilter()"
       (buttonClick)="createTask()"
     ></app-features-header>
+    <div class="toggle">
+      <mat-button-toggle-group
+        class="custom-toggle-group"
+        [formControl]="statusFilterControl"
+      >
+        <mat-button-toggle value="CRIADA">Criada</mat-button-toggle>
+        <mat-button-toggle value="ATRASADA">Atrasada</mat-button-toggle>
+        <mat-button-toggle value="INICIADA">Iniciada</mat-button-toggle>
+        <mat-button-toggle value="FINALIZADA">Finalizada</mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <button class="action-button" (click)="reset(); $event.stopPropagation()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
     <app-tasks-table
       [canManage]="canManage"
       [role]="role"

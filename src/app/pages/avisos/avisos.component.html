@@ -12,6 +12,23 @@
       (filter)="applyFilter()"
       (buttonClick)="createNotification()"
     ></app-features-header>
+
+    <div class="toggle">
+      <mat-button-toggle-group
+        class="custom-toggle-group"
+        [formControl]="statusFilterControl"
+      >
+        <mat-button-toggle value="LIDO">Lido</mat-button-toggle>
+        <mat-button-toggle value="NAO LIDO">Não lido</mat-button-toggle>
+        @if(role !== "colaborador"){
+        <mat-button-toggle value="ENVIADO">Enviado</mat-button-toggle>
+        <mat-button-toggle value="RECEBIDO">Recebido</mat-button-toggle>}
+      </mat-button-toggle-group>
+
+      <button class="action-button" (click)="reset(); $event.stopPropagation()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
     <div class="table-container">
       <table>
         <thead>
