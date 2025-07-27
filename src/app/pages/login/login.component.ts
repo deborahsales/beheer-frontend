@@ -94,6 +94,7 @@ export class LoginComponent {
         this.userService.getAuthUser().subscribe((user) => {
           if (user) {
             const funcao = user.funcao;
+            this.snackbarService.show('Login realizado com sucesso');
 
             if (funcao == 'ADMINISTRADOR') {
               this.router.navigateByUrl('/administrador');
@@ -109,7 +110,9 @@ export class LoginComponent {
       },
       error: (err) => {
         this.isLoading.set(false);
-        this.snackbarService.show(err.error.message);
+        this.snackbarService.show(
+          err.error.message || 'Erro ao realizar login'
+        );
       },
     });
   }

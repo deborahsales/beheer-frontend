@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { SnackbarService } from '../../../core/services/snackbar.service';
 import { GroupFormComponent } from '../group-form/group-form.component';
 
 @Component({
@@ -23,7 +24,10 @@ export class AttendanceFormComponent {
 
   stream: MediaStream | null = null;
 
-  constructor(private dialogRef: MatDialogRef<GroupFormComponent>) {}
+  constructor(
+    private dialogRef: MatDialogRef<GroupFormComponent>,
+    private snackbarService: SnackbarService
+  ) {}
 
   ngOnInit() {
     this.startCamera();
@@ -38,8 +42,9 @@ export class AttendanceFormComponent {
         this.videoRef.nativeElement.srcObject = stream;
       })
       .catch((err) => {
-        console.error('Erro ao acessar a câmera', err);
-        alert('Não foi possível acessar a câmera.');
+        this.snackbarService.show(
+          err.error.message || 'Não foi possível acessar a câmera.'
+        );
       });
   }
 
@@ -60,8 +65,9 @@ export class AttendanceFormComponent {
           };
         },
         (error) => {
-          console.error('Erro ao obter localização:', error);
-          alert('Não foi possível obter sua localização.');
+          this.snackbarService.show(
+            error.message || 'Erro ao obter localização'
+          );
         },
         {
           enableHighAccuracy: true,
