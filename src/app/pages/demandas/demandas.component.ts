@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { Router } from '@angular/router';
 import { Task } from '../../core/interfaces/task';
@@ -14,6 +14,9 @@ import { ProgressSpinnerComponent } from '../../shared/components/progress-spinn
 import { TaskFormComponent } from '../../shared/components/task-form/task-form.component';
 import { TasksTableComponent } from '../../shared/components/tasks-table/tasks-table.component';
 
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { TasksKanbanComponent } from '../../shared/components/tasks-kanban/tasks-kanban.component';
+
 @Component({
   selector: 'app-demandas',
   imports: [
@@ -24,6 +27,9 @@ import { TasksTableComponent } from '../../shared/components/tasks-table/tasks-t
     TasksTableComponent,
     MatButtonToggleModule,
     ReactiveFormsModule,
+    MatSlideToggleModule,
+    FormsModule,
+    TasksKanbanComponent,
   ],
   templateUrl: './demandas.component.html',
   styleUrl: './demandas.component.scss',
@@ -34,6 +40,7 @@ export class DemandasComponent {
   canManage: boolean = false;
   role: string = 'colaborador';
   today = new Date().getTime();
+  isChecked = true;
 
   tasks: Task[] = [];
   filteredTasks: Task[] = [];
@@ -187,5 +194,25 @@ export class DemandasComponent {
     return (
       new Date(prazo).getTime() < hoje.getTime() && status !== 'FINALIZADA'
     );
+  }
+
+  handleUpdateStatus(event: { id: number; status: string }): void {
+    this.updateStatus(event.id, event.status);
+  }
+
+  updateStatus(taskId: number, status: string) {
+    this.isLoading.set(true);
+    const taskStatus = { status: status };
+
+    this.taskService.updateTaskStatus(taskId, taskStatus).subscribe({
+      next: () => {
+        this.snackbarService.show('Status alterado com sucesso.');
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.snackbarService.show('Erro ao alterar status.');
+        this.isLoading.set(false);
+      },
+    });
   }
 }

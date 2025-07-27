@@ -29,3 +29,9 @@
 ::ng-deep app-features-header .feature-header {
   margin-bottom: var(--space-md) !important;
 }
+
+@media (max-width: 768px) {
+  ::ng-deep app-features-header .feature-header {
+    padding-bottom: var(--space-xxs);
+  }
+}
