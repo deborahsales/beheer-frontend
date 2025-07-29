@@ -157,8 +157,11 @@
         </div>
       </mat-card-content>
       <mat-card-actions class="user-form__card-footer">
+        
+        <button mat-button (click)="onCancel()">Cancelar</button>
         <button
-          class="beheer-button user-form__button"
+          mat-flat-button
+          color="primary"
           (click)="onClick()"
           [disabled]="userForm.invalid"
         >

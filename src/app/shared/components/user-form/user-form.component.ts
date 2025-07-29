@@ -15,6 +15,11 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,6 +27,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { User } from '../../../core/interfaces/user';
 import { FormsService } from '../../../core/services/forms.service';
+import { AppDateAdapter } from '../../../core/utils/app-date.adapter';
+import { MY_DATE_FORMATS } from '../../../core/utils/date-format';
 import { ContainerComponent } from '../container/container.component';
 
 interface Funcao {
@@ -46,6 +53,11 @@ interface Funcao {
   templateUrl: './user-form.component.html',
   styleUrl: './user-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    { provide: DateAdapter, useClass: AppDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+  ],
 })
 export class UserFormComponent {
   userForm!: FormGroup;
@@ -55,6 +67,7 @@ export class UserFormComponent {
   @Input() isEditing: boolean = false;
   @Input() usuario!: User;
   @Output() acaoClique = new EventEmitter<void>();
+  @Output() acaoCancela = new EventEmitter<void>();
 
   hide = signal(true);
   clickEvent(event: MouseEvent) {
@@ -106,6 +119,10 @@ export class UserFormComponent {
 
   onClick() {
     this.acaoClique.emit();
+  }
+
+  onCancel() {
+    this.acaoCancela.emit();
   }
 
   carregarFormulario() {

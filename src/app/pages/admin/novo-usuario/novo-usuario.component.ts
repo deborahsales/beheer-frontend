@@ -23,6 +23,10 @@ export class NovoUsuarioComponent {
     private router: Router
   ) {}
 
+  onCancel() {
+    this.router.navigate([`/administrador`]);
+  }
+
   cadastrar() {
     this.isLoading.set(true);
 
@@ -34,7 +38,7 @@ export class NovoUsuarioComponent {
         next: (value) => {
           this.isLoading.set(false);
           this.snackbarService.show('Usuário criado com sucesso');
-          this.router.navigate(['/admin']);
+          this.router.navigate([`/administrador/usuario`, value.id]);
         },
         error: (err) => {
           this.isLoading.set(false);

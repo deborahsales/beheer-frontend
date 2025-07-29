@@ -4,7 +4,15 @@
       @if (isLoading()) {
       <app-progress-spinner></app-progress-spinner>
       } @else{
-      <h1 class="user-page__title">{{ user.nome }}</h1>
+
+      <div class="user-page__actions">
+        <h1 class="user-page__title">{{ user.nome }}</h1>
+        @if(this.role === 'administrador'){
+        <button class="action-button" (click)="editUser()">
+          <span class="material-icons">edit</span>
+        </button>
+        }
+      </div>
       <p class="user-page__description">{{ user.email }}</p>
       <h2 class="user-page__subtitle">Grupos</h2>
       @if(filteredTasks.length > 0){

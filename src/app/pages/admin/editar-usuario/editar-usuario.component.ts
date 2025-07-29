@@ -43,6 +43,10 @@ export class EditarUsuarioComponent {
     }
   }
 
+  onCancel() {
+    this.router.navigate([`/administrador/usuario`, this.userId]);
+  }
+
   editar() {
     this.isLoading.set(true);
 
@@ -69,8 +73,8 @@ export class EditarUsuarioComponent {
       this.userService.updateUser(this.userId, dadosAtualizados).subscribe({
         next: (value) => {
           this.isLoading.set(false);
+          this.router.navigate([`/administrador/usuario`, value.id]);
           this.snackbarService.show('Usuário editado com sucesso');
-          this.router.navigate(['/admin']);
         },
         error: (err) => {
           this.isLoading.set(false);
