@@ -27,6 +27,13 @@ import { ItemSelectionComponent } from '../../shared/components/item-selection/i
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
 import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
 import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import { AppDateAdapter } from '../../core/utils/app-date.adapter';
+import { MY_DATE_FORMATS } from '../../core/utils/date-format';
 
 interface Prioridade {
   value: string;
@@ -52,6 +59,11 @@ interface Prioridade {
   ],
   templateUrl: './demanda-id.component.html',
   styleUrl: './demanda-id.component.scss',
+  providers: [
+    { provide: DateAdapter, useClass: AppDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+  ],
 })
 export class DemandaIdComponent {
   taskId!: number;

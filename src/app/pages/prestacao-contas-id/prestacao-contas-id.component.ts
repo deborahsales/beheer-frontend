@@ -7,6 +7,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -14,9 +19,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute } from '@angular/router';
 import { FinancialReport } from '../../core/interfaces/financial-report';
 import { FinancialReportService } from '../../core/services/financial-report.service';
+import { OpenDialogService } from '../../core/services/open-dialog.service';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { UserService } from '../../core/services/user.service';
+import { AppDateAdapter } from '../../core/utils/app-date.adapter';
+import { MY_DATE_FORMATS } from '../../core/utils/date-format';
 import { ContainerComponent } from '../../shared/components/container/container.component';
+import { PdfModalComponent } from '../../shared/components/pdf-modal/pdf-modal.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
 import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
 
@@ -37,6 +46,11 @@ import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
   ],
   templateUrl: './prestacao-contas-id.component.html',
   styleUrl: './prestacao-contas-id.component.scss',
+  providers: [
+    { provide: DateAdapter, useClass: AppDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+  ],
 })
 export class PrestacaoContasIdComponent {
   financialReportId!: number;
@@ -53,7 +67,8 @@ export class PrestacaoContasIdComponent {
     private financialReportService: FinancialReportService,
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private openDialog: OpenDialogService
   ) {
     this.form = this.formBuilder.group({
       data: ['', Validators.required],
@@ -80,6 +95,8 @@ export class PrestacaoContasIdComponent {
           next: (financialReport) => {
             this.financialReport = financialReport;
 
+            console.log(financialReport.imagem);
+
             if (this.userId === this.financialReport.usuarioId) {
               this.canManage = true;
             }
@@ -96,6 +113,23 @@ export class PrestacaoContasIdComponent {
             this.isLoading.set(false);
           },
         });
+    }
+  }
+
+  isImage(url: string): boolean {
+    return /\.(jpeg|jpg|png|gif)$/i.test(url);
+  }
+
+  abrirModalPdf() {
+    const url = this.financialReport?.imagem;
+    console.log('Tipo da URL:', typeof url, url);
+
+    if (url) {
+      this.openDialog.open(PdfModalComponent, {
+        pdfUrl: url,
+      });
+    } else {
+      console.warn('URL do PDF está indefinida.');
     }
   }
 

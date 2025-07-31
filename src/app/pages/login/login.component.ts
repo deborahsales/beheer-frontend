@@ -94,7 +94,6 @@ export class LoginComponent {
         this.userService.getAuthUser().subscribe((user) => {
           if (user) {
             const funcao = user.funcao;
-            this.snackbarService.show('Login realizado com sucesso');
 
             if (funcao == 'ADMINISTRADOR') {
               this.router.navigateByUrl('/administrador');

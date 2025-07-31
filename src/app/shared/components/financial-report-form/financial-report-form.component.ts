@@ -7,11 +7,18 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { AppDateAdapter } from '../../../core/utils/app-date.adapter';
+import { MY_DATE_FORMATS } from '../../../core/utils/date-format';
 import { GroupFormComponent } from '../group-form/group-form.component';
 
 @Component({
@@ -28,6 +35,11 @@ import { GroupFormComponent } from '../group-form/group-form.component';
   ],
   templateUrl: './financial-report-form.component.html',
   styleUrl: './financial-report-form.component.scss',
+  providers: [
+    { provide: DateAdapter, useClass: AppDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+  ],
 })
 export class FinancialReportFormComponent {
   form: FormGroup;
@@ -56,11 +68,15 @@ export class FinancialReportFormComponent {
     this.form.patchValue({ imagem: file.name });
     this.form.get('imagem')?.updateValueAndValidity();
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreview = reader.result;
-    };
-    reader.readAsDataURL(file);
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      this.imagePreview = null;
+    }
   }
 
   onSubmit() {

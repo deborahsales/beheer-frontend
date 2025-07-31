@@ -8,11 +8,14 @@
       <div class="financialReport-page__actions">
         <h1 class="financialReport-page__title">Prestação de contas</h1>
         @if(canManage){
-        <button class="action-button" 
+        <button
+          class="action-button"
           [disabled]="
             financialReport.status === 'ACEITE' ||
             financialReport.status === 'RECUSADA'
-          " (click)="edit()">
+          "
+          (click)="edit()"
+        >
           <span class="material-icons">edit</span>
         </button>
         }
@@ -102,11 +105,21 @@
       }
 
       <div class="financialReport-page__displays">
-        <img
-          class="financialReport-page__image"
-          [src]="financialReport.imagem"
-          alt="Imagem"
-        />
+        <ng-container
+          *ngIf="isImage(financialReport.imagem); else showPdfButton"
+        >
+          <img
+            class="financialReport-page__image"
+            [src]="financialReport.imagem"
+            alt="Imagem"
+          />
+        </ng-container>
+
+        <ng-template #showPdfButton>
+          <button mat-flat-button color="primary" (click)="abrirModalPdf()">
+            Visualizar PDF
+          </button>
+        </ng-template>
       </div>
 
       @if (role === 'rh'){
@@ -114,20 +127,12 @@
         <button
           mat-flat-button
           color="primary"
-          [disabled]="
-            financialReport.status === 'ACEITE' ||
-            financialReport.status === 'RECUSADA'
-          "
           (click)="manageRequest(true)"
         >
           Aceitar
         </button>
         <button
           mat-button
-          [disabled]="
-            financialReport.status === 'ACEITE' ||
-            financialReport.status === 'RECUSADA'
-          "
           (click)="manageRequest(false)"
         >
           Recusar

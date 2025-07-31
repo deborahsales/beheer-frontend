@@ -121,10 +121,6 @@
           <td class="text-center">
             <button
               class="action-button action-button--delete"
-              [disabled]="
-                medicalCertificate.status === 'ACEITE' ||
-                medicalCertificate.status === 'RECUSADO'
-              "
               (click)="
                 manageRequest(medicalCertificate.id!, false);
                 $event.stopPropagation()
@@ -134,10 +130,6 @@
             </button>
             <button
               class="action-button"
-              [disabled]="
-                medicalCertificate.status === 'ACEITE' ||
-                medicalCertificate.status === 'RECUSADO'
-              "
               (click)="
                 manageRequest(medicalCertificate.id!, true);
                 $event.stopPropagation()

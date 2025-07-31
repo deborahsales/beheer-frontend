@@ -19,6 +19,13 @@ import { UserService } from '../../core/services/user.service';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
 import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import { AppDateAdapter } from '../../core/utils/app-date.adapter';
+import { MY_DATE_FORMATS } from '../../core/utils/date-format';
 
 @Component({
   selector: 'app-solicitacao-ajuste-id',
@@ -38,6 +45,11 @@ import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
   ],
   templateUrl: './solicitacao-ajuste-id.component.html',
   styleUrl: './solicitacao-ajuste-id.component.scss',
+  providers: [
+    { provide: DateAdapter, useClass: AppDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+  ],
 })
 export class SolicitacaoAjusteIdComponent {
   adjustmentRequestId!: number;

@@ -11,6 +11,7 @@ import { ProgressSpinnerComponent } from '../../shared/components/progress-spinn
 import { SearchBarComponent } from '../../shared/components/search-bar/search-bar.component';
 import { TasksTableComponent } from '../../shared/components/tasks-table/tasks-table.component';
 import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-usuario-id',
@@ -20,6 +21,7 @@ import { UserAvatarComponent } from '../../shared/components/user-avatar/user-av
     SearchBarComponent,
     TasksTableComponent,
     UserAvatarComponent,
+    MatIconModule,
   ],
   templateUrl: './usuario-id.component.html',
   styleUrl: './usuario-id.component.scss',
@@ -94,5 +96,9 @@ export class UsuarioIdComponent {
         task.titulo.toLowerCase().includes(term) ||
         task.descricao.toLowerCase().includes(term)
     );
+  }
+
+  editUser() {
+    this.router.navigate(['/administrador/usuarios', this.userId, 'editar']);
   }
 }

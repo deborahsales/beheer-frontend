@@ -3,6 +3,7 @@ import { AdjustmentRequest } from './adjustment-request';
 export interface Attendance {
   id: number;
   dateTimestamp: string;
+  dateTimestampAjustado: string;
   ip: string;
   imagem: string;
   latitude: number;

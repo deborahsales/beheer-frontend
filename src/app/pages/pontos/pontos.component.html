@@ -66,10 +66,18 @@
           </td>
           }
           <td>
-            {{ attendance.dateTimestamp | date : "dd/MM/yyyy" }}
+            {{
+              attendance.dateTimestampAjustado
+                ? (attendance.dateTimestampAjustado | date : "dd/MM/yyyy")
+                : (attendance.dateTimestamp | date : "dd/MM/yyyy")
+            }}
           </td>
           <td class="text-center">
-            {{ attendance.dateTimestamp | date : "HH:mm" }}
+            {{
+              attendance.dateTimestampAjustado
+                ? (attendance.dateTimestampAjustado | date : "HH:mm")
+                : (attendance.dateTimestamp | date : "HH:mm")
+            }}
           </td>
           <td class="text-center">
             {{ attendance.ip }}
