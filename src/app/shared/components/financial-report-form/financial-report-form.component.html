@@ -42,7 +42,11 @@
         </mat-error>
       </mat-form-field>
 
-      <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+      <input
+        type="file"
+        accept="image/*,application/pdf"
+        (change)="onFileSelected($event)"
+      />
 
       <div class="financial-report-modal__image-wrapper" *ngIf="imagePreview">
         <img [src]="imagePreview" alt="Imagem selecionada" width="200" />

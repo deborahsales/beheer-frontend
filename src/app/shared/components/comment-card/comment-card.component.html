@@ -15,13 +15,25 @@
       <p class="comment-card__header-text">
         {{ comment.usuario.nome }}
       </p>
+      @if (comment.dateTimestamp !== comment.dataAlteracao){
       <p class="comment-card__header-text">-</p>
+      <p class="comment-card__header-text">Editado em:</p>
       <p class="comment-card__header-text">
-        {{
-          comment.dataAlteracao !== comment.dateTimestamp ? "Editado em" : ""
-        }}
         {{ comment.dataAlteracao | date : "dd/MM/yyyy" }}
       </p>
+      <p class="comment-card__header-text">
+        {{ comment.dataAlteracao | date : "HH:mm" }}
+      </p>
+      } @else {
+
+      <p class="comment-card__header-text">-</p>
+      <p class="comment-card__header-text">
+        {{ comment.dateTimestamp | date : "dd/MM/yyyy" }}
+      </p>
+      <p class="comment-card__header-text">
+        {{ comment.dateTimestamp | date : "HH:mm" }}
+      </p>
+      }
       <span class="comment-card__spacer"></span>
       @if (userId === comment.usuario.id){
       <button class="comment-card__action-button edit" (click)="onEdit()">

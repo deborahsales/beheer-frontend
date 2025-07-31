@@ -114,36 +114,29 @@
       }
 
       <div class="medicalCertificate-page__displays">
-        <img
-          class="medicalCertificate-page__image"
-          [src]="medicalCertificate.imagem"
-          alt="Imagem"
-        />
+        <ng-container
+          *ngIf="isImage(medicalCertificate.imagem); else showPdfButton"
+        >
+          <img
+            class="medicalCertificate-page__image"
+            [src]="medicalCertificate.imagem"
+            alt="Imagem"
+          />
+        </ng-container>
+
+        <ng-template #showPdfButton>
+          <button mat-flat-button color="primary" (click)="abrirModalPdf()">
+            Visualizar PDF
+          </button>
+        </ng-template>
       </div>
 
       @if (role === 'rh'){
       <div class="medicalCertificate-page__manage">
-        <button
-          mat-flat-button
-          color="primary"
-          [disabled]="
-            medicalCertificate.status === 'ACEITE' ||
-            medicalCertificate.status === 'RECUSADO'
-          "
-          (click)="manageRequest(true)"
-        >
+        <button mat-flat-button color="primary" (click)="manageRequest(true)">
           Aceitar
         </button>
-        <button
-          mat-button
-          [disabled]="
-            medicalCertificate.status === 'ACEITE' ||
-            medicalCertificate.status === 'RECUSADO'
-          "
-          (click)="manageRequest(false)"
-        >
-          Recusar
-        </button>
+        <button mat-button (click)="manageRequest(false)">Recusar</button>
       </div>
       } }
     </div>

@@ -7,6 +7,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -16,16 +21,13 @@ import { MedicalCertificate } from '../../core/interfaces/medical-certificate';
 import { MedicalCertificateService } from '../../core/services/medical-certificate.service';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { UserService } from '../../core/services/user.service';
-import { ContainerComponent } from '../../shared/components/container/container.component';
-import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
-import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
 import { AppDateAdapter } from '../../core/utils/app-date.adapter';
 import { MY_DATE_FORMATS } from '../../core/utils/date-format';
+import { ContainerComponent } from '../../shared/components/container/container.component';
+import { PdfModalComponent } from '../../shared/components/pdf-modal/pdf-modal.component';
+import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
+import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
+import { OpenDialogService } from '../../core/services/open-dialog.service';
 
 @Component({
   selector: 'app-atestado-id',
@@ -70,7 +72,8 @@ export class AtestadoIdComponent {
     private medicalCertificateService: MedicalCertificateService,
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private openDialog: OpenDialogService
   ) {
     this.form = this.formBuilder.group({
       dataAtestado: ['', Validators.required],
@@ -137,6 +140,23 @@ export class AtestadoIdComponent {
             this.isLoading.set(false);
           },
         });
+    }
+  }
+
+  isImage(url: string): boolean {
+    return /\.(jpeg|jpg|png|gif)$/i.test(url);
+  }
+
+  abrirModalPdf() {
+    const url = this.medicalCertificate?.imagem;
+    console.log('Tipo da URL:', typeof url, url);
+
+    if (url) {
+      this.openDialog.open(PdfModalComponent, {
+        pdfUrl: url,
+      });
+    } else {
+      console.warn('URL do PDF está indefinida.');
     }
   }
 

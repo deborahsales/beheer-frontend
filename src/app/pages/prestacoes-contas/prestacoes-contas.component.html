@@ -134,10 +134,6 @@
           <td class="text-center">
             <button
               class="action-button action-button--delete"
-              [disabled]="
-                financialReport.status === 'ACEITE' ||
-                financialReport.status === 'RECUSADA'
-              "
               (click)="
                 manageRequest(financialReport.id!, false);
                 $event.stopPropagation()
@@ -147,10 +143,6 @@
             </button>
             <button
               class="action-button"
-              [disabled]="
-                financialReport.status === 'ACEITE' ||
-                financialReport.status === 'RECUSADA'
-              "
               (click)="
                 manageRequest(financialReport.id!, true);
                 $event.stopPropagation()

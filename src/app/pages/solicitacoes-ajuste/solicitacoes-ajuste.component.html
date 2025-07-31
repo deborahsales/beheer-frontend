@@ -131,10 +131,6 @@
           <td class="text-center">
             <button
               class="action-button action-button--delete"
-              [disabled]="
-                adjustmentRequest.status === 'AJUSTADO' ||
-                adjustmentRequest.status === 'RECUSADO'
-              "
               (click)="
                 manageRequest(adjustmentRequest.id!, false);
                 $event.stopPropagation()
@@ -144,10 +140,6 @@
             </button>
             <button
               class="action-button"
-              [disabled]="
-                adjustmentRequest.status === 'AJUSTADO' ||
-                adjustmentRequest.status === 'RECUSADO'
-              "
               (click)="
                 manageRequest(adjustmentRequest.id!, true);
                 $event.stopPropagation()

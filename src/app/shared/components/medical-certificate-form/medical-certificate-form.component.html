@@ -48,7 +48,11 @@
         }
       </mat-form-field>
 
-      <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+      <input
+        type="file"
+        accept="image/*,application/pdf"
+        (change)="onFileSelected($event)"
+      />
 
       <div
         class="medical-certificate-modal__image-wrapper"
