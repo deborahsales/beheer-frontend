@@ -41,24 +41,29 @@ export class NotificationFormComponent {
     });
   }
 
-  onSubmit(idsSelecionados: number[]) {
+  onSubmit(selectedGroupIds: number[]) {
     if (this.form.valid) {
       const dadosComUsuarios = {
         ...this.form.value,
-        avisoUsuario: idsSelecionados,
+        avisoUsuario: this.selectedUserIds,
+        gruposAviso: selectedGroupIds,
       };
       this.dialogRef.close(dadosComUsuarios);
     }
   }
 
-  nextStep() {
+  nextStep(idsSelecionados: number[]) {
+    if (idsSelecionados.length > 0) {
+      this.selectedUserIds = idsSelecionados;
+    }
+
     if (this.form.valid) {
-      this.step = 2;
+      this.step += 1;
     }
   }
 
   previousStep() {
-    this.step = 1;
+    this.step -= 1;
   }
 
   onCancel() {

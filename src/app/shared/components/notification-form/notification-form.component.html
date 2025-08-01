@@ -25,14 +25,22 @@
       mat-flat-button
       color="primary"
       [disabled]="form.invalid"
-      (click)="nextStep()"
+      (click)="nextStep([])"
     >
-      Continuar
+      Avançar
     </button>
   </mat-dialog-actions>
-  } @else {
+  } @else if (step === 2) {
   <app-item-selection
     [title]="'Selecionar usuários'"
+    [steps]="true"
+    (save)="nextStep($event)"
+    (step)="previousStep()"
+  ></app-item-selection>
+  } @else{
+  <app-item-selection
+    [title]="'Selecionar grupos'"
+    [funcao]="'GRUPO'"
     (save)="onSubmit($event)"
     (step)="previousStep()"
   ></app-item-selection>

@@ -21,6 +21,7 @@ import { ContainerComponent } from '../../../shared/components/container/contain
 import { ItemSelectionComponent } from '../../../shared/components/item-selection/item-selection.component';
 import { ProgressSpinnerComponent } from '../../../shared/components/progress-spinner/progress-spinner.component';
 import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar.component';
+import { TaskFormComponent } from '../../../shared/components/task-form/task-form.component';
 import { TasksTableComponent } from '../../../shared/components/tasks-table/tasks-table.component';
 
 @Component({
@@ -156,6 +157,48 @@ export class CronogramaIdComponent {
 
   onCancel() {
     this.isEditing.set(false);
+  }
+
+  createTask() {
+    this.openDialog
+      .open<
+        TaskFormComponent,
+        { dataInicio: string; dataTermino: string },
+        { nome: string; descricao: string; prazo: string; prioridade: string }
+      >(TaskFormComponent, {
+        dataInicio: this.timeline.dataInicio,
+        dataTermino: this.timeline.dataTermino,
+      })
+      .subscribe((result) => {
+        if (result) {
+          this.executeCreate(result);
+        }
+      });
+  }
+
+  private executeCreate(data: {
+    nome: string;
+    descricao: string;
+    prazo: string;
+    prioridade: string;
+  }) {
+    this.isLoading.set(true);
+    this.taskService
+      .createTask({ ...data, cronogramaId: this.timelineId })
+      .subscribe({
+        next: (newTask) => {
+          this.tasks.push(newTask);
+          this.applyFilter();
+          this.isLoading.set(false);
+          this.snackbarService.show('Demanda criada com sucesso');
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          this.snackbarService.show(
+            err.error.message || 'Erro ao criar demanda'
+          );
+        },
+      });
   }
 
   addTasks(timelineId: number) {

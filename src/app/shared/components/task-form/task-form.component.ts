@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,20 +7,24 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { ItemSelectionComponent } from '../item-selection/item-selection.component';
-import { NotificationFormComponent } from '../notification-form/notification-form.component';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
 } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { AppDateAdapter } from '../../../core/utils/app-date.adapter';
 import { MY_DATE_FORMATS } from '../../../core/utils/date-format';
+import { ItemSelectionComponent } from '../item-selection/item-selection.component';
+import { NotificationFormComponent } from '../notification-form/notification-form.component';
 
 interface Prioridade {
   value: string;
@@ -52,6 +56,8 @@ export class TaskFormComponent {
   form: FormGroup;
   step: number = 1;
   selectedUserIds: number[] = [];
+  dataInicioCronograma!: string;
+  dataTerminoCronograma!: string;
 
   Prioridades: Prioridade[] = [
     { value: 'ALTA', viewValue: 'Alta' },
@@ -60,15 +66,52 @@ export class TaskFormComponent {
   ];
 
   constructor(
+    @Inject(MAT_DIALOG_DATA)
+    private data: {
+      dataInicio: string;
+      dataTermino: string;
+    } | null = null,
     private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<NotificationFormComponent>
   ) {
+    if (data) {
+      this.dataInicioCronograma = data.dataInicio;
+      this.dataTerminoCronograma = data.dataTermino;
+    }
+
     this.form = this.formBuilder.group({
       titulo: ['', Validators.required],
       descricao: ['', Validators.required],
-      prazo: ['', Validators.required],
+      prazo: [
+        '',
+        [
+          Validators.required,
+          this.prazoDentroDoRangeValidator(
+            this.dataInicioCronograma,
+            this.dataTerminoCronograma
+          ),
+        ],
+      ],
       prioridade: ['', Validators.required],
     });
+  }
+
+  prazoDentroDoRangeValidator(dataInicio: string, dataFim: string) {
+    return (control: any) => {
+      const value = control.value;
+
+      if (!value) return null;
+
+      const prazo = new Date(value);
+      const inicio = new Date(dataInicio);
+      const fim = new Date(dataFim);
+
+      if (prazo < inicio || prazo > fim) {
+        return { prazoForaDoIntervalo: true };
+      }
+
+      return null;
+    };
   }
 
   onSubmit(selectedGroupIds: number[]) {

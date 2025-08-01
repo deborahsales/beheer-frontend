@@ -1,3 +1,5 @@
+import { Timeline } from './timeline';
+
 export interface Task {
   id: number;
   titulo: string;
@@ -11,6 +13,7 @@ export interface Task {
   gestor: { nome: string };
   usuariosDemanda: UsuariosDemanda[];
   gruposDemanda: GruposDemanda[];
+  cronograma: Timeline;
 }
 
 interface UsuariosDemanda {

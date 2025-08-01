@@ -20,6 +20,47 @@
           Descrição é obrigatória
         </mat-error>
       </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data de início</mat-label>
+        <input
+          input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="dataInicio"
+        />
+
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="form.get('dataInicio')?.hasError('required')">
+          Data de início é obrigatória
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data de término</mat-label>
+        <input
+          input
+          matInput
+          [matDatepicker]="picker2"
+          formControlName="dataTermino"
+        />
+
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker2"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker
+        ><mat-error *ngIf="form.get('dataTermino')?.hasError('required')"
+          >Data de término é obrigatória
+        </mat-error>
+        <mat-error *ngIf="form.get('dataTermino')?.hasError('dataRangeInvalid')"
+          >Data de término inválida.
+        </mat-error>
+      </mat-form-field>
     </form>
   </mat-dialog-content>
   <mat-dialog-actions align="end">

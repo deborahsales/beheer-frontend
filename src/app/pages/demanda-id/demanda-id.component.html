@@ -77,10 +77,11 @@
 
           <div class="task-page__actions">
             <p class="task-page__details">
-              Prazo: {{ task.prazo | date : "dd/MM/yyyy" : "UTC" }}
+              <strong>Prazo:</strong>
+              {{ task.prazo | date : "dd/MM/yyyy" : "UTC" }}
             </p>
             <p class="task-page__details">
-              Prioridade:
+              <strong>Prioridade: </strong>
               <span
                 class="table-container__prioridade"
                 [class.table-container__prioridade--media]="
@@ -97,6 +98,14 @@
               >
             </p>
           </div>
+          @if(task.cronograma){
+          <p
+            class="task-page__timeline"
+            (click)="openTimeline(task.cronogramaId)"
+          >
+            <strong>Cronograma:</strong> {{ task.cronograma.titulo }}
+          </p>
+          }
         </div>
         <div class="task-page__expansion-wrapper">
           <mat-expansion-panel

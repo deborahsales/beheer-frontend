@@ -33,6 +33,10 @@
         <mat-error *ngIf="form.get('prazo')?.hasError('required')">
           Prazo é obrigatório
         </mat-error>
+        <mat-error *ngIf="form.get('prazo')?.hasError('prazoForaDoIntervalo')">
+          O prazo deve estar entre {{ dataInicioCronograma | date }} e
+          {{ dataTerminoCronograma | date }}.
+        </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Prioridade</mat-label>

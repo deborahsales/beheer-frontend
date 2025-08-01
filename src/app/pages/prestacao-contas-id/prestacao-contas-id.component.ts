@@ -95,8 +95,6 @@ export class PrestacaoContasIdComponent {
           next: (financialReport) => {
             this.financialReport = financialReport;
 
-            console.log(financialReport.imagem);
-
             if (this.userId === this.financialReport.usuarioId) {
               this.canManage = true;
             }
@@ -122,7 +120,6 @@ export class PrestacaoContasIdComponent {
 
   abrirModalPdf() {
     const url = this.financialReport?.imagem;
-    console.log('Tipo da URL:', typeof url, url);
 
     if (url) {
       this.openDialog.open(PdfModalComponent, {

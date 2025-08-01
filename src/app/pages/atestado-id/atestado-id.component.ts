@@ -149,7 +149,6 @@ export class AtestadoIdComponent {
 
   abrirModalPdf() {
     const url = this.medicalCertificate?.imagem;
-    console.log('Tipo da URL:', typeof url, url);
 
     if (url) {
       this.openDialog.open(PdfModalComponent, {
