@@ -7,6 +7,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,19 +26,14 @@ import { OpenDialogService } from '../../core/services/open-dialog.service';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { TaskService } from '../../core/services/task.service';
 import { UserService } from '../../core/services/user.service';
+import { AppDateAdapter } from '../../core/utils/app-date.adapter';
+import { MY_DATE_FORMATS } from '../../core/utils/date-format';
 import { CommentCardComponent } from '../../shared/components/comment-card/comment-card.component';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { ItemSelectionComponent } from '../../shared/components/item-selection/item-selection.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
 import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
 import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import { AppDateAdapter } from '../../core/utils/app-date.adapter';
-import { MY_DATE_FORMATS } from '../../core/utils/date-format';
 
 interface Prioridade {
   value: string;
@@ -179,6 +179,10 @@ export class DemandaIdComponent {
 
   edit() {
     this.isEditing.set(true);
+  }
+
+  openTimeline(id: number) {
+    this.router.navigate([`/${this.role}/cronograma`, id]);
   }
 
   addAssignes(taskId: number, funcao: string) {

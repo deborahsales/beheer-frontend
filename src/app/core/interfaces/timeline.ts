@@ -4,6 +4,8 @@ export interface Timeline {
   descricao: string;
   dateTimestamp: string;
   gestorUsuarioId: number;
+  dataInicio: string;
+  dataTermino: string;
   demandasCronograma: Demanda[];
 }
 

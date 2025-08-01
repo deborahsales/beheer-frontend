@@ -206,7 +206,6 @@ export class DemandasComponent {
 
     this.taskService.updateTaskStatus(taskId, taskStatus).subscribe({
       next: () => {
-        this.snackbarService.show('Status alterado com sucesso.');
         this.isLoading.set(false);
       },
       error: () => {

@@ -45,7 +45,12 @@
         }
       </div>
       <p class="timeline-page__details">
-        Criado: {{ timeline.dateTimestamp | date : "dd/MM/yyyy" : "UTC" }}
+        <strong>Data de início:</strong>
+        {{ timeline.dataInicio | date : "dd/MM/yyyy" : "UTC" }}
+      </p>
+      <p class="timeline-page__details">
+        <strong>Data de término:</strong>
+        {{ timeline.dataTermino | date : "dd/MM/yyyy" : "UTC" }}
       </p>
       <p class="timeline-page__description">
         {{ timeline.descricao }}
@@ -55,6 +60,13 @@
         <h2 class="timeline-page__subtitle">Demandas</h2>
         <button class="action-button" (click)="addTasks(timeline.id)">
           <span class="material-icons">assignment_add</span>
+        </button>
+        <span class="timeline-page__spacer"></span>
+        <button
+          (click)="createTask()"
+          class="beheer-button timeline-page__button"
+        >
+          Nova Demanda
         </button>
       </div>
       <div class="timeline-page__tasks">

@@ -21,6 +21,13 @@
     max-width: 75%;
   }
 
+  &__timeline {
+    &:hover {
+      cursor: pointer;
+      color: var(--primary-blue);
+    }
+  }
+
   &__actions {
     display: flex;
     gap: var(--space-sm);
@@ -115,7 +122,7 @@
   }
 
   &__details {
-    margin: var(--space-sm) 0 0 0;
+    margin-top: var(--space-xs);
     overflow: hidden;
     font-size: var(--font-size-md);
     line-height: var(--space-lg);
