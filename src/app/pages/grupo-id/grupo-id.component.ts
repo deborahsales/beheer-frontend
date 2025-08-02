@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { Group } from '../../core/interfaces/group';
 import { Task } from '../../core/interfaces/task';
 import { GroupService } from '../../core/services/group.service';
@@ -87,8 +88,11 @@ export class GrupoIdComponent {
     this.groupId = Number(this.route.snapshot.paramMap.get('id')!);
 
     if (this.groupId) {
-      this.groupService.getGroupById(this.groupId).subscribe({
-        next: (group) => {
+      forkJoin({
+        group: this.groupService.getGroupById(this.groupId),
+        tasks: this.taskService.getTasksByGroup(this.groupId),
+      }).subscribe({
+        next: ({ group, tasks }) => {
           group.usuarios = group.usuarios.sort((a, b) =>
             a.usuario.nome.localeCompare(b.usuario.nome)
           );
@@ -104,6 +108,9 @@ export class GrupoIdComponent {
             descricao: group.descricao,
           });
 
+          this.tasks = tasks;
+          this.filteredTasks = [...this.tasks];
+
           this.isLoading.set(false);
         },
         error: () => {
@@ -112,12 +119,6 @@ export class GrupoIdComponent {
         },
       });
     }
-
-    this.taskService.getTasksByGroup(this.groupId).subscribe((data) => {
-      this.tasks = data;
-      this.filteredTasks = [...this.tasks];
-      this.isLoading = signal(false);
-    });
   }
 
   applyFilter() {

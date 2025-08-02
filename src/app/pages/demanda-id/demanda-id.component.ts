@@ -155,7 +155,7 @@ export class DemandaIdComponent {
         },
       });
     }
-  }
+  }  
 
   updateStatus(status: string) {
     this.isLoading.set(true);

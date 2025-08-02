@@ -1,5 +1,7 @@
 import { Component, signal } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { Group } from '../../core/interfaces/group';
 import { Task } from '../../core/interfaces/task';
 import { User } from '../../core/interfaces/user';
@@ -11,7 +13,6 @@ import { ProgressSpinnerComponent } from '../../shared/components/progress-spinn
 import { SearchBarComponent } from '../../shared/components/search-bar/search-bar.component';
 import { TasksTableComponent } from '../../shared/components/tasks-table/tasks-table.component';
 import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
-import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-usuario-id',
@@ -62,9 +63,17 @@ export class UsuarioIdComponent {
     this.userId = Number(this.route.snapshot.paramMap.get('id')!);
 
     if (this.userId) {
-      this.userService.getUserById(this.userId).subscribe({
-        next: (user) => {
+      forkJoin({
+        user: this.userService.getUserById(this.userId),
+        group: this.groupService.getGroupsByUser(this.userId),
+        tasks: this.taskService.getTasksByUser(this.userId),
+      }).subscribe({
+        next: ({ user, group, tasks }) => {
           this.user = user;
+          this.groups = group;
+          this.tasks = tasks;
+          this.filteredTasks = [...this.tasks];
+
           this.isLoading.set(false);
         },
         error: () => {
@@ -72,17 +81,6 @@ export class UsuarioIdComponent {
         },
       });
     }
-
-    this.groupService.getGroupsByUser(this.userId).subscribe((data) => {
-      this.groups = data;
-      this.isLoading = signal(false);
-    });
-
-    this.taskService.getTasksByUser(this.userId).subscribe((data) => {
-      this.tasks = data;
-      this.filteredTasks = [...this.tasks];
-      this.isLoading = signal(false);
-    });
   }
 
   openGroup(id: number) {
