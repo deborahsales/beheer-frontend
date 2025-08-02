@@ -13,7 +13,9 @@ import {
 import { CardSettingsModel } from '@syncfusion/ej2-angular-kanban';
 import { Task } from '../../../core/interfaces/task';
 
+import { Router } from '@angular/router';
 import { L10n, setCulture } from '@syncfusion/ej2-base';
+import { UserService } from '../../../core/services/user.service';
 
 setCulture('pt-BR');
 L10n.load({
@@ -37,14 +39,32 @@ export class TasksKanbanComponent {
   @Input() filteredTasks!: Task[];
   @Output() updateStatus = new EventEmitter<{ id: number; status: string }>();
   @Output() openTask = new EventEmitter<number>();
+  role!: string;
 
   public cardSettings: CardSettingsModel = {
     contentField: 'descricao',
     headerField: 'titulo',
   };
 
+  constructor(private userService: UserService, private router: Router) {}
+
+  ngOnInit() {
+    this.userService.getRole().subscribe((role) => {
+      if (role) {
+        this.role = role.toLowerCase();
+      }
+    });
+  }
+
   onCardDoubleClick(args: CardClickEventArgs): void {
     args.cancel = true;
+  }
+
+  onCardClick(args: CardClickEventArgs): void {
+    args.cancel = true;
+    const cardData = args.data;
+    const cardId = cardData['id'];
+    this.router.navigate([`/${this.role}/demanda`, cardId]);
   }
 
   onDragStop(args: any): void {

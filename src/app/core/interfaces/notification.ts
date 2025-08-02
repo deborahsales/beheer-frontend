@@ -5,7 +5,14 @@ export interface Notification {
   dateTimestamp: string;
   gestorRhUsuarioId: number;
   avisoUsuario: AvisoUsuario[];
+  gruposAviso: GruposAviso[];
   gestor: Gestor;
+}
+
+interface GruposAviso {
+  grupoId: number;
+  avisoId: number;
+  grupo: { nome: string };
 }
 
 interface AvisoUsuario {

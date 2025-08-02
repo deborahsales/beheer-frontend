@@ -18,7 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map } from 'rxjs';
+import { forkJoin, map } from 'rxjs';
 import { Task } from '../../core/interfaces/task';
 import { TaskComment } from '../../core/interfaces/task-comment';
 import { CommentService } from '../../core/services/comment.service';
@@ -120,19 +120,19 @@ export class DemandaIdComponent {
         map((user) => {
           this.userId = user?.sub || 0;
           this.role = user?.funcao.toLowerCase() || '';
+          this.canManage = this.role === 'gestor';
         })
       )
       .subscribe();
 
-    if (this.role === 'gestor') {
-      this.canManage = true;
-    }
-
     this.taskId = Number(this.route.snapshot.paramMap.get('id')!);
 
     if (this.taskId) {
-      this.taskService.getTaskById(this.taskId).subscribe({
-        next: (task) => {
+      forkJoin({
+        task: this.taskService.getTaskById(this.taskId),
+        comments: this.commentService.getCommentByTask(this.taskId),
+      }).subscribe({
+        next: ({ task, comments }) => {
           this.task = task;
 
           this.form.patchValue({
@@ -142,6 +142,12 @@ export class DemandaIdComponent {
             prioridade: task.prioridade,
           });
 
+          this.comments = comments.sort(
+            (a, b) =>
+              new Date(a.dateTimestamp).getTime() -
+              new Date(b.dateTimestamp).getTime()
+          );
+
           this.isLoading.set(false);
         },
         error: () => {
@@ -149,15 +155,6 @@ export class DemandaIdComponent {
         },
       });
     }
-
-    this.commentService.getCommentByTask(this.taskId).subscribe((data) => {
-      this.comments = data.sort(
-        (a, b) =>
-          new Date(a.dateTimestamp).getTime() -
-          new Date(b.dateTimestamp).getTime()
-      );
-      this.isLoading.set(false);
-    });
   }
 
   updateStatus(status: string) {

@@ -15,14 +15,22 @@ import { CapitalizeFirstPipe } from '../../pipes/capitalize-first.pipe';
 })
 export class TasksTableComponent {
   @Input() canManage!: boolean;
+  @Input() canRemove: boolean = false;
   @Input() role!: string;
   @Input() filteredTasks!: Task[];
 
   @Output() filter = new EventEmitter<void>();
+  @Output() remove = new EventEmitter<number>();
+
   isLoading = signal(false);
 
   applyFilter() {
     this.filter.emit();
+  }
+
+  removeTask(id: number) {
+    console.log(id);
+    this.remove.emit(id);
   }
 
   constructor(

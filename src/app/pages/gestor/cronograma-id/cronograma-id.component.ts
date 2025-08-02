@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { Task } from '../../../core/interfaces/task';
 import { Timeline } from '../../../core/interfaces/timeline';
 import { OpenDialogService } from '../../../core/services/open-dialog.service';
@@ -85,8 +86,11 @@ export class CronogramaIdComponent {
     }
 
     if (this.timelineId) {
-      this.timelineService.getTimelineById(this.timelineId).subscribe({
-        next: (timeline) => {
+      forkJoin({
+        timeline: this.timelineService.getTimelineById(this.timelineId),
+        tasks: this.taskService.getTasksByTimeline(this.timelineId),
+      }).subscribe({
+        next: ({ timeline, tasks }) => {
           this.timeline = timeline;
 
           this.form.patchValue({
@@ -94,6 +98,8 @@ export class CronogramaIdComponent {
             descricao: timeline.descricao,
           });
 
+          this.tasks = tasks;
+          this.filteredTasks = [...this.tasks];
           this.isLoading.set(false);
         },
         error: () => {
@@ -101,12 +107,6 @@ export class CronogramaIdComponent {
         },
       });
     }
-
-    this.taskService.getTasksByTimeline(this.timelineId).subscribe((data) => {
-      this.tasks = data;
-      this.filteredTasks = [...this.tasks];
-      this.isLoading.set(false);
-    });
   }
 
   applyFilter() {
@@ -247,6 +247,42 @@ export class CronogramaIdComponent {
       error: () => {
         this.isLoading.set(false);
         this.snackbarService.show('Erro ao recarregar demandas.');
+      },
+    });
+  }
+
+  handleRemoveTask(taskId: number) {
+    const task = this.filteredTasks.find((task) => task.id === taskId);
+    if (!task) return;
+
+    this.openDialog
+      .confirm({
+        title: 'Remover demada',
+        message: `Tem certeza que deseja remover a demanda desse cronograma?`,
+        confirmText: 'Remover',
+        cancelText: 'Cancelar',
+      })
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.executeRemove(taskId);
+        }
+      });
+  }
+
+  executeRemove(taskId: number) {
+    this.isLoading.set(true);
+
+    this.taskService.updateTask(taskId, { cronogramaId: null }).subscribe({
+      next: (retorno) => {
+        console.log(retorno);
+        this.tasks = this.tasks.filter((task) => task.id !== taskId);
+        this.applyFilter();
+        this.snackbarService.show('Tarefa removida com sucesso.');
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.snackbarService.show('Erro ao remover tarefa.');
+        this.isLoading.set(false);
       },
     });
   }
