@@ -78,8 +78,10 @@
         @if(filteredTasks.length > 0){
         <app-tasks-table
           [canManage]="canManage"
+          [canRemove]="true"
           [role]="role"
           [filteredTasks]="filteredTasks"
+          (remove)="handleRemoveTask($event)"
           (applyFilter)="applyFilter()"
         ></app-tasks-table>
         } @else {

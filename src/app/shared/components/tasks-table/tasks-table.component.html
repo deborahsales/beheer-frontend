@@ -63,6 +63,12 @@
       <td class="text-center">
         <button
           class="action-button action-button--delete"
+          (click)="removeTask(task.id!); $event.stopPropagation()"
+        >
+          <span class="material-icons">do_not_disturb_on</span>
+        </button>
+        <button
+          class="action-button action-button--delete"
           (click)="deleteTask(task.id!); $event.stopPropagation()"
         >
           <span class="material-icons">delete</span>

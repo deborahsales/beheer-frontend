@@ -49,10 +49,10 @@ export class DemandasComponent {
   statusFilter?: string;
 
   constructor(
-    private userService: UserService,
     private taskService: TaskService,
     private openDialog: OpenDialogService,
     private snackbarService: SnackbarService,
+    private userService: UserService,
     private router: Router
   ) {
     const today = new Date();
@@ -201,16 +201,13 @@ export class DemandasComponent {
   }
 
   updateStatus(taskId: number, status: string) {
-    this.isLoading.set(true);
     const taskStatus = { status: status };
 
     this.taskService.updateTaskStatus(taskId, taskStatus).subscribe({
-      next: () => {
-        this.isLoading.set(false);
-      },
+      next: () => {},
       error: () => {
         this.snackbarService.show('Erro ao alterar status.');
-        this.isLoading.set(false);
+        this.applyFilter();
       },
     });
   }

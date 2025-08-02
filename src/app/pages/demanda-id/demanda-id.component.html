@@ -3,7 +3,7 @@
     <div class="task-page__container">
       @if (isLoading()) {
       <app-progress-spinner></app-progress-spinner>
-      } @else{ @if(isEditing()){
+      } @else if (task){ @if(isEditing()){
       <form [formGroup]="form" class="task-page__form" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline">
           <mat-label>Título</mat-label>

@@ -17,12 +17,20 @@
       <div class="notification-page__users">
         <p class="notification-page__details">Para:</p>
 
-        @if(notification.avisoUsuario.length < 4) { @for (avisoUsuario of
-        notification.avisoUsuario; track avisoUsuario.usuarioId){
+        @if (notification.avisoUsuario.length + notification.gruposAviso.length
+        < 4) { @for (avisoUsuario of notification.avisoUsuario; track
+        avisoUsuario.usuarioId) {
         <p class="notification-page__details">
-          {{ avisoUsuario.usuario.nome }} <{{ avisoUsuario.usuario.email }}>,
+          {{ avisoUsuario.usuario.nome }} &lt;{{
+            avisoUsuario.usuario.email
+          }}&gt;,
         </p>
-        } } @else{
+        } @for (grupoAviso of notification.gruposAviso; track
+        grupoAviso.grupoId) {
+        <p class="notification-page__details">
+          Grupo: {{ grupoAviso.grupo.nome }},
+        </p>
+        } } @else {
 
         <mat-expansion-panel
           (opened)="panelOpenState.set(true)"
@@ -30,23 +38,38 @@
         >
           <mat-expansion-panel-header>
             <mat-panel-title>
-              @for (avisoUsuario of notification.avisoUsuario.slice(0, 3); track
-              avisoUsuario.usuarioId; let last = $last ){
+              @if (notification.gruposAviso.length > 0){ @for ( grupoAviso of
+              notification.gruposAviso.slice(0, 3); track grupoAviso.grupoId;
+              let last = $last ) {
+              <p class="notification-page__details">
+                {{ grupoAviso.grupo.nome }}{{ !last ? "," : "" }}
+              </p>
+              }} @else{ @for ( avisoUsuario of
+              notification.avisoUsuario.slice(0, 2); track
+              avisoUsuario.usuarioId; let last = $last ) {
               <p class="notification-page__details">
                 {{ avisoUsuario.usuario.nome }} &lt;{{
                   avisoUsuario.usuario.email
-                }}&gt;{{ !last ? "," : "..." }}
+                }}&gt;{{ !last ? "," : "" }}
               </p>
-              }
+              } }
             </mat-panel-title>
           </mat-expansion-panel-header>
+
           <div class="notification-page__emails">
-            @for (avisoUsuario of notification.avisoUsuario.slice(3); track
-            avisoUsuario.usuarioId; let last = $last){
+            @for ( avisoUsuario of notification.avisoUsuario.slice(2); track
+            avisoUsuario.usuarioId; let last = $last ) {
             <p class="notification-page__details">
               {{ avisoUsuario.usuario.nome }} &lt;{{
                 avisoUsuario.usuario.email
-              }}&gt;{{ !last ? "," : "." }}
+              }}&gt;{{
+                !last || notification.gruposAviso.length - 3 > 0 ? "," : "."
+              }}
+            </p>
+            } @for (grupoAviso of notification.gruposAviso.slice(3); track
+            grupoAviso.grupoId ; let last = $last) {
+            <p class="notification-page__details">
+              {{ grupoAviso.grupo.nome }}{{ !last ? "," : "." }}
             </p>
             }
           </div>
