@@ -23,10 +23,16 @@
                 matInput
                 placeholder="Digite seu CPF"
                 formControlName="cpf"
+                mask="000.000.000-00"
               />
-              @if (userForm.get('cpf')?.errors) {
-              <mat-error>CPF é obrigatório</mat-error>
-              }
+              <mat-error *ngIf="userForm.get('cpf')?.hasError('required')">
+                CPF é obrigatório
+              </mat-error>
+              <mat-error
+                *ngIf="userForm.get('cpf')?.hasError('invalidCpfLength')"
+              >
+                CPF deve conter 11 dígitos
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
@@ -57,9 +63,17 @@
                 [for]="picker"
               ></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
-              @if (userForm.get('dataNascimento')?.errors) {
-              <mat-error>Data de nascimento é obrigatória</mat-error>
-              }
+
+              <mat-error
+                *ngIf="userForm.get('dataNascimento')?.hasError('required')"
+              >
+                Data de nascimento é obrigatória
+              </mat-error>
+              <mat-error
+                *ngIf="userForm.get('dataNascimento')?.hasError('futureDate')"
+              >
+                Selecione uma data válida
+              </mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Senha</mat-label>
@@ -89,8 +103,9 @@
               <mat-label>Telefone</mat-label>
               <input
                 matInput
-                placeholder="+XX XXXX-XXXX"
+                placeholder="(00) 00000-0000"
                 formControlName="telefone"
+                mask="(00) 00000-0000"
               />
               @if (userForm.get('telefone')?.errors) {
               <mat-error>Telefone é obrigatório</mat-error>
@@ -133,9 +148,17 @@
                 [for]="picker2"
               ></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
-              @if (userForm.get('dataAdmissao')?.errors) {
-              <mat-error>Data de admissão é obrigatória</mat-error>
-              }
+
+              <mat-error
+                *ngIf="userForm.get('dataAdmissao')?.hasError('required')"
+              >
+                Data de admissão é obrigatória
+              </mat-error>
+              <mat-error
+                *ngIf="userForm.get('dataAdmissao')?.hasError('futureDate')"
+              >
+                Selecione uma data válida
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="user-form__grid-item">
@@ -157,7 +180,6 @@
         </div>
       </mat-card-content>
       <mat-card-actions class="user-form__card-footer">
-        
         <button mat-button (click)="onCancel()">Cancelar</button>
         <button
           mat-flat-button

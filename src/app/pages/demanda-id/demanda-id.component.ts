@@ -155,7 +155,7 @@ export class DemandaIdComponent {
         },
       });
     }
-  }  
+  }
 
   updateStatus(status: string) {
     this.isLoading.set(true);
@@ -195,9 +195,7 @@ export class DemandaIdComponent {
         isDialog: true,
       })
       .subscribe((selected) => {
-        if (selected && selected.length > 0) {
-          this.executeAddNewAssigne(selected, taskId, funcao);
-        }
+        this.executeAddNewAssigne(selected, taskId, funcao);
       });
   }
 

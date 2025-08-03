@@ -78,8 +78,10 @@
   <app-item-selection
     [title]="'Selecionar grupos'"
     [funcao]="'GRUPO'"
-    (save)="onSubmit($event)"
+    [steps]="true"
+    [buttonName]="'Concluir'"
     (step)="previousStep()"
+    (save)="onSubmit($event)"
   ></app-item-selection>
   }
 </div>

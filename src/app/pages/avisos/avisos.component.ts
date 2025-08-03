@@ -175,6 +175,7 @@ export class AvisosComponent {
         newNotification.gestor = { id: this.userId, nome: this.userName };
         newNotification.avisoUsuario = [];
         this.notifications.push(newNotification);
+        this.reset();
         this.applyFilter();
         this.isLoading.set(false);
         this.snackbarService.show('Aviso criado com sucesso');
@@ -197,6 +198,7 @@ export class AvisosComponent {
         if (notification && notification.avisoUsuario.length > 0) {
           notification.avisoUsuario[0].status = 'LIDO';
         }
+        this.reset();
         this.snackbarService.show('Aviso marcado como lido');
         this.isLoading.set(false);
       },
@@ -237,6 +239,7 @@ export class AvisosComponent {
         this.notifications = this.notifications.filter(
           (notification) => notification.id !== notificationId
         );
+        this.reset();
         this.applyFilter();
         this.snackbarService.show('Aviso deletado com sucesso');
         this.isLoading.set(false);
