@@ -195,7 +195,9 @@ export class DemandaIdComponent {
         isDialog: true,
       })
       .subscribe((selected) => {
-        this.executeAddNewAssigne(selected, taskId, funcao);
+        if (selected) {
+          this.executeAddNewAssigne(selected, taskId, funcao);
+        }
       });
   }
 
