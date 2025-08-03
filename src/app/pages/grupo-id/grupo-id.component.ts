@@ -147,7 +147,9 @@ export class GrupoIdComponent {
         isDialog: true,
       })
       .subscribe((selected) => {
-        this.executeAddNewMember(selected, groupId, funcao);
+        if (selected) {
+          this.executeAddNewMember(selected, groupId, funcao);
+        }
       });
   }
 

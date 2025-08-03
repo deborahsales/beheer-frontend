@@ -71,6 +71,7 @@
     [title]="'Selecionar usuários'"
     [funcao]="'COLABORADOR'"
     [steps]="true"
+    [buttonName]="'Avançar'"
     (save)="nextStep($event)"
     (step)="previousStep()"
   ></app-item-selection>
@@ -79,7 +80,6 @@
     [title]="'Selecionar grupos'"
     [funcao]="'GRUPO'"
     [steps]="true"
-    [buttonName]="'Concluir'"
     (step)="previousStep()"
     (save)="onSubmit($event)"
   ></app-item-selection>

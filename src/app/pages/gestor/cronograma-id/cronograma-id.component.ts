@@ -214,7 +214,9 @@ export class CronogramaIdComponent {
         isDialog: true,
       })
       .subscribe((selected) => {
+        if (selected) {
           this.executeAddNewTask(selected, timelineId);
+        }
       });
   }
 

@@ -42,7 +42,7 @@ export class ItemSelectionComponent {
 
   selected: number[] = [];
   @Input() funcao: string = '';
-  @Input() buttonName: string = 'Avançar';
+  @Input() buttonName: string = 'Concluir';
   @Output() selectionChange = new EventEmitter<number[]>();
   @Output() closed = new EventEmitter<void>();
   @Output() save = new EventEmitter<number[]>();
