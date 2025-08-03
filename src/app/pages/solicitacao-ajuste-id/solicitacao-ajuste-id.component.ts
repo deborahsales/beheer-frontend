@@ -7,6 +7,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -16,16 +21,11 @@ import { AdjustmentRequest } from '../../core/interfaces/adjustment-request';
 import { AdjustmentRequestService } from '../../core/services/adjustment-requests.service';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { UserService } from '../../core/services/user.service';
+import { AppDateAdapter } from '../../core/utils/app-date.adapter';
+import { MY_DATE_FORMATS } from '../../core/utils/date-format';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { ProgressSpinnerComponent } from '../../shared/components/progress-spinner/progress-spinner.component';
 import { CapitalizeFirstPipe } from '../../shared/pipes/capitalize-first.pipe';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import { AppDateAdapter } from '../../core/utils/app-date.adapter';
-import { MY_DATE_FORMATS } from '../../core/utils/date-format';
 
 @Component({
   selector: 'app-solicitacao-ajuste-id',
@@ -182,9 +182,10 @@ export class SolicitacaoAjusteIdComponent {
     this.adjustmentRequestService
       .manageAdjustmentRequest(this.adjustmentRequestId, adjustmentRequest)
       .subscribe({
-        next: () => {
+        next: (result) => {
           this.snackbarService.show('Status alterado com sucesso.');
           this.adjustmentRequest.status = status;
+          this.adjustmentRequest.ponto = result.ponto;
           this.isLoading.set(false);
         },
         error: () => {

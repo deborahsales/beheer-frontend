@@ -42,6 +42,7 @@ export class ItemSelectionComponent {
 
   selected: number[] = [];
   @Input() funcao: string = '';
+  @Input() buttonName: string = 'Avançar';
   @Output() selectionChange = new EventEmitter<number[]>();
   @Output() closed = new EventEmitter<void>();
   @Output() save = new EventEmitter<number[]>();
@@ -279,10 +280,11 @@ export class ItemSelectionComponent {
   }
 
   onSave() {
+    const result = this.selected.length === 0 ? [-1] : this.selected;
     if (this.dialogRef && this.isDialog) {
-      this.dialogRef.close(this.selected);
+      this.dialogRef.close(result);
     } else {
-      this.save.emit(this.selected);
+      this.save.emit(result);
     }
   }
 

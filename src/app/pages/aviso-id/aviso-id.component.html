@@ -27,9 +27,7 @@
         </p>
         } @for (grupoAviso of notification.gruposAviso; track
         grupoAviso.grupoId) {
-        <p class="notification-page__details">
-          Grupo: {{ grupoAviso.grupo.nome }},
-        </p>
+        <p class="notification-page__details">{{ grupoAviso.grupo.nome }},</p>
         } } @else {
 
         <mat-expansion-panel
@@ -57,8 +55,9 @@
           </mat-expansion-panel-header>
 
           <div class="notification-page__emails">
-            @for ( avisoUsuario of notification.avisoUsuario.slice(2); track
-            avisoUsuario.usuarioId; let last = $last ) {
+            @for ( avisoUsuario of (notification.gruposAviso.length > 0 ?
+            notification.avisoUsuario : notification.avisoUsuario.slice(2));
+            track avisoUsuario.usuarioId; let last = $last ) {
             <p class="notification-page__details">
               {{ avisoUsuario.usuario.nome }} &lt;{{
                 avisoUsuario.usuario.email

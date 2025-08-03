@@ -214,9 +214,7 @@ export class CronogramaIdComponent {
         isDialog: true,
       })
       .subscribe((selected) => {
-        if (selected) {
           this.executeAddNewTask(selected, timelineId);
-        }
       });
   }
 
@@ -274,7 +272,6 @@ export class CronogramaIdComponent {
 
     this.taskService.updateTask(taskId, { cronogramaId: null }).subscribe({
       next: (retorno) => {
-        console.log(retorno);
         this.tasks = this.tasks.filter((task) => task.id !== taskId);
         this.applyFilter();
         this.snackbarService.show('Tarefa removida com sucesso.');

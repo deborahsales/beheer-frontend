@@ -29,7 +29,6 @@ export class TasksTableComponent {
   }
 
   removeTask(id: number) {
-    console.log(id);
     this.remove.emit(id);
   }
 

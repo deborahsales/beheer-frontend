@@ -25,10 +25,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { User } from '../../../core/interfaces/user';
 import { FormsService } from '../../../core/services/forms.service';
 import { AppDateAdapter } from '../../../core/utils/app-date.adapter';
 import { MY_DATE_FORMATS } from '../../../core/utils/date-format';
+import { cpfLengthValidator } from '../../../core/validators/cpf-length.validator';
+import { noFutureDateValidator } from '../../../core/validators/date.validator';
 import { ContainerComponent } from '../container/container.component';
 
 interface Funcao {
@@ -49,6 +52,7 @@ interface Funcao {
     ReactiveFormsModule,
     CommonModule,
     MatSelectModule,
+    NgxMaskDirective,
   ],
   templateUrl: './user-form.component.html',
   styleUrl: './user-form.component.scss',
@@ -57,6 +61,7 @@ interface Funcao {
     { provide: DateAdapter, useClass: AppDateAdapter },
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+    provideNgxMask(),
   ],
 })
 export class UserFormComponent {
@@ -90,14 +95,14 @@ export class UserFormComponent {
   ngOnInit() {
     this.userForm = this.formBuilder.group({
       nome: [null, Validators.required],
-      cpf: [null, [Validators.required, Validators.minLength(11)]],
-      dataNascimento: [null, Validators.required],
+      cpf: [null, [Validators.required, cpfLengthValidator()]],
+      dataNascimento: [null, [Validators.required, noFutureDateValidator()]],
       email: [null, [Validators.required, Validators.email]],
       senha: [null, Validators.required],
       telefone: [null, Validators.required],
       cargo: [null, Validators.required],
       funcao: [null, Validators.required],
-      dataAdmissao: [null, Validators.required],
+      dataAdmissao: [null, [Validators.required, noFutureDateValidator()]],
       dataDesligamento: [{ value: null, disabled: true }],
     });
 
