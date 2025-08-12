@@ -19,20 +19,23 @@ export const routes: Routes = [
   {
     path: 'administrador',
     loadChildren: () =>
-      import('./routes/admin.routes').then((m) => m.adminRoutes),
+      import('./core/routes/admin.routes').then((m) => m.adminRoutes),
   },
   {
     path: 'gestor',
     loadChildren: () =>
-      import('./routes/gestor.routes').then((m) => m.gestorRoutes),
+      import('./core/routes/gestor.routes').then((m) => m.gestorRoutes),
   },
   {
     path: 'colaborador',
     loadChildren: () =>
-      import('./routes/colaborador.routes').then((m) => m.colaboradorRoutes),
+      import('./core/routes/colaborador.routes').then(
+        (m) => m.colaboradorRoutes
+      ),
   },
   {
     path: 'rh',
-    loadChildren: () => import('./routes/rh.routes').then((m) => m.rhRoutes),
+    loadChildren: () =>
+      import('./core/routes/rh.routes').then((m) => m.rhRoutes),
   },
 ];

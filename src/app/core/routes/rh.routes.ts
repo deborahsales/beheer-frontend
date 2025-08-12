@@ -1,15 +1,15 @@
 import { Routes } from '@angular/router';
-import { rhGuard } from '../core/guards/rh.guard';
-import { AtestadoIdComponent } from '../pages/atestado-id/atestado-id.component';
-import { AtestadosComponent } from '../pages/atestados/atestados.component';
-import { AvisoIdComponent } from '../pages/aviso-id/aviso-id.component';
-import { AvisosComponent } from '../pages/avisos/avisos.component';
-import { PontoIdComponent } from '../pages/ponto-id/ponto-id.component';
-import { PontosComponent } from '../pages/pontos/pontos.component';
-import { PrestacaoContasIdComponent } from '../pages/prestacao-contas-id/prestacao-contas-id.component';
-import { PrestacoesContasComponent } from '../pages/prestacoes-contas/prestacoes-contas.component';
-import { SolicitacaoAjusteIdComponent } from '../pages/solicitacao-ajuste-id/solicitacao-ajuste-id.component';
-import { SolicitacoesAjusteComponent } from '../pages/solicitacoes-ajuste/solicitacoes-ajuste.component';
+import { AtestadoIdComponent } from '../../pages/atestado-id/atestado-id.component';
+import { AtestadosComponent } from '../../pages/atestados/atestados.component';
+import { AvisoIdComponent } from '../../pages/aviso-id/aviso-id.component';
+import { AvisosComponent } from '../../pages/avisos/avisos.component';
+import { PontoIdComponent } from '../../pages/ponto-id/ponto-id.component';
+import { PontosComponent } from '../../pages/pontos/pontos.component';
+import { PrestacaoContasIdComponent } from '../../pages/prestacao-contas-id/prestacao-contas-id.component';
+import { PrestacoesContasComponent } from '../../pages/prestacoes-contas/prestacoes-contas.component';
+import { SolicitacaoAjusteIdComponent } from '../../pages/solicitacao-ajuste-id/solicitacao-ajuste-id.component';
+import { SolicitacoesAjusteComponent } from '../../pages/solicitacoes-ajuste/solicitacoes-ajuste.component';
+import { rhGuard } from '../guards/rh.guard';
 
 export const rhRoutes: Routes = [
   {
@@ -45,7 +45,7 @@ export const rhRoutes: Routes = [
       ],
     },
     loadComponent: () =>
-      import('../layouts/dashboard-layout/dashboard-layout.component').then(
+      import('../../layouts/dashboard-layout/dashboard-layout.component').then(
         (m) => m.DashboardLayoutComponent
       ),
     children: [

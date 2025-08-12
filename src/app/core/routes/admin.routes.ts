@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { adminGuard } from '../core/guards/admin.guard';
-import { EditarUsuarioComponent } from '../pages/admin/editar-usuario/editar-usuario.component';
-import { NovoUsuarioComponent } from '../pages/admin/novo-usuario/novo-usuario.component';
-import { UsuariosComponent } from '../pages/admin/usuarios/usuarios.component';
-import { AvisoIdComponent } from '../pages/aviso-id/aviso-id.component';
-import { AvisosComponent } from '../pages/avisos/avisos.component';
-import { UsuarioIdComponent } from '../pages/usuario-id/usuario-id.component';
+import { EditarUsuarioComponent } from '../../pages/admin/editar-usuario/editar-usuario.component';
+import { NovoUsuarioComponent } from '../../pages/admin/novo-usuario/novo-usuario.component';
+import { UsuariosComponent } from '../../pages/admin/usuarios/usuarios.component';
+import { AvisoIdComponent } from '../../pages/aviso-id/aviso-id.component';
+import { AvisosComponent } from '../../pages/avisos/avisos.component';
+import { UsuarioIdComponent } from '../../pages/usuario-id/usuario-id.component';
+import { adminGuard } from '../guards/admin.guard';
 
 export const adminRoutes: Routes = [
   {
@@ -22,7 +22,7 @@ export const adminRoutes: Routes = [
       ],
     },
     loadComponent: () =>
-      import('../layouts/dashboard-layout/dashboard-layout.component').then(
+      import('../../layouts/dashboard-layout/dashboard-layout.component').then(
         (m) => m.DashboardLayoutComponent
       ),
     children: [
