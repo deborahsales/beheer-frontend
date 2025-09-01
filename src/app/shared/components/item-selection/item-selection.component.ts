@@ -3,12 +3,15 @@ import {
   EventEmitter,
   Inject,
   Input,
+  OnDestroy,
+  OnInit,
   Optional,
   Output,
   signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Subject, takeUntil } from 'rxjs';
 import { GroupService } from '../../../core/services/group.service';
 import { SnackbarService } from '../../../core/services/snackbar.service';
 import { TaskService } from '../../../core/services/task.service';
@@ -29,7 +32,8 @@ import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
   templateUrl: './item-selection.component.html',
   styleUrl: './item-selection.component.scss',
 })
-export class ItemSelectionComponent {
+export class ItemSelectionComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   id!: number;
   itens: any[] = [];
   filteredItens: any[] = [];
@@ -74,156 +78,194 @@ export class ItemSelectionComponent {
   ngOnInit() {
     this.isLoading = signal(true);
 
-    this.userService.getAuthUser().subscribe((user) => {
-      this.userId = user?.sub || 0;
+    this.userService
+      .getAuthUser()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
+        this.userId = user?.sub || 0;
 
-      if (this.id) {
-        if (this.funcao === 'GESTOR') {
-          this.loadGrupoGestores();
-          this.loadAllGestores();
-        } else if (this.funcao === 'COLABORADOR') {
-          this.loadGrupoColaboradores();
-          this.loadAllColaboradores();
-        } else if (this.funcao === 'COLABORADOR-DEMANDA') {
-          this.loadDemandaUsuarios();
-          this.loadAllColaboradores();
-        } else if (this.funcao === 'GRUPO-DEMANDA') {
-          this.loadDemandaGrupos();
-          this.loadAllGroups();
-        } else if (this.funcao === 'DEMANDA-CRONOGRAMA') {
-          this.loadCronogramaDemandas();
-          this.loadAllDemandas();
-        }
-      } else {
-        if (this.funcao === 'GRUPO') {
-          this.loadAllGroups();
-        } else if (this.funcao === 'COLABORADOR') {
-          this.loadAllColaboradores();
+        if (this.id) {
+          if (this.funcao === 'GESTOR') {
+            this.loadGrupoGestores();
+            this.loadAllGestores();
+          } else if (this.funcao === 'COLABORADOR') {
+            this.loadGrupoColaboradores();
+            this.loadAllColaboradores();
+          } else if (this.funcao === 'COLABORADOR-DEMANDA') {
+            this.loadDemandaUsuarios();
+            this.loadAllColaboradores();
+          } else if (this.funcao === 'GRUPO-DEMANDA') {
+            this.loadDemandaGrupos();
+            this.loadAllGroups();
+          } else if (this.funcao === 'DEMANDA-CRONOGRAMA') {
+            this.loadCronogramaDemandas();
+            this.loadAllDemandas();
+          }
         } else {
-          this.loadAllUsers();
+          if (this.funcao === 'GRUPO') {
+            this.loadAllGroups();
+          } else if (this.funcao === 'COLABORADOR') {
+            this.loadAllColaboradores();
+          } else {
+            this.loadAllUsers();
+          }
         }
-      }
-    });
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadCronogramaDemandas() {
     this.isLoading = signal(true);
-    this.timelineService.getTimelineById(this.id).subscribe({
-      next: (timeline) => {
-        this.selected =
-          timeline.demandasCronograma?.map((task: any) => task.id) || [];
-        this.isLoading = signal(false);
-      },
-      error: (err) => {
-        this.snackbarService.show(err);
-        this.isLoading = signal(false);
-      },
-    });
+    this.timelineService
+      .getTimelineById(this.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (timeline) => {
+          this.selected =
+            timeline.demandasCronograma?.map((task: any) => task.id) || [];
+          this.isLoading = signal(false);
+        },
+        error: (err) => {
+          this.snackbarService.show(err);
+          this.isLoading = signal(false);
+        },
+      });
   }
 
   loadAllDemandas() {
     this.isLoading = signal(true);
-    this.taskService.getTasks().subscribe((res) => {
-      this.itens = res;
-      this.applyFilter();
-      this.isLoading = signal(false);
-    });
+    this.taskService
+      .getTasks()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.itens = res;
+        this.applyFilter();
+        this.isLoading = signal(false);
+      });
   }
 
   loadDemandaGrupos() {
     this.isLoading = signal(true);
-    this.taskService.getTaskById(this.id).subscribe({
-      next: (task) => {
-        this.selected =
-          task.gruposDemanda?.map((group: any) => group.grupoId) || [];
-        this.isLoading = signal(false);
-      },
-      error: (err) => {
-        this.snackbarService.show(err);
-        this.isLoading = signal(false);
-      },
-    });
+    this.taskService
+      .getTaskById(this.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (task) => {
+          this.selected =
+            task.gruposDemanda?.map((group: any) => group.grupoId) || [];
+          this.isLoading = signal(false);
+        },
+        error: (err) => {
+          this.snackbarService.show(err);
+          this.isLoading = signal(false);
+        },
+      });
   }
 
   loadDemandaUsuarios() {
     this.isLoading = signal(true);
-    this.taskService.getTaskById(this.id).subscribe({
-      next: (task) => {
-        this.selected =
-          task.usuariosDemanda?.map((user: any) => user.usuarioId) || [];
-        this.isLoading = signal(false);
-      },
-      error: (err) => {
-        this.snackbarService.show(err);
-        this.isLoading = signal(false);
-      },
-    });
+    this.taskService
+      .getTaskById(this.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (task) => {
+          this.selected =
+            task.usuariosDemanda?.map((user: any) => user.usuarioId) || [];
+          this.isLoading = signal(false);
+        },
+        error: (err) => {
+          this.snackbarService.show(err);
+          this.isLoading = signal(false);
+        },
+      });
   }
 
   loadGrupoColaboradores() {
     this.isLoading = signal(true);
-    this.groupService.getGroupById(this.id).subscribe({
-      next: (group) => {
-        this.selected =
-          group.usuarios?.map((user: any) => user.usuarioId) || [];
-        this.isLoading = signal(false);
-      },
-      error: (err) => {
-        this.snackbarService.show(err);
-        this.isLoading = signal(false);
-      },
-    });
+    this.groupService
+      .getGroupById(this.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (group) => {
+          this.selected =
+            group.usuarios?.map((user: any) => user.usuarioId) || [];
+          this.isLoading = signal(false);
+        },
+        error: (err) => {
+          this.snackbarService.show(err);
+          this.isLoading = signal(false);
+        },
+      });
   }
 
   loadGrupoGestores() {
     this.isLoading = signal(true);
-    this.groupService.getGroupById(this.id).subscribe({
-      next: (group) => {
-        this.selected =
-          group.gestores?.map((user: any) => user.usuarioId) || [];
-        this.isLoading = signal(false);
-      },
-      error: (err) => {
-        this.snackbarService.show(err);
-        this.isLoading = signal(false);
-      },
-    });
+    this.groupService
+      .getGroupById(this.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (group) => {
+          this.selected =
+            group.gestores?.map((user: any) => user.usuarioId) || [];
+          this.isLoading = signal(false);
+        },
+        error: (err) => {
+          this.snackbarService.show(err);
+          this.isLoading = signal(false);
+        },
+      });
   }
 
   loadAllColaboradores() {
     this.isLoading = signal(true);
-    this.userService.getColaboradores().subscribe((res) => {
-      this.itens = res;
-      this.applyFilter();
-      this.isLoading = signal(false);
-    });
+    this.userService
+      .getColaboradores()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.itens = res;
+        this.applyFilter();
+        this.isLoading = signal(false);
+      });
   }
 
   loadAllGestores() {
     this.isLoading = signal(true);
-    this.userService.getGestores().subscribe((res) => {
-      this.itens = res;
-      this.applyFilter();
-      this.isLoading = signal(false);
-    });
+    this.userService
+      .getGestores()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.itens = res;
+        this.applyFilter();
+        this.isLoading = signal(false);
+      });
   }
 
   loadAllUsers() {
     this.isLoading = signal(true);
-    this.userService.getUsers().subscribe((res) => {
-      this.itens = res.filter((user) => user.id !== this.userId);
-      this.applyFilter();
-      this.isLoading = signal(false);
-    });
+    this.userService
+      .getUsers()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.itens = res.filter((user) => user.id !== this.userId);
+        this.applyFilter();
+        this.isLoading = signal(false);
+      });
   }
 
   loadAllGroups() {
     this.isLoading = signal(true);
-    this.groupService.getGroups().subscribe((res) => {
-      this.itens = res;
-      this.applyFilter();
-      this.isLoading = signal(false);
-    });
+    this.groupService
+      .getGroups()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.itens = res;
+        this.applyFilter();
+        this.isLoading = signal(false);
+      });
   }
 
   applyFilter() {
