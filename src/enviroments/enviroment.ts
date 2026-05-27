@@ -1,3 +1,3 @@
 export const enviroment = {
-  apiUrl: 'https://beheer-backend.vercel.app',
+  apiUrl: 'beheer-backend-production.up.railway.app',
 };
