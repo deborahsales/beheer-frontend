@@ -1,3 +1,3 @@
 export const enviroment = {
-  apiUrl: 'beheer-backend-production.up.railway.app',
+  apiUrl: 'https://beheer-backend-production.up.railway.app',
 };
